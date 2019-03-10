@@ -1,0 +1,35 @@
+{
+    "name": "unzeroun/isocontent",
+    "description": "A library to transform web contents (say HTML) to an abstract AST that can be rendered everywhere",
+    "type": "library",
+    "require": {
+        "php": "^7.1",
+        "ext-json": "*"
+    },
+    "suggest": {
+        "ext-dom": "ext-dom is required for DOMParser usage"
+    },
+    "require-dev": {
+        "ext-dom": "*",
+        "phpunit/phpunit": "^8.0",
+        "spatie/phpunit-watcher": "^1.8",
+        "symfony/var-dumper": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Isocontent\\": "src/"
+        }
+    },
+    "autoload-dev":  {
+        "psr-4": {
+            "Isocontent\\Tests\\": "tests/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yohan Giarelli",
+            "email": "yohan@un-zero-un.fr"
+        }
+    ]
+}
