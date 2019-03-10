@@ -1,7 +1,7 @@
 .PHONY: test watch phpstan docker_build docker_test docker_phpstan
 
 test:
-	./vendor/bin/phpunit tests --colors --coverage-text --whitelist=src
+	./vendor/bin/phpunit tests --colors --coverage-text --whitelist=src --coverage-clover=build/coverage/clover.xml
 
 watch:
 	./vendor/bin/phpunit-watcher watch tests --colors
