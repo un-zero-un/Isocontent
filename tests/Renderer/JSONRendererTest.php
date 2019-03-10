@@ -40,7 +40,7 @@ class JSONRendererTest extends TestCase
             ],
             [
                 NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', NodeList::fromArray([
+                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
                         TextNode::fromText('foobar')
                     ])),
                 ]),
@@ -48,10 +48,10 @@ class JSONRendererTest extends TestCase
             ],
             [
                 NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', NodeList::fromArray([
+                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
                         TextNode::fromText('foobar')
                     ])),
-                    BlockNode::fromBlockType('strong', NodeList::fromArray([
+                    BlockNode::fromBlockType('strong', [], NodeList::fromArray([
                         TextNode::fromText('bazqux')
                     ])),
                 ]),

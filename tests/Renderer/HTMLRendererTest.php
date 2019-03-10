@@ -41,7 +41,7 @@ class HTMLRendererTest extends TestCase
             ],
             [
                 NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', NodeList::fromArray([
+                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
                         TextNode::fromText('foobar')
                     ])),
                 ]),
@@ -49,10 +49,10 @@ class HTMLRendererTest extends TestCase
             ],
             [
                 NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', NodeList::fromArray([
+                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
                         TextNode::fromText('foobar')
                     ])),
-                    BlockNode::fromBlockType('strong', NodeList::fromArray([
+                    BlockNode::fromBlockType('strong', [], NodeList::fromArray([
                         TextNode::fromText('bazqux')
                     ])),
                 ]),
@@ -60,7 +60,7 @@ class HTMLRendererTest extends TestCase
             ],
             [
                 NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', NodeList::fromArray([
+                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
                         TextNode::fromText('foobar')
                     ])),
                     BlockNode::fromBlockType('generic')
@@ -69,7 +69,7 @@ class HTMLRendererTest extends TestCase
             ],
             [
                 NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', NodeList::fromArray([
+                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
                         TextNode::fromText('foobar')
                     ])),
                     $this->prophesize(Node::class)->reveal()

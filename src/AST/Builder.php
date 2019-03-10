@@ -37,9 +37,9 @@ class Builder
         return $this;
     }
 
-    public function addBlockNode(string $blockType): self
+    public function addBlockNode(string $blockType, array $arguments = []): self
     {
-        $builder = new self(Node::TYPE_BLOCK, ['block_type' => $blockType]);
+        $builder = new self(Node::TYPE_BLOCK, array_merge(['arguments' => $arguments], ['block_type' => $blockType]));
         $this->nodes[] = $builder;
 
         return $builder;
@@ -58,6 +58,7 @@ class Builder
             case Node::TYPE_BLOCK:
                 return BlockNode::fromBlockType(
                     $this->data['block_type'],
+                    $this->data['arguments'],
                     0 === count($this->nodes) ? null : NodeList::fromArray(array_map($getAst, $this->nodes))
                 );
 

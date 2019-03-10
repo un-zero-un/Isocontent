@@ -185,6 +185,58 @@ class ParseHTMLTest extends TestCase
                     ],
                 ]]
             ],
+            [
+                '<h4>Foo</h4>
+                <p>
+                    <span><em>Emphasis</em> text</span>
+                </p>
+                <ul><li>Baz</li></ul>',
+                [
+                    [
+                        'type' => 'block',
+                        'block_type' => 'title',
+                        'level' => 4,
+                        'children' => [['type' => 'text', 'value' => 'Foo']],
+                    ],
+                    ['type' => 'text', 'value' => ' '],
+                    [
+                        'type' => 'block',
+                        'block_type' => 'paragraph',
+                        'children' => [
+                            ['type' => 'text', 'value' => ' '],
+                            [
+                                'type' => 'block',
+                                'block_type' => 'inline_text',
+                                'children' => [
+                                    [
+                                        'type' => 'block',
+                                        'block_type' => 'emphasis',
+                                        'children' => [
+                                            ['type' => 'text', 'value' => 'Emphasis'],
+                                        ],
+                                    ],
+                                    ['type' => 'text', 'value' => ' text']
+                                ],
+                            ],
+                            ['type' => 'text', 'value' => ' '],
+                        ],
+                    ],
+                    ['type' => 'text', 'value' => ' '],
+                    [
+                        'type' => 'block',
+                        'block_type' => 'list',
+                        'children' => [
+                            [
+                                'type' => 'block',
+                                'block_type' => 'list_item',
+                                'children' => [
+                                    ['type' => 'text', 'value' => 'Baz'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            ],
         ];
     }
 }

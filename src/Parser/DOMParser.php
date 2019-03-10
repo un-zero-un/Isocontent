@@ -38,7 +38,7 @@ final class DOMParser implements Parser
 
                 return;
             case XML_ELEMENT_NODE:
-                $childBuilder = $builder->addBlockNode($this->parseBlockType($node));
+                $childBuilder = $builder->addBlockNode(...$this->parseBlockType($node));
                 break;
             default:
                 return;
@@ -56,16 +56,22 @@ final class DOMParser implements Parser
     private function parseBlockType(\DOMNode $node)
     {
         switch ($node->nodeName) {
+            case 'h4':
+                return ['title', ['level' => 4]];
             case 'p':
-                return 'paragraph';
+                return ['paragraph'];
             case 'em':
-                return 'emphasis';
+                return ['emphasis'];
             case 'strong':
-                return 'strong';
+                return ['strong'];
             case 'span':
-                return 'inline_text';
+                return ['inline_text'];
+            case 'ul':
+                return ['list'];
+            case 'li':
+                return ['list_item'];
             default:
-                return 'generic';
+                return ['generic'];
         }
     }
 }
