@@ -28,16 +28,17 @@ final class DOMParser implements Parser
         $childBuilder = null;
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
-                $builder->addTextNode($node->textContent);
+                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?: '');
+
                 return;
             case XML_ELEMENT_NODE:
                 $childBuilder = $builder->addBlockNode($this->parseBlockType($node));
                 break;
             default:
-                \dump($node);
+                return;
         }
 
-        if (null === $childBuilder || null === $node->childNodes) {
+        if (null === $node->childNodes) {
             return;
         }
 
@@ -51,6 +52,10 @@ final class DOMParser implements Parser
         switch ($node->nodeName) {
             case 'p':
                 return 'paragraph';
+            case 'em':
+                return 'emphasis';
+            case 'strong':
+                return 'strong';
             case 'span':
                 return 'inline_text';
             default:
