@@ -9,7 +9,7 @@ use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 
-class HTMLRenderer
+class HTMLRenderer implements Renderer
 {
     private const TAGS = [
         'paragraph' => 'p',
