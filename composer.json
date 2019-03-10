@@ -3,8 +3,7 @@
     "description": "A library to transform web contents (say HTML) to an abstract AST that can be rendered everywhere",
     "type": "library",
     "require": {
-        "php": "^7.1",
-        "ext-json": "*"
+        "php": "^7.1"
     },
     "suggest": {
         "ext-dom": "ext-dom is required for DOMParser usage"
