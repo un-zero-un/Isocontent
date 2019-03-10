@@ -38,6 +38,11 @@ class HTMLRenderer implements Renderer
         );
     }
 
+    public function supportsFormat(string $format): bool
+    {
+        return 'html' === $format;
+    }
+
     private function renderBlockNode(BlockNode $blockNode): string
     {
         if (null === $blockNode->getChildren()) {

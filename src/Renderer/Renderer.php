@@ -9,4 +9,6 @@ use Isocontent\AST\NodeList;
 interface Renderer
 {
     public function render(NodeList $ast);
+
+    public function supportsFormat(string $format): bool;
 }

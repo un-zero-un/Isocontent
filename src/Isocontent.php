@@ -8,6 +8,7 @@ use Isocontent\AST\Builder;
 use Isocontent\AST\NodeList;
 use Isocontent\Exception\UnsupportedFormatException;
 use Isocontent\Parser\Parser;
+use Isocontent\Renderer\Renderer;
 
 class Isocontent
 {
@@ -16,12 +17,23 @@ class Isocontent
      */
     private $parsers;
 
-    public function __construct(iterable $parsers)
+    /**
+     * @var Renderer[]
+     */
+    private $renderers;
+
+    public function __construct(iterable $parsers, iterable $renderers)
     {
         if ($parsers instanceof \Traversable) {
             $this->parsers = iterator_to_array($parsers);
         } else {
             $this->parsers = $parsers;
+        }
+
+        if ($renderers instanceof \Traversable) {
+            $this->renderers = iterator_to_array($renderers);
+        } else {
+            $this->renderers = $renderers;
         }
     }
 
@@ -41,11 +53,32 @@ class Isocontent
         throw new UnsupportedFormatException(sprintf('No parser found for format "%s"', $format));
     }
 
+    public function render(NodeList $ast, string $format)
+    {
+        foreach ($this->renderers as $renderer) {
+            if (!$renderer->supportsFormat($format)) {
+                continue;
+            }
+
+            return $renderer->render($ast);
+        }
+
+        throw new UnsupportedFormatException(sprintf('No renderer found for format "%s"', $format));
+    }
+
     /**
      * @return Parser[]
      */
     public function getParsers(): array
     {
         return $this->parsers;
+    }
+
+    /**
+     * @return Renderer[]
+     */
+    public function getRenderers(): array
+    {
+        return $this->renderers;
     }
 }

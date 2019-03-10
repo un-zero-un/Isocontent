@@ -17,7 +17,7 @@ class ParseHTMLTest extends TestCase
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent([new DOMParser]);
+        $this->isocontent = new Isocontent([new DOMParser], []);
 
         parent::setUp();
     }

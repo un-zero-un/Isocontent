@@ -12,6 +12,17 @@ use PHPUnit\Framework\TestCase;
 
 class JSONRendererTest extends TestCase
 {
+    public function test_it_supports_json(): void
+    {
+        $this->assertTrue((new JSONRenderer)->supportsFormat('json'));
+    }
+
+    public function test_it_does_not_supports_non_json(): void
+    {
+        $this->assertFalse((new JSONRenderer)->supportsFormat('html'));
+        $this->assertFalse((new JSONRenderer)->supportsFormat('js'));
+    }
+
     /**
      * @dataProvider dataProvider
      */

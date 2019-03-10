@@ -12,4 +12,9 @@ class JSONRenderer implements Renderer
     {
         return json_encode($ast->toArray());
     }
+
+    public function supportsFormat(string $format): bool
+    {
+        return 'json' === $format;
+    }
 }

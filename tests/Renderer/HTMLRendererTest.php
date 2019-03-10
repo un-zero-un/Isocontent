@@ -13,6 +13,17 @@ use PHPUnit\Framework\TestCase;
 
 class HTMLRendererTest extends TestCase
 {
+    public function test_it_supports_html(): void
+    {
+        $this->assertTrue((new HTMLRenderer)->supportsFormat('html'));
+    }
+
+    public function test_it_does_not_supports_non_html(): void
+    {
+        $this->assertFalse((new HTMLRenderer)->supportsFormat('htm'));
+        $this->assertFalse((new HTMLRenderer)->supportsFormat('json'));
+    }
+
     /**
      * @dataProvider dataProvider
      */
