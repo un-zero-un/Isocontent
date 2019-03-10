@@ -11,6 +11,14 @@ class NodeList
      */
     private $nodes = [];
 
+    /**
+     * @return Node[]
+     */
+    public function getNodes(): array
+    {
+        return $this->nodes;
+    }
+
     public function toArray(): array
     {
         return array_map(
