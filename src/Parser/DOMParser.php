@@ -44,7 +44,7 @@ final class DOMParser implements Parser
                 return;
         }
 
-        if (null === $node->childNodes || 0 === count($node->childNodes)) {
+        if (null === $node->childNodes || 0 === $node->childNodes->length) {
             return;
         }
 
