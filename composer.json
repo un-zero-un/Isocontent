@@ -19,7 +19,8 @@
         "symfony/var-dumper": "^4.2",
         "phpstan/phpstan": "^0.11.2",
         "symfony/framework-bundle": "^3.4 || ^4.2",
-        "symfony/serializer": "^3.4 || ^4.2"
+        "symfony/serializer": "^3.4 || ^4.2",
+        "satooshi/php-coveralls": "^2.1"
     },
     "autoload": {
         "psr-4": {
