@@ -9,4 +9,6 @@ use Isocontent\AST\Builder;
 interface Parser
 {
     public function parse(Builder $builder, $input): void;
+
+    public function supportsFormat(string $format): bool;
 }

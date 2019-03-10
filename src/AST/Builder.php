@@ -52,9 +52,6 @@ class Builder
         };
 
         switch ($this->type) {
-            case null:
-                return NodeList::fromArray(array_map($getAst, $this->nodes));
-
             case Node::TYPE_TEXT:
                 return TextNode::fromText($this->data['text']);
 
@@ -65,7 +62,7 @@ class Builder
                 );
 
             default:
-                throw new UnknownNodeTypeException(sprintf('Unknown node type "%s".', $this->type));
+                return NodeList::fromArray(array_map($getAst, $this->nodes));
         }
     }
 

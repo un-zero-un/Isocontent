@@ -19,6 +19,10 @@ class BlockNodeTest extends TestCase
         $nodeList = $this->prophesize(NodeList::class);
         $nodeList->toArray()->shouldBeCalled()->willReturn(['type' => 'text', 'value' => 'foobar']);
         $filledBlockNode = BlockNode::fromBlockType('foo', $nodeList->reveal());
+
+        $this->assertSame('block', $filledBlockNode->getType());
+        $this->assertSame('foo', $filledBlockNode->getBlockType());
+        $this->assertInstanceOf(NodeList::class, $filledBlockNode->getChildren());
         $this->assertEquals(
             ['type' => 'block', 'block_type' => 'foo', 'children' => ['type' => 'text', 'value' => 'foobar']],
             $filledBlockNode->toArray()

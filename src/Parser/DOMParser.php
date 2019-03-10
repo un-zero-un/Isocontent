@@ -11,21 +11,27 @@ final class DOMParser implements Parser
     public function parse(Builder $builder, $input): void
     {
         $document = new \DOMDocument('1.0', 'utf-8');
-        $document->loadHTML($input);
-        $root = $document->getElementsByTagName('body')->item(0);
-
-        if (null === $root) {
+        if (!$input) {
             return;
         }
+
+        $document->loadHTML($input);
+        $root = $document->getElementsByTagName('body')->item(0);
 
         foreach ($root->childNodes as $childNode) {
             $this->parseNode($builder, $childNode);
         }
     }
 
+    public function supportsFormat(string $format): bool
+    {
+        return 'html' === $format;
+    }
+
     private function parseNode(Builder $builder, \DOMNode $node): void
     {
         $childBuilder = null;
+
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
                 $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?: '');
@@ -38,7 +44,7 @@ final class DOMParser implements Parser
                 return;
         }
 
-        if (null === $node->childNodes) {
+        if (null === $node->childNodes || 0 === count($node->childNodes)) {
             return;
         }
 

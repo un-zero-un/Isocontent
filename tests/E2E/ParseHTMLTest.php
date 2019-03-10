@@ -17,7 +17,7 @@ class ParseHTMLTest extends TestCase
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent(new DOMParser);
+        $this->isocontent = new Isocontent([new DOMParser]);
 
         parent::setUp();
     }
@@ -27,7 +27,7 @@ class ParseHTMLTest extends TestCase
      */
     public function test_output_is_conform_to_html(string $htmlInput, array $expectedOutput): void
     {
-        $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput)->toArray());
+        $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput, 'html')->toArray());
     }
 
     public function dataProvider(): array
@@ -47,6 +47,25 @@ class ParseHTMLTest extends TestCase
                     'type' => 'block',
                     'block_type' => 'inline_text',
                     'children' => [['type' => 'text', 'value' => 'Foo']],
+                ]]
+            ],
+            [
+                '<span dir="rtl">Foo</span><!-- foobar -->',
+                [[
+                    'type' => 'block',
+                    'block_type' => 'inline_text',
+                    'children' => [['type' => 'text', 'value' => 'Foo']],
+                ]]
+            ],
+            [
+                '<strong>Foo <img /></strong>',
+                [[
+                    'type' => 'block',
+                    'block_type' => 'strong',
+                    'children' => [
+                        ['type' => 'text', 'value' => 'Foo '],
+                        ['type' => 'block', 'block_type' => 'generic'],
+                    ],
                 ]]
             ],
             [

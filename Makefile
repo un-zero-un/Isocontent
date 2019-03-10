@@ -1,7 +1,7 @@
 .PHONY: test watch phpstan
 
 test:
-	./vendor/bin/phpunit tests --colors
+	./vendor/bin/phpunit tests --colors --coverage-text --whitelist=src
 
 watch:
 	./vendor/bin/phpunit-watcher watch tests --colors

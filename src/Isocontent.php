@@ -6,25 +6,46 @@ namespace Isocontent;
 
 use Isocontent\AST\Builder;
 use Isocontent\AST\NodeList;
+use Isocontent\Exception\UnsupportedFormatException;
 use Isocontent\Parser\Parser;
 
 class Isocontent
 {
     /**
-     * @var Parser
+     * @var Parser[]
      */
-    private $parser;
+    private $parsers;
 
-    public function __construct(Parser $parser)
+    public function __construct(iterable $parsers)
     {
-        $this->parser = $parser;
+        if ($parsers instanceof \Traversable) {
+            $this->parsers = iterator_to_array($parsers);
+        } else {
+            $this->parsers = $parsers;
+        }
     }
 
-    public function buildAST($input): NodeList
+    public function buildAST($input, string $format): NodeList
     {
         $builder = Builder::create();
-        $this->parser->parse($builder, $input);
+        foreach ($this->parsers as $parser) {
+            if (!$parser->supportsFormat($format)) {
+                continue;
+            }
 
-        return $builder->getAST();
+            $parser->parse($builder, $input);
+
+            return $builder->getAST();
+        }
+
+        throw new UnsupportedFormatException(sprintf('No parser found for format "%s"', $format));
+    }
+
+    /**
+     * @return Parser[]
+     */
+    public function getParsers(): array
+    {
+        return $this->parsers;
     }
 }
