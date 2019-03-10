@@ -1,0 +1,20 @@
+language: php
+dist: xenial
+php:
+    - 7.1
+    - 7.2
+    - 7.3
+    - master
+
+install:
+    - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --no-interaction; fi
+    - if [ "$dependencies" = "highest" ]; then composer update --no-interaction; fi
+
+script:
+    - make test
+    - make phpstan
+
+env:
+    matrix:
+        - dependencies=lowest
+        - dependencies=highest

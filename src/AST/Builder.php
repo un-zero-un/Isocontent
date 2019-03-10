@@ -14,12 +14,12 @@ class Builder
     private $nodes;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $type;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $data;
 

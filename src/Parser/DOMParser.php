@@ -14,6 +14,10 @@ final class DOMParser implements Parser
         $document->loadHTML($input);
         $root = $document->getElementsByTagName('body')->item(0);
 
+        if (null === $root) {
+            return;
+        }
+
         foreach ($root->childNodes as $childNode) {
             $this->parseNode($builder, $childNode);
         }
