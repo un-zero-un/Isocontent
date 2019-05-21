@@ -38,6 +38,11 @@ final class BlockNode implements Node
         return $this->children;
     }
 
+    public function getArguments(): array
+    {
+        return $this->arguments;
+    }
+
     public function getType(): string
     {
         return Node::TYPE_BLOCK;

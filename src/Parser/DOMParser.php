@@ -58,6 +58,8 @@ final class DOMParser implements Parser
         switch ($node->nodeName) {
             case 'h4':
                 return ['title', ['level' => 4]];
+            case 'h5':
+                return ['title', ['level' => 5]];
             case 'p':
                 return ['paragraph'];
             case 'em':
@@ -67,9 +69,15 @@ final class DOMParser implements Parser
             case 'span':
                 return ['inline_text'];
             case 'ul':
-                return ['list'];
+                return ['list', ['ordered' => false]];
+            case 'ol':
+                return ['list', ['ordered' => true]];
             case 'li':
                 return ['list_item'];
+            case 'blockquote':
+                return ['quote'];
+            case 'br':
+                return ['new_line'];
             default:
                 return ['generic'];
         }

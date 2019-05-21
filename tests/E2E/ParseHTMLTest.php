@@ -190,7 +190,8 @@ class ParseHTMLTest extends TestCase
                 <p>
                     <span><em>Emphasis</em> text</span>
                 </p>
-                <ul><li>Baz</li></ul>',
+                <ul><li>Baz</li></ul>
+                <ol><li>Qux</li></ol>',
                 [
                     [
                         'type' => 'block',
@@ -225,12 +226,27 @@ class ParseHTMLTest extends TestCase
                     [
                         'type' => 'block',
                         'block_type' => 'list',
+                        'ordered' => false,
                         'children' => [
                             [
                                 'type' => 'block',
                                 'block_type' => 'list_item',
                                 'children' => [
                                     ['type' => 'text', 'value' => 'Baz'],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'block',
+                        'block_type' => 'list',
+                        'ordered' => true,
+                        'children' => [
+                            [
+                                'type' => 'block',
+                                'block_type' => 'list_item',
+                                'children' => [
+                                    ['type' => 'text', 'value' => 'Qux'],
                                 ],
                             ],
                         ],

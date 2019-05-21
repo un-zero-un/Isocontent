@@ -8,16 +8,33 @@ use Isocontent\AST\BlockNode;
 use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
+use Isocontent\Specs\BlockArgumentMatch;
+use Isocontent\Specs\BlockTypeMatch;
 
 class HTMLRenderer implements Renderer
 {
-    private const TAGS = [
-        'paragraph' => 'p',
-        'inline_text' => 'span',
-        'emphasis' => 'em',
-        'strong' => 'strong',
-        'generic' => 'span',
-    ];
+    /**
+     * @var array<[BlockNodeSpecification, string]>
+     */
+    private $tags;
+
+    public function __construct(?array $tags = null)
+    {
+        $this->tags = $tags ?: [
+            [new BlockTypeMatch('paragraph'), 'p'],
+            [new BlockTypeMatch('inline_text'), 'span'],
+            [new BlockTypeMatch('emphasis'), 'em'],
+            [new BlockTypeMatch('strong'), 'strong'],
+            [new BlockTypeMatch('generic'), 'span'],
+            [(new BlockTypeMatch('list'))->and(new BlockArgumentMatch('ordered', false)), 'ul'],
+            [(new BlockTypeMatch('list'))->and(new BlockArgumentMatch('ordered', true)), 'ol'],
+            [new BlockTypeMatch('list_item'), 'li'],
+            [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 4)), 'h4'],
+            [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 5)), 'h5'],
+            [new BlockTypeMatch('quote'), 'blockquote'],
+            [new BlockTypeMatch('new_line'), 'br'],
+        ];
+    }
 
     public function render(NodeList $ast)
     {
@@ -45,19 +62,21 @@ class HTMLRenderer implements Renderer
 
     private function renderBlockNode(BlockNode $blockNode): string
     {
+        $tagName = 'span';
+        foreach ($this->tags as $tag) {
+            if ($tag[0]->isSatisfiedBy($blockNode)) {
+                $tagName = $tag[1];
+            }
+        }
+
         if (null === $blockNode->getChildren()) {
-            return strtr(
-                '<:tagName: />',
-                [
-                    ':tagName:' => self::TAGS[$blockNode->getBlockType()] ?? 'span',
-                ]
-            );
+            return strtr('<:tagName: />', [':tagName:' => $tagName]);
         }
 
         return strtr(
             '<:tagName:>:content:</:tagName:>',
             [
-                ':tagName:' => self::TAGS[$blockNode->getBlockType()] ?? 'span',
+                ':tagName:' => $tagName,
                 ':content:' => $this->render($blockNode->getChildren()),
             ]
         );
