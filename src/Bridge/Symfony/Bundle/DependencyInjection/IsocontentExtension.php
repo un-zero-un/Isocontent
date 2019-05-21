@@ -15,7 +15,7 @@ class IsocontentExtension extends Extension
     {
         $configuration = $this->getConfiguration($configs, $container);
         if (null !== $configuration) {
-            $config = $this->processConfiguration($configuration, $configs);
+            $this->processConfiguration($configuration, $configs);
         }
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
