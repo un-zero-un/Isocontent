@@ -2,7 +2,7 @@
 
 namespace Isocontent\Specs;
 
-trait SpecificationImpl
+abstract class BaseSpecification implements Specification
 {
     public function and(Specification $specification): Specification
     {

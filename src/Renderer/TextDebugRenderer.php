@@ -34,7 +34,7 @@ class TextDebugRenderer implements Renderer
     {
         $renderedNode = str_repeat('  ', $level) . '# ' . $node->getType() . $this->renderArguments($node);
 
-        if ($node instanceof BlockNode && $node->getChildren()) {
+        if ($node instanceof BlockNode && null !== $node->getChildren()) {
             return
                 $renderedNode .
                 "\n" .

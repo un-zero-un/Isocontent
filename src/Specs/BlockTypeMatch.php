@@ -4,10 +4,8 @@ namespace Isocontent\Specs;
 
 use Isocontent\AST\BlockNode;
 
-class BlockTypeMatch implements BlockNodeSpecification
+class BlockTypeMatch extends BaseSpecification
 {
-    use SpecificationImpl;
-
     /**
      * @var string
      */
@@ -18,8 +16,8 @@ class BlockTypeMatch implements BlockNodeSpecification
         $this->blockType = $blockType;
     }
 
-    public function isSatisfiedBy(BlockNode $blockNode): bool
+    public function isSatisfiedBy($candidate): bool
     {
-        return $blockNode->getBlockType() === $this->blockType;
+        return $candidate instanceof BlockNode && $candidate->getBlockType() === $this->blockType;
     }
 }

@@ -14,7 +14,7 @@ use Isocontent\Specs\BlockTypeMatch;
 class HTMLRenderer implements Renderer
 {
     /**
-     * @var array<[BlockNodeSpecification, string]>
+     * @var array<array>
      */
     private $tags;
 

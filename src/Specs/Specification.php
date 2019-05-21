@@ -2,10 +2,9 @@
 
 namespace Isocontent\Specs;
 
-/**
- * @method isSatisfiedBy($candidate)
- */
 interface Specification
 {
+    public function isSatisfiedBy($candidate): bool;
+
     public function and(Specification $specification): Specification;
 }

@@ -4,10 +4,8 @@ namespace Isocontent\Specs;
 
 use Isocontent\AST\BlockNode;
 
-class BlockArgumentMatch implements BlockNodeSpecification
+class BlockArgumentMatch extends BaseSpecification
 {
-    use SpecificationImpl;
-
     /**
      * @var string
      */
@@ -24,8 +22,10 @@ class BlockArgumentMatch implements BlockNodeSpecification
         $this->argumentValue = $argumentValue;
     }
 
-    public function isSatisfiedBy(BlockNode $blockNode): bool
+    public function isSatisfiedBy($candidate): bool
     {
-        return ($blockNode->getArguments()[$this->argumentName] ?? null) === $this->argumentValue;
+        return
+            $candidate instanceof BlockNode &&
+            ($candidate->getArguments()[$this->argumentName] ?? null) === $this->argumentValue;
     }
 }

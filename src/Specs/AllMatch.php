@@ -2,10 +2,8 @@
 
 namespace Isocontent\Specs;
 
-class AllMatch implements Specification
+class AllMatch extends BaseSpecification
 {
-    use SpecificationImpl;
-
     /**
      * @var Specification[]
      */
