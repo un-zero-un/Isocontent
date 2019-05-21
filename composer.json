@@ -7,7 +7,7 @@
     },
     "suggest": {
         "ext-dom": "ext-dom is required for DOMParser usage",
-        "ext-json": "ext-dom is required for JSONRenderer usage",
+        "ext-json": "ext-json is required for JSONRenderer usage",
         "symfony/framework-bundle": "for Symfony integration",
         "symfony/serializer": "for serialization of AST"
     },
