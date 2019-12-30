@@ -9,7 +9,8 @@
         "ext-dom": "ext-dom is required for DOMParser usage",
         "ext-json": "ext-json is required for JSONRenderer usage",
         "symfony/framework-bundle": "for Symfony integration",
-        "symfony/serializer": "for serialization of AST"
+        "symfony/serializer": "for serialization of AST",
+        "twig/twig": "for Symfony integration"
     },
     "require-dev": {
         "ext-dom": "*",
@@ -20,7 +21,8 @@
         "phpstan/phpstan": "^0.11.2",
         "symfony/framework-bundle": "^3.4 || ^4.2",
         "symfony/serializer": "^3.4 || ^4.2",
-        "satooshi/php-coveralls": "^2.1"
+        "satooshi/php-coveralls": "^2.1",
+        "twig/twig": "^1.28 || ^2.0"
     },
     "autoload": {
         "psr-4": {
