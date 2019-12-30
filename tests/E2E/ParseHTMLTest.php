@@ -27,6 +27,9 @@ class ParseHTMLTest extends TestCase
      */
     public function test_output_is_conform_to_html(string $htmlInput, array $expectedOutput): void
     {
+        if($htmlInput == '<div>generic container with unknown <script>console.log("unknown");</script></div>'){
+            dump($this->isocontent->buildAST($htmlInput, 'html')->toArray());
+        }
         $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput, 'html')->toArray());
     }
 
@@ -274,7 +277,65 @@ class ParseHTMLTest extends TestCase
                         ]
                     ],
                 ],
-            ]
+            ],
+            [
+                '<p>
+                    Paragraph with some
+                    <span>inline text </span>
+                    <br />
+                    <span>separated by a break</span>
+                </p>',
+                [
+                    [
+                        'type' => 'block',
+                        'block_type' => 'paragraph',
+                        'children' => [
+                            ['type' => 'text', 'value' => ' Paragraph with some '],
+                            [
+                                'type' => 'block',
+                                'block_type' => 'inline_text',
+                                'children' => [
+                                    ['type' => 'text', 'value' => 'inline text ']
+                                ],
+                            ],
+                            ['type' => 'text', 'value' => ' '],
+                            [
+                                'type' => 'block',
+                                'block_type' => 'new_line'
+                            ],
+                            ['type' => 'text', 'value' => ' '],
+                            [
+                                'type' => 'block',
+                                'block_type' => 'inline_text',
+                                'children' => [
+                                    ['type' => 'text', 'value' => 'separated by a break']
+                                ],
+                            ],
+                            ['type' => 'text', 'value' => ' '],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                '<div class="container__className">generic container with unknown <script>console.log("unknown");</script><img src="yoda.png" alt="mini yoda" /></div>',
+                [
+                    [
+                        'type' => 'block',
+                        'block_type' => 'generic',
+                        'children' => [
+                            ['type' => 'text', 'value' => 'generic container with unknown '],
+                            [
+                                'type' => 'block',
+                                'block_type' => 'generic',
+                            ],
+                            [
+                                'type' => 'block',
+                                'block_type' => 'generic',
+                            ],
+                        ]
+                    ],
+                ],
+            ],
         ];
     }
 }

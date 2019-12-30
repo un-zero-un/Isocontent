@@ -42,6 +42,8 @@ class HTML2HTMLTest extends TestCase
             [ '<h4>Heading with <strong>strong and <em>emphasis</em></strong> text </h4>'.
                '<h5>Some <em>emphasis with<strong>too</strong></em></h5>'
             ],
+            [ '<p>Some paragraph with some <span> inline text <br /> with a return </span></p>'
+            ],
         ];
     }
 }
