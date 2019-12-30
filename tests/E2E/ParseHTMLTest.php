@@ -27,9 +27,6 @@ class ParseHTMLTest extends TestCase
      */
     public function test_output_is_conform_to_html(string $htmlInput, array $expectedOutput): void
     {
-        if($htmlInput == '<div>generic container with unknown <script>console.log("unknown");</script></div>'){
-            dump($this->isocontent->buildAST($htmlInput, 'html')->toArray());
-        }
         $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput, 'html')->toArray());
     }
 
