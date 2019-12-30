@@ -15,3 +15,4 @@ RUN composer update ${COMPOSER_FLAGS}
 COPY ./src ./src
 COPY ./tests ./tests
 COPY ./Makefile ./Makefile
+COPY ./phpstan.neon ./
