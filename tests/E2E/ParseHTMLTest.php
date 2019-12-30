@@ -237,6 +237,7 @@ class ParseHTMLTest extends TestCase
                             ],
                         ],
                     ],
+                    ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'list',
@@ -253,6 +254,27 @@ class ParseHTMLTest extends TestCase
                     ],
                 ]
             ],
+            [
+                '<p class="will-be-removed">very small paragraph</p>
+                 <div>generic container with some text</div>',
+                [
+                    [
+                        'type' => 'block',
+                        'block_type' => 'paragraph',
+                        'children' => [
+                            ['type' => 'text', 'value' => 'very small paragraph']
+                        ]
+                    ],
+                    ['type' => 'text', 'value' => ' '],
+                    [
+                        'type' => 'block',
+                        'block_type' => 'generic',
+                        'children' => [
+                            ['type' => 'text', 'value' => 'generic container with some text']
+                        ]
+                    ],
+                ],
+            ]
         ];
     }
 }

@@ -33,7 +33,15 @@ class HTML2HTMLTest extends TestCase
             [
                 '<ul><li>foo</li><li>bar</li><li>baz <ol><li>qux</li></ol></li></ul>' .
                 '<blockquote><p>Foobar</p></blockquote><br />'
-            ]
+            ],
+            [ '<h4>Heading with a <strong>strong</strong></h4>'.
+              '<p><span>Always escape your element &acd;</span></p>'.
+              '<br />'.
+              '<ul><li>Some <strong>element</strong></li><li>are more <em>important than other</em></li></ul>'
+            ],
+            [ '<h4>Heading with <strong>strong and <em>emphasis</em></strong> text </h4>'.
+               '<h5>Some <em>emphasis with<strong>too</strong></em></h5>'
+            ],
         ];
     }
 }
