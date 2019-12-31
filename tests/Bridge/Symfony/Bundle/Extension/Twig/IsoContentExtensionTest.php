@@ -7,6 +7,7 @@ use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Bridge\Symfony\Bundle\Extension\Twig\IsoContentExtension;
 use PHPUnit\Framework\TestCase;
+use Twig\TwigFunction;
 
 class IsoContentExtensionTest extends TestCase
 {
@@ -17,6 +18,14 @@ class IsoContentExtensionTest extends TestCase
     {
         $extension = new IsoContentExtension();
         $this->assertEquals($expect, $extension->displayIsoContent($ast));
+    }
+
+    /**
+     * @dataProvider functionProvider
+     */
+    public function testGetFunctions(string $expect,TwigFunction $function)
+    {
+        $this->assertSame($expect, $function->getName());
     }
 
     public static function astProvider()
@@ -58,6 +67,15 @@ class IsoContentExtensionTest extends TestCase
                 ''
             ],
 
+        ];
+    }
+
+    public function functionProvider()
+    {
+        $extension = new IsoContentExtension();
+        $function = $extension->getFunctions();
+        return[
+            ['display_isocontent', $function[0]],
         ];
     }
 }

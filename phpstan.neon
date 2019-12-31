@@ -1,6 +1,7 @@
 parameters:
     reportUnmatchedIgnoredErrors: false
-    excludes_analyse: []
+    excludes_analyse:
+        - 'vendor/*'
 
     ignoreErrors:
         # Symfony 3.4 compatibility
