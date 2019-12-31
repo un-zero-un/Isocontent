@@ -52,7 +52,12 @@ class IsoContentExtensionTest extends TestCase
                     ])),
                 ]),
                 '<p>Some paragraph <span>with some inline text</span><ul><li>Unsorted</li><li>data</li></ul></p>'
-            ]
+            ],
+            [
+                NodeList::fromArray([]),
+                ''
+            ],
+
         ];
     }
 }

@@ -115,54 +115,40 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
-                '<p>
-                    <span>Foo</span>
-                    <span>Bar</span>
-                    <span>Baz</span>
-                </p>',
+                '<p><span>Foo</span><span>Bar</span><span>Baz</span></p>',
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
                     'children' => [
-                        ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
                             'children' => [['type' => 'text', 'value' => 'Foo']],
                         ],
-                        ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
                             'children' => [['type' => 'text', 'value' => 'Bar']],
                         ],
-                        ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
-                        ['type' => 'text', 'value' => ' '],
                     ],
                 ]]
             ],
             [
-                '<p>
-                    <span>Foo</span>
-                    <span><em>Emphasis</em> text</span>
-                    <span>Baz</span>
-                </p>',
+                '<p><span>Foo</span><span><em>Emphasis</em> text</span><span>Baz</span></p>',
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
                     'children' => [
-                        ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
                             'children' => [['type' => 'text', 'value' => 'Foo']],
                         ],
-                        ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
@@ -175,23 +161,16 @@ class ParseHTMLTest extends TestCase
                                 ['type' => 'text', 'value' => ' text'],
                             ],
                         ],
-                        ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
-                        ['type' => 'text', 'value' => ' '],
                     ],
                 ]]
             ],
             [
-                '<h4>Foo</h4>
-                <p>
-                    <span><em>Emphasis</em> text</span>
-                </p>
-                <ul><li>Baz</li></ul>
-                <ol><li>Qux</li></ol>',
+                '<h4>Foo</h4><p><span><em>Emphasis</em> text</span></p><ul><li>Baz</li></ul><ol><li>Qux</li></ol>',
                 [
                     [
                         'type' => 'block',
@@ -199,12 +178,10 @@ class ParseHTMLTest extends TestCase
                         'level' => 4,
                         'children' => [['type' => 'text', 'value' => 'Foo']],
                     ],
-                    ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'paragraph',
                         'children' => [
-                            ['type' => 'text', 'value' => ' '],
                             [
                                 'type' => 'block',
                                 'block_type' => 'inline_text',
@@ -219,10 +196,8 @@ class ParseHTMLTest extends TestCase
                                     ['type' => 'text', 'value' => ' text']
                                 ],
                             ],
-                            ['type' => 'text', 'value' => ' '],
                         ],
                     ],
-                    ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'list',
@@ -237,7 +212,6 @@ class ParseHTMLTest extends TestCase
                             ],
                         ],
                     ],
-                    ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'list',
@@ -255,8 +229,7 @@ class ParseHTMLTest extends TestCase
                 ]
             ],
             [
-                '<p class="will-be-removed">very small paragraph</p>
-                 <div>generic container with some text</div>',
+                '<p class="will-be-removed">very small paragraph</p><div>generic container with some text</div>',
                 [
                     [
                         'type' => 'block',
@@ -265,7 +238,6 @@ class ParseHTMLTest extends TestCase
                             ['type' => 'text', 'value' => 'very small paragraph']
                         ]
                     ],
-                    ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'generic',
@@ -276,18 +248,13 @@ class ParseHTMLTest extends TestCase
                 ],
             ],
             [
-                '<p>
-                    Paragraph with some
-                    <span>inline text </span>
-                    <br />
-                    <span>separated by a break</span>
-                </p>',
+                '<p>Paragraph with some<span>inline text </span><br /><span>separated by a break</span></p>',
                 [
                     [
                         'type' => 'block',
                         'block_type' => 'paragraph',
                         'children' => [
-                            ['type' => 'text', 'value' => ' Paragraph with some '],
+                            ['type' => 'text', 'value' => 'Paragraph with some'],
                             [
                                 'type' => 'block',
                                 'block_type' => 'inline_text',
@@ -295,12 +262,10 @@ class ParseHTMLTest extends TestCase
                                     ['type' => 'text', 'value' => 'inline text ']
                                 ],
                             ],
-                            ['type' => 'text', 'value' => ' '],
                             [
                                 'type' => 'block',
                                 'block_type' => 'new_line'
                             ],
-                            ['type' => 'text', 'value' => ' '],
                             [
                                 'type' => 'block',
                                 'block_type' => 'inline_text',
@@ -308,7 +273,6 @@ class ParseHTMLTest extends TestCase
                                     ['type' => 'text', 'value' => 'separated by a break']
                                 ],
                             ],
-                            ['type' => 'text', 'value' => ' '],
                         ],
                     ],
                 ],
