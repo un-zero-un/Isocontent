@@ -23,11 +23,16 @@ class IsoContentExtensionTest extends TestCase
     /**
      * @dataProvider functionProvider
      */
-    public function testGetFunctions(string $expect,TwigFunction $function)
+    public function testGetTwigFunctions(string $expect,TwigFunction $function)
     {
         $this->assertSame($expect, $function->getName());
     }
-
+    public function testGetFunction(){
+        $extension = new IsoContentExtension();
+        $this->assertTrue(is_array($extension->getFunctions()));
+        $functions = $extension->getFunctions();
+        $this->assertInstanceOf(TwigFunction::class,$functions[0]);
+    }
     public static function astProvider()
     {
         return [
