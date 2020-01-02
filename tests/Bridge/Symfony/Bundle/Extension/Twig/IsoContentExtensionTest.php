@@ -14,7 +14,7 @@ class IsoContentExtensionTest extends TestCase
     /**
      * @dataProvider astProvider
      */
-    public function testDisplayIsoContentFunction(NodeList $ast, string $expect)
+    public function tes_display_iso_content_function(NodeList $ast, string $expect)
     {
         $extension = new IsoContentExtension();
         $this->assertEquals($expect, $extension->displayIsoContent($ast));
@@ -23,16 +23,19 @@ class IsoContentExtensionTest extends TestCase
     /**
      * @dataProvider functionProvider
      */
-    public function testGetTwigFunctions(string $expect,TwigFunction $function)
+    public function test_get_twig_functions(string $expect, TwigFunction $function)
     {
         $this->assertSame($expect, $function->getName());
     }
-    public function testGetFunction(){
+
+    public function test_get_function()
+    {
         $extension = new IsoContentExtension();
         $this->assertTrue(is_array($extension->getFunctions()));
         $functions = $extension->getFunctions();
-        $this->assertInstanceOf(TwigFunction::class,$functions[0]);
+        $this->assertInstanceOf(TwigFunction::class, $functions[0]);
     }
+
     public static function astProvider()
     {
         return [
@@ -79,7 +82,7 @@ class IsoContentExtensionTest extends TestCase
     {
         $extension = new IsoContentExtension();
         $function = $extension->getFunctions();
-        return[
+        return [
             ['display_isocontent', $function[0]],
         ];
     }

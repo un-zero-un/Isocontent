@@ -84,20 +84,20 @@ class JSONRendererTest extends TestCase
                     BlockNode::fromBlockType('list', ['ordered' => false], NodeList::fromArray([
                         BlockNode::fromBlockType('list_item', ['ordered' => false], NodeList::fromArray([
                             TextNode::fromText('a list'),
-                        ])),BlockNode::fromBlockType('list_item', ['ordered' => false], NodeList::fromArray([
+                        ])), BlockNode::fromBlockType('list_item', ['ordered' => false], NodeList::fromArray([
                             TextNode::fromText('of item'),
                         ]))
                     ])),
                 ]),
-                '[{"level":4,"type":"block","block_type":"title","children":[{"type":"text","value":"level 4 title"}]},'.
-                '{"type":"block","block_type":"quote","children":[{"type":"text","value":"Quoted item"}]},'.
-                '{"level":5,"type":"block","block_type":"title","children":[{"type":"text","value":"level 5 title"}]},'.
-                '{"type":"text","value":"followed by an"},'.
-                '{"type":"block","block_type":"new_line"},'.
-                '{"type":"block","block_type":"emphasis","children":[{"type":"text","value":"emphasis"}]},'.
-                '{"type":"text","value":"and"},'.
-                '{"type":"block","block_type":"strong","children":[{"type":"text","value":"Strong text"}]},'.
-                '{"type":"text","value":"followed by"},'.
+                '[{"level":4,"type":"block","block_type":"title","children":[{"type":"text","value":"level 4 title"}]},' .
+                '{"type":"block","block_type":"quote","children":[{"type":"text","value":"Quoted item"}]},' .
+                '{"level":5,"type":"block","block_type":"title","children":[{"type":"text","value":"level 5 title"}]},' .
+                '{"type":"text","value":"followed by an"},' .
+                '{"type":"block","block_type":"new_line"},' .
+                '{"type":"block","block_type":"emphasis","children":[{"type":"text","value":"emphasis"}]},' .
+                '{"type":"text","value":"and"},' .
+                '{"type":"block","block_type":"strong","children":[{"type":"text","value":"Strong text"}]},' .
+                '{"type":"text","value":"followed by"},' .
                 '{"ordered":false,"type":"block","block_type":"list","children":[{"ordered":false,"type":"block","block_type":"list_item","children":[{"type":"text","value":"a list"}]},' .
                 '{"ordered":false,"type":"block","block_type":"list_item","children":[{"type":"text","value":"of item"}]}]}]',
             ],

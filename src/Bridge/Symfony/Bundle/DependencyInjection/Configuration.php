@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
             $builder = new TreeBuilder();
 
             /** @var ArrayNodeDefinition $rootNode */
-            $root= $builder->root('isocontent');
+            $root = $builder->root('isocontent');
         }
 
         $root
