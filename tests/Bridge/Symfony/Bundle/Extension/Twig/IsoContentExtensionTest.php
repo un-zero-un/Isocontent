@@ -14,7 +14,7 @@ class IsoContentExtensionTest extends TestCase
     /**
      * @dataProvider astProvider
      */
-    public function tes_display_iso_content_function(NodeList $ast, string $expect)
+    public function test_display_iso_content_function(NodeList $ast, string $expect)
     {
         $extension = new IsoContentExtension();
         $this->assertEquals($expect, $extension->displayIsoContent($ast));
