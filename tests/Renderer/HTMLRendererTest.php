@@ -76,6 +76,56 @@ class HTMLRendererTest extends TestCase
                 ]),
                 '<span>foobar</span>',
             ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType('list', ['ordered' => false], NodeList::fromArray([
+                        BlockNode::fromBlockType('list_item', [], NodeList::fromArray([
+                            TextNode::fromText("List item"),
+                        ])),
+                        BlockNode::fromBlockType('list_item', [], NodeList::fromArray([
+                            TextNode::fromText('Unordered'),
+                        ]))
+                    ]))
+                ]),
+                '<ul><li>List item</li><li>Unordered</li></ul>'
+            ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType('list', ['ordered' => true], NodeList::fromArray([
+                        BlockNode::fromBlockType('list_item', [], NodeList::fromArray([
+                            TextNode::fromText("First item"),
+                        ])),
+                        BlockNode::fromBlockType('list_item', [], NodeList::fromArray([
+                            TextNode::fromText('Second item'),
+                        ]))
+                    ]))
+                ]),
+                '<ol><li>First item</li><li>Second item</li></ol>'
+            ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType('title', ['level' => 4], NodeList::fromArray([
+                        TextNode::fromText('level 4 title'),
+                    ])),
+                    BlockNode::fromBlockType('title', ['level' => 5], NodeList::fromArray([
+                        TextNode::fromText('level 5 title'),
+                    ])),
+                    BlockNode::fromBlockType('quote', [], NodeList::fromArray([
+                        TextNode::fromText('Quoted item'),
+
+                    ])),
+                    TextNode::fromText('followed by an'),
+                    BlockNode::fromBlockType('new_line', [], null),
+                    BlockNode::fromBlockType('emphasis', [], NodeList::fromArray([
+                        TextNode::fromText('emphasis'),
+                    ])),
+                    TextNode::fromText('and'),
+                    BlockNode::fromBlockType('strong', [], NodeList::fromArray([
+                        TextNode::fromText('Strong text'),
+                    ])),
+                ]),
+                '<h4>level 4 title</h4><h5>level 5 title</h5><blockquote>Quoted item</blockquote>followed by an<br /><em>emphasis</em>and<strong>Strong text</strong>',
+            ]
         ];
     }
 }

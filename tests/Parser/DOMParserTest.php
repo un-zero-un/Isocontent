@@ -15,6 +15,7 @@ class DOMParserTest extends TestCase
     {
         $this->assertTrue((new DOMParser)->supportsFormat('html'));
     }
+
     public function test_it_does_not_supports_other_format_that_html(): void
     {
         $this->assertFalse((new DOMParser)->supportsFormat('txt'));

@@ -12,9 +12,17 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder();
-        /** @var ArrayNodeDefinition $root */
-        $root = $builder->root('isocontent');
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
+            $builder = new TreeBuilder('isocontent');
+
+            /** @var ArrayNodeDefinition $rootNode */
+            $root = $builder->getRootNode();
+        } else {
+            $builder = new TreeBuilder();
+
+            /** @var ArrayNodeDefinition $rootNode */
+            $root = $builder->root('isocontent');
+        }
 
         $root
             ->children()
