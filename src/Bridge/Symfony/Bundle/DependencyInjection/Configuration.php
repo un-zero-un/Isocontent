@@ -14,8 +14,10 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('isocontent');
         if (method_exists($treeBuilder, 'root')) {
+            /** @var ArrayNodeDefinition $rootNode */
             $rootNode = $treeBuilder->root('isocontent');
         } else {
+            /** @var ArrayNodeDefinition $rootNode */
             $rootNode = $treeBuilder->getRootNode();
         }
 
