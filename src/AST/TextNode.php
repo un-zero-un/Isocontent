@@ -6,10 +6,7 @@ namespace Isocontent\AST;
 
 final class TextNode implements Node
 {
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
     private function __construct(string $value)
     {

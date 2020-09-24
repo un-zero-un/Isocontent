@@ -16,12 +16,12 @@ class Isocontent
     /**
      * @var Parser[]
      */
-    private $parsers;
+    private array $parsers;
 
     /**
      * @var Renderer[]
      */
-    private $renderers;
+    private array $renderers;
 
     /**
      * @param iterable<Parser>   $parsers

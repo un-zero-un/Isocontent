@@ -17,7 +17,7 @@ class HTMLRenderer implements Renderer
     /**
      * @var array<array{Specification, string}>
      */
-    private $tags;
+    private array $tags;
 
     /**
      * @param array<array{Specification, string}> $tags

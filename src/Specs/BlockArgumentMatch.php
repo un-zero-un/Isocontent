@@ -6,10 +6,7 @@ use Isocontent\AST\BlockNode;
 
 class BlockArgumentMatch extends BaseSpecification
 {
-    /**
-     * @var string
-     */
-    private $argumentName;
+    private string $argumentName;
 
     /**
      * @var mixed

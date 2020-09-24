@@ -11,21 +11,19 @@ class Builder
     /**
      * @var Builder[]
      */
-    private $nodes;
+    private array $nodes;
 
     /**
      * @var string|null
      */
-    private $type;
+    private ?string $type;
 
     /**
      * @var array<string, mixed>|null
      */
-    private $data;
+    private ?array $data;
 
     /**
-     * Builder constructor.
-     *
      * @param string|null               $type
      * @param array<string, mixed>|null $data
      */

@@ -7,7 +7,7 @@ class AllMatch extends BaseSpecification
     /**
      * @var Specification[]
      */
-    private $specifications;
+    private array $specifications;
 
     public function __construct(Specification ...$specifications)
     {

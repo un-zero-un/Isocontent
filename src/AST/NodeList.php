@@ -9,7 +9,7 @@ class NodeList
     /**
      * @var Node[]
      */
-    private $nodes = [];
+    private array $nodes = [];
 
     /**
      * @return Node[]

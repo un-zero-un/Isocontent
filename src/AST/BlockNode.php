@@ -6,20 +6,14 @@ namespace Isocontent\AST;
 
 final class BlockNode implements Node
 {
-    /**
-     * @var string
-     */
-    private $blockType;
+    private string $blockType;
 
-    /**
-     * @var NodeList|null
-     */
-    private $children;
+    private ?NodeList $children;
 
     /**
      * @var array<string, scalar>
      */
-    private $arguments;
+    private array $arguments;
 
     /**
      * @param string                $blockType
