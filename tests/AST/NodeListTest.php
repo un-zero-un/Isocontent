@@ -7,9 +7,12 @@ namespace Isocontent\Tests\AST;
 use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class NodeListTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function test_it_constructs_from_array(): void
     {
         $node1 = $this->prophesize(Node::class);

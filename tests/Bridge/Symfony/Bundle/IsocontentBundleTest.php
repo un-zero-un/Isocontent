@@ -8,12 +8,15 @@ use Isocontent\Bridge\Symfony\Bundle\IsocontentBundle;
 use Isocontent\Parser\Parser;
 use Isocontent\Renderer\Renderer;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class IsocontentBundleTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function test_it_builds(): void
     {
         $containerBuilder = $this->prophesize(ContainerBuilder::class);

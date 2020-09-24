@@ -12,9 +12,12 @@ use Isocontent\Parser\Parser;
 use Isocontent\Renderer\Renderer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class IsocontentTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function test_it_constructs_with_parsers_array(): void
     {
         $this->assertCount(

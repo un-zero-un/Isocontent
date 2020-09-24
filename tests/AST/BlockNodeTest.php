@@ -7,9 +7,12 @@ namespace Isocontent\Tests\AST;
 use Isocontent\AST\BlockNode;
 use Isocontent\AST\NodeList;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class BlockNodeTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function test_it_renders_as_array(): void
     {
         $emptyBlockNode = BlockNode::fromBlockType('foo', []);

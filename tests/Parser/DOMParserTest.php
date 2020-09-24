@@ -8,9 +8,12 @@ use Isocontent\AST\Builder;
 use Isocontent\Parser\DOMParser;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class DOMParserTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function test_it_supports_html(): void
     {
         $this->assertTrue((new DOMParser)->supportsFormat('html'));

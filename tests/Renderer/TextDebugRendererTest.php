@@ -8,9 +8,12 @@ use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Renderer\TextDebugRenderer;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TextDebugRendererTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function test_it_supports_text(): void
     {
         $this->assertTrue((new TextDebugRenderer)->supportsFormat('text_debug'));
