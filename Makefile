@@ -4,7 +4,7 @@ test:
 	./vendor/bin/phpunit tests --colors --coverage-text --whitelist=src --coverage-clover=build/coverage/clover.xml
 
 watch:
-	./vendor/bin/phpunit-watcher watch tests --colors
+	./vendor/bin/phpunit-watcher watch tests --colors .
 
 phpstan:
 	./vendor/bin/phpstan analyse src --level 7
