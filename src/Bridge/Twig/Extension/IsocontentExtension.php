@@ -26,15 +26,16 @@ class IsocontentExtension extends AbstractExtension
     }
 
     /**
-     * @param @param array<array<mixed>>|NodeList $ast
-     * @param string $format
+     * @param array<array<mixed>>|NodeList $ast
+     * @param string                       $format
      *
      * @return string
      */
     public function renderAST($ast, string $format = 'html'): string
     {
         if (!$ast instanceof NodeList) {
-            $ast = NodeList::fromArray($ast);
+            /** @var NodeList $ast */
+            $ast = $this->isocontent->buildAST($ast, 'array');
         }
 
         return $this->isocontent->render($ast, $format);

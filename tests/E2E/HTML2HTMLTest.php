@@ -3,6 +3,7 @@
 namespace Isocontent\Tests\E2E;
 
 use Isocontent\AST\Builder;
+use Isocontent\Parser\ArrayParser;
 use Isocontent\Parser\DOMParser;
 use Isocontent\Renderer\HTMLRenderer;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,18 @@ class HTML2HTMLTest extends TestCase
         $builder = Builder::create();
         (new DOMParser)->parse($builder, $html);
         $this->assertSame($html, (new HTMLRenderer)->render($builder->getAST()));
+    }
+    /**
+     * @dataProvider htmlProvider
+     */
+    public function test_it_converts_html_back_to_html_via_arrays(string $html)
+    {
+        $builder = Builder::create();
+        (new DOMParser)->parse($builder, $html);
+
+        $arrayBuilder = Builder::create();
+        (new ArrayParser)->parse($arrayBuilder, $builder->getAST()->toArray());
+        $this->assertSame($html, (new HTMLRenderer)->render($arrayBuilder->getAST()));
     }
 
     public function htmlProvider(): array

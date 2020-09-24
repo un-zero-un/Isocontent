@@ -32,8 +32,10 @@ class IsocontentExtensionTest extends TestCase
     public function test_it_renders_array_ast()
     {
         $isocontent = $this->prophesize(Isocontent::class);
+        $nodeList   = $this->prophesize(NodeList::class);
 
         $isocontent->render(Argument::type(NodeList::class), 'html')->shouldBeCalled()->willReturn('value');
+        $isocontent->buildAST(Argument::type('array'), 'array')->shouldBeCalled()->willReturn($nodeList);
 
         $extension = new IsocontentExtension($isocontent->reveal());
 

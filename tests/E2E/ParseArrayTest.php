@@ -6,11 +6,10 @@ namespace Isocontent\Tests\E2E;
 
 use Isocontent\Isocontent;
 use Isocontent\Parser\ArrayParser;
-use Isocontent\Parser\DOMParser;
 use Isocontent\Renderer\HTMLRenderer;
 use PHPUnit\Framework\TestCase;
 
-class ParseHTMLTest extends TestCase
+class ParseArrayTest extends TestCase
 {
     /**
      * @var Isocontent
@@ -19,7 +18,7 @@ class ParseHTMLTest extends TestCase
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent([new DOMParser, new ArrayParser], [new HTMLRenderer]);
+        $this->isocontent = new Isocontent([new ArrayParser], [new HTMLRenderer]);
 
         parent::setUp();
     }
@@ -27,16 +26,16 @@ class ParseHTMLTest extends TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function test_output_is_conform_to_html(string $htmlInput, array $expectedOutput): void
+    public function test_output_renders_as_html(string $htmlInput, array $expectedOutput): void
     {
-        $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput, 'html')->toArray());
+        $this->assertEquals($htmlInput, $this->isocontent->render($this->isocontent->buildAST($expectedOutput, 'array'), 'html'));
     }
 
     public function dataProvider(): array
     {
         return [
             [
-                'Foo',
+                '<p>Foo</p>',
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
@@ -52,7 +51,7 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
-                '<span dir="rtl">Foo</span><!-- foobar -->',
+                '<span>Foo</span>',
                 [[
                     'type' => 'block',
                     'block_type' => 'inline_text',
@@ -60,7 +59,7 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
-                '<strong>Foo <img /></strong>',
+                '<strong>Foo <span /></strong>',
                 [[
                     'type' => 'block',
                     'block_type' => 'strong',
@@ -68,14 +67,6 @@ class ParseHTMLTest extends TestCase
                         ['type' => 'text', 'value' => 'Foo '],
                         ['type' => 'block', 'block_type' => 'generic'],
                     ],
-                ]]
-            ],
-            [
-                '<dir>Foo</dir>',
-                [[
-                    'type' => 'block',
-                    'block_type' => 'generic',
-                    'children' => [['type' => 'text', 'value' => 'Foo']],
                 ]]
             ],
             [
@@ -117,11 +108,7 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
-                '<p>
-                    <span>Foo</span>
-                    <span>Bar</span>
-                    <span>Baz</span>
-                </p>',
+                '<p> <span>Foo</span> <span>Bar</span> <span>Baz</span> </p>',
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
@@ -149,11 +136,7 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
-                '<p>
-                    <span>Foo</span>
-                    <span><em>Emphasis</em> text</span>
-                    <span>Baz</span>
-                </p>',
+                '<p> <span>Foo</span> <span><em>Emphasis</em> text</span> <span>Baz</span> </p>',
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
@@ -188,12 +171,7 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
-                '<h4>Foo</h4>
-                <p>
-                    <span><em>Emphasis</em> text</span>
-                </p>
-                <ul><li>Baz</li></ul>
-                <ol><li>Qux</li></ol>',
+                '<h4>Foo</h4> <p> <span><em>Emphasis</em> text</span> </p> <ul><li>Baz</li></ul><ol><li>Qux</li></ol>',
                 [
                     [
                         'type' => 'block',
