@@ -17,14 +17,19 @@ final class BlockNode implements Node
     private $children;
 
     /**
-     * @var array
+     * @var array<string, scalar>
      */
     private $arguments;
 
+    /**
+     * @param string                $blockType
+     * @param array<string, scalar> $arguments
+     * @param NodeList|null         $children
+     */
     private function __construct(string $blockType, array $arguments, NodeList $children = null)
     {
         $this->blockType = $blockType;
-        $this->children = $children;
+        $this->children  = $children;
         $this->arguments = $arguments;
     }
 
@@ -38,6 +43,9 @@ final class BlockNode implements Node
         return $this->children;
     }
 
+    /**
+     * @return array<string, scalar>
+     */
     public function getArguments(): array
     {
         return $this->arguments;
@@ -58,6 +66,13 @@ final class BlockNode implements Node
         return $array;
     }
 
+    /**
+     * @param string                $blockType
+     * @param array<string, scalar> $arguments
+     * @param NodeList|null         $children
+     *
+     * @return self
+     */
     public static function fromBlockType(string $blockType, array $arguments = [], NodeList $children = null): self
     {
         return new self($blockType, $arguments, $children);

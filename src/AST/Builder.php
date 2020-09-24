@@ -19,15 +19,21 @@ class Builder
     private $type;
 
     /**
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     private $data;
 
+    /**
+     * Builder constructor.
+     *
+     * @param string|null               $type
+     * @param array<string, mixed>|null $data
+     */
     private function __construct(string $type = null, array $data = null)
     {
         $this->nodes = [];
-        $this->type = $type;
-        $this->data = $data;
+        $this->type  = $type;
+        $this->data  = $data;
     }
 
     public function addTextNode(string $text): self
@@ -37,14 +43,26 @@ class Builder
         return $this;
     }
 
+    /**
+     * @param string                $blockType
+     * @param array<string, scalar> $arguments
+     *
+     * @return self
+     */
     public function addBlockNode(string $blockType, array $arguments = []): self
     {
-        $builder = new self(Node::TYPE_BLOCK, array_merge(['arguments' => $arguments], ['block_type' => $blockType]));
+        $builder       = new self(
+            Node::TYPE_BLOCK,
+            array_merge(['arguments' => $arguments], ['block_type' => $blockType])
+        );
         $this->nodes[] = $builder;
 
         return $builder;
     }
 
+    /**
+     * @return Node|NodeList
+     */
     public function getAST()
     {
         $getAst = function (Builder $builder) {

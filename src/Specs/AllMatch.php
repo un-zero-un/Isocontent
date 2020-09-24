@@ -14,6 +14,11 @@ class AllMatch extends BaseSpecification
         $this->specifications = $specifications;
     }
 
+    /**
+     * @param mixed $candidate
+     *
+     * @return bool
+     */
     public function isSatisfiedBy($candidate): bool
     {
         foreach ($this->specifications as $specification) {

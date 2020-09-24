@@ -11,5 +11,8 @@ interface Node
 
     public function getType(): string;
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array;
 }

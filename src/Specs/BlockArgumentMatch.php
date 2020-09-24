@@ -16,12 +16,21 @@ class BlockArgumentMatch extends BaseSpecification
      */
     private $argumentValue;
 
+    /**
+     * @param string $argumentName
+     * @param mixed  $argumentValue
+     */
     public function __construct(string $argumentName, $argumentValue)
     {
         $this->argumentName  = $argumentName;
         $this->argumentValue = $argumentValue;
     }
 
+    /**
+     * @param mixed $candidate
+     *
+     * @return bool
+     */
     public function isSatisfiedBy($candidate): bool
     {
         return

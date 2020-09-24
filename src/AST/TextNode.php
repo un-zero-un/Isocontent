@@ -26,6 +26,9 @@ final class TextNode implements Node
         return Node::TYPE_TEXT;
     }
 
+    /**
+     * @return array{type: string, value: string}
+     */
     public function toArray(): array
     {
         return ['type' => $this->getType(), 'value' => $this->value];

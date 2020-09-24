@@ -19,6 +19,9 @@ class NodeList
         return $this->nodes;
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function toArray(): array
     {
         return array_map(

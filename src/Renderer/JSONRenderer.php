@@ -8,6 +8,11 @@ use Isocontent\AST\NodeList;
 
 class JSONRenderer implements Renderer
 {
+    /**
+     * @param NodeList $ast
+     *
+     * @return false|string
+     */
     public function render(NodeList $ast)
     {
         return json_encode($ast->toArray());

@@ -8,6 +8,10 @@ use Isocontent\AST\Builder;
 
 final class DOMParser implements Parser
 {
+    /**
+     * @param Builder $builder
+     * @param mixed   $input
+     */
     public function parse(Builder $builder, $input): void
     {
         $document = new \DOMDocument('1.0', 'utf-8');
@@ -53,7 +57,12 @@ final class DOMParser implements Parser
         }
     }
 
-    private function parseBlockType(\DOMNode $node)
+    /**
+     * @param \DOMNode $node
+     *
+     * @return array{0: string, 1?: array<string, scalar>}
+     */
+    private function parseBlockType(\DOMNode $node): array
     {
         switch ($node->nodeName) {
             case 'h4':

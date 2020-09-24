@@ -19,7 +19,7 @@ class TextDebugRenderer implements Renderer
         return 'text_debug' === $format;
     }
 
-    private function renderNodeList(NodeList $ast, $level = 0): string
+    private function renderNodeList(NodeList $ast, ?int $level = 0): string
     {
         return implode(
             '',
@@ -30,7 +30,7 @@ class TextDebugRenderer implements Renderer
         );
     }
 
-    private function renderNode(Node $node, $level = 0): string
+    private function renderNode(Node $node, ?int $level = 0): string
     {
         $renderedNode = str_repeat('  ', $level) . '# ' . $node->getType() . $this->renderArguments($node);
 

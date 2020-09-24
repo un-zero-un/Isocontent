@@ -11,7 +11,13 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class IsocontentExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    /**
+     * @param array<string, mixed> $configs
+     * @param ContainerBuilder     $container
+     *
+     * @throws \Exception
+     */
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = $this->getConfiguration($configs, $container);
         if (null !== $configuration) {

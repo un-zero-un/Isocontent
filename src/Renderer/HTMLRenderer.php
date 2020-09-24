@@ -10,14 +10,18 @@ use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Specs\BlockArgumentMatch;
 use Isocontent\Specs\BlockTypeMatch;
+use Isocontent\Specs\Specification;
 
 class HTMLRenderer implements Renderer
 {
     /**
-     * @var array<array>
+     * @var array<array{Specification, string}>
      */
     private $tags;
 
+    /**
+     * @param array<array{Specification, string}> $tags
+     */
     public function __construct(?array $tags = null)
     {
         $this->tags = $tags ?: [
@@ -36,7 +40,7 @@ class HTMLRenderer implements Renderer
         ];
     }
 
-    public function render(NodeList $ast)
+    public function render(NodeList $ast): string
     {
         return array_reduce(
             $ast->getNodes(),
