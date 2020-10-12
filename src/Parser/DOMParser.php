@@ -14,7 +14,7 @@ final class DOMParser implements Parser
      */
     public function parse(Builder $builder, $input): void
     {
-        $document = new \DOMDocument('1.0', 'utf-8');
+        $document = new \DOMDocument('1.0', 'UTF-8');
         if (!$input) {
             return;
         }
