@@ -33,8 +33,12 @@ class HTMLRenderer implements Renderer
             [(new BlockTypeMatch('list'))->and(new BlockArgumentMatch('ordered', false)), 'ul'],
             [(new BlockTypeMatch('list'))->and(new BlockArgumentMatch('ordered', true)), 'ol'],
             [new BlockTypeMatch('list_item'), 'li'],
+            [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 1)), 'h1'],
+            [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 2)), 'h2'],
+            [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 3)), 'h3'],
             [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 4)), 'h4'],
             [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 5)), 'h5'],
+            [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 6)), 'h6'],
             [new BlockTypeMatch('quote'), 'blockquote'],
             [new BlockTypeMatch('new_line'), 'br'],
         ];
