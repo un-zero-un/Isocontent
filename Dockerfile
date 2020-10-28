@@ -4,7 +4,7 @@ FROM php:${PHP_VERSION}-alpine
 
 ARG COMPOSER_FLAGS
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 

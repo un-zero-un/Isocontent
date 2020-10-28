@@ -239,6 +239,7 @@ class ParseHTMLTest extends TestCase
                             ],
                         ],
                     ],
+                    ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'list',

@@ -15,12 +15,11 @@
         "ext-dom": "*",
         "ext-json": "*",
         "phpunit/phpunit": "^9.3.11",
-        "spatie/phpunit-watcher": "^1.22",
         "symfony/var-dumper": "^4.4 | ^5.0",
         "phpstan/phpstan": "^0.12.44",
         "symfony/framework-bundle": "^4.4 | ^5.0",
         "symfony/serializer": "^4.4 | ^5.0",
-        "satooshi/php-coveralls": "^2.1",
+        "php-coveralls/php-coveralls": "^2.4.2",
         "phpspec/prophecy-phpunit": "^2.0",
         "symfony/form": "^5.1",
         "twig/twig": "^2.0 | ^3.0"

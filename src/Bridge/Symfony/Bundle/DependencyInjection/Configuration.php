@@ -13,6 +13,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('isocontent');
+        // @codeCoverageIgnoreStart
         if (method_exists($treeBuilder, 'root')) {
             /** @var ArrayNodeDefinition $rootNode */
             $rootNode = $treeBuilder->root('isocontent');
@@ -20,6 +21,7 @@ class Configuration implements ConfigurationInterface
             /** @var ArrayNodeDefinition $rootNode */
             $rootNode = $treeBuilder->getRootNode();
         }
+        // @codeCoverageIgnoreEnd
 
         $rootNode
             ->children()
