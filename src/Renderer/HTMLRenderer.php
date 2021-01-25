@@ -41,6 +41,7 @@ class HTMLRenderer implements Renderer
             [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 6)), 'h6'],
             [new BlockTypeMatch('quote'), 'blockquote'],
             [new BlockTypeMatch('new_line'), 'br'],
+            [new BlockTypeMatch('link'), 'a'],
         ];
     }
 
@@ -77,15 +78,26 @@ class HTMLRenderer implements Renderer
             }
         }
 
+        $arguments = '';
+        if (count($blockNode->getArguments()) > 0 && array_key_exists('arguments', $blockNode->getArguments()) && count($blockNode->getArguments()['arguments']) > 0) {
+            $args = [];
+            foreach($blockNode->getArguments()['arguments'] as $k => $v) {
+                $args[] = sprintf('%s="%s"', $k, $v);
+            }
+
+            $arguments = ' ' . implode(' ', $args);
+        }
+
         if (null === $blockNode->getChildren()) {
-            return strtr('<:tagName: />', [':tagName:' => $tagName]);
+            return strtr('<:tagName::arguments: />', [':tagName:' => $tagName, ':arguments:' => $arguments]);
         }
 
         return strtr(
-            '<:tagName:>:content:</:tagName:>',
+            '<:tagName::arguments:>:content:</:tagName:>',
             [
                 ':tagName:' => $tagName,
                 ':content:' => $this->render($blockNode->getChildren()),
+                ':arguments:' => $arguments,
             ]
         );
     }

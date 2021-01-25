@@ -95,6 +95,8 @@ final class DOMParser implements Parser
                 return ['quote'];
             case 'br':
                 return ['new_line'];
+            case 'a':
+                return ['link', [ 'arguments' => ['href' => ($node->attributes !== null ? $node->attributes->getNamedItem('href')->nodeValue : '')]]];
             default:
                 return ['generic'];
         }
