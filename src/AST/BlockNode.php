@@ -52,7 +52,7 @@ final class BlockNode implements Node
 
     public function toArray(): array
     {
-        $array = array_merge($this->arguments, ['type' => $this->getType(), 'block_type' => $this->blockType]);
+        $array = ['type' => $this->getType(), 'block_type' => $this->blockType, 'arguments' => $this->arguments];
         if ($this->children) {
             $array['children'] = $this->children->toArray();
         }
