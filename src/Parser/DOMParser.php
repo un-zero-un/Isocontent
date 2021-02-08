@@ -105,6 +105,8 @@ final class DOMParser implements Parser
                 return [ 'subscript' ];
             case 'sup':
                 return [ 'superscript' ];
+            case 'code':
+                return [ 'code' ];
             default:
                 return ['generic'];
         }

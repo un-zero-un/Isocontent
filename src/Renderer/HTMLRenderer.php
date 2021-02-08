@@ -46,6 +46,7 @@ class HTMLRenderer implements Renderer
             [new BlockTypeMatch('separator'), 'hr'],
             [new BlockTypeMatch('subscript'), 'sub'],
             [new BlockTypeMatch('superscript'), 'sup'],
+            [new BlockTypeMatch('code'), 'code'],
         ];
     }
 
