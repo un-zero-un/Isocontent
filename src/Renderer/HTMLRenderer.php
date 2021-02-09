@@ -42,6 +42,11 @@ class HTMLRenderer implements Renderer
             [new BlockTypeMatch('quote'), 'blockquote'],
             [new BlockTypeMatch('new_line'), 'br'],
             [new BlockTypeMatch('link'), 'a'],
+            [new BlockTypeMatch('striped'), 'del'],
+            [new BlockTypeMatch('separator'), 'hr'],
+            [new BlockTypeMatch('subscript'), 'sub'],
+            [new BlockTypeMatch('superscript'), 'sup'],
+            [new BlockTypeMatch('code'), 'code'],
         ];
     }
 
