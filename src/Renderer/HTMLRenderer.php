@@ -56,7 +56,7 @@ class HTMLRenderer implements Renderer
             $ast->getNodes(),
             function (string $memo, Node $node) {
                 if ($node instanceof TextNode) {
-                    return $memo . $node->getValue();
+                    return $memo . htmlentities($node->getValue());
                 }
 
                 if ($node instanceof BlockNode) {
