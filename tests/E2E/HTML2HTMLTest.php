@@ -29,6 +29,7 @@ class HTML2HTMLTest extends TestCase
 
         $arrayBuilder = Builder::create();
         (new ArrayParser)->parse($arrayBuilder, $builder->getAST()->toArray());
+
         $this->assertSame($html, (new HTMLRenderer)->render($arrayBuilder->getAST()));
     }
 

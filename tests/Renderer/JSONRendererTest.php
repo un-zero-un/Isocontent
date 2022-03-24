@@ -44,7 +44,7 @@ class JSONRendererTest extends TestCase
                         TextNode::fromText('foobar')
                     ])),
                 ]),
-                '[{"type":"block","block_type":"inline_text","children":[{"type":"text","value":"foobar"}]}]',
+                '[{"type":"block","block_type":"inline_text","arguments":[],"children":[{"type":"text","value":"foobar"}]}]',
             ],
             [
                 NodeList::fromArray([
@@ -55,8 +55,8 @@ class JSONRendererTest extends TestCase
                         TextNode::fromText('bazqux')
                     ])),
                 ]),
-                '[{"type":"block","block_type":"inline_text","children":[{"type":"text","value":"foobar"}]},' .
-                '{"type":"block","block_type":"strong","children":[{"type":"text","value":"bazqux"}]}]',
+                '[{"type":"block","block_type":"inline_text","arguments":[],"children":[{"type":"text","value":"foobar"}]},' .
+                '{"type":"block","block_type":"strong","arguments":[],"children":[{"type":"text","value":"bazqux"}]}]',
             ],
         ];
     }

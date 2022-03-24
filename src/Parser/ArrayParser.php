@@ -41,8 +41,7 @@ class ArrayParser implements Parser
         $childNodes = $node['children'] ?? null;
         $blockType  = $node['block_type'];
 
-        unset($node['children'], $node['block_type']);
-        $childBuilder = $builder->addBlockNode($blockType, $node);
+        $childBuilder = $builder->addBlockNode($blockType, $node['arguments']);
 
         if ($childNodes) {
             foreach ($childNodes as $childNode) {

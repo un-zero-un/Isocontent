@@ -4,6 +4,7 @@ dist: xenial
 php:
     - 7.4
     - 8.0
+    - 8.1
 
 install:
     - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --no-interaction; fi

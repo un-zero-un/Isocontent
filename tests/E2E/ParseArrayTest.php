@@ -39,6 +39,7 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
+                    'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
                 ]]
             ],
@@ -47,6 +48,7 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'inline_text',
+                    'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
                 ]]
             ],
@@ -55,6 +57,7 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'inline_text',
+                    'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
                 ]]
             ],
@@ -63,9 +66,10 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'strong',
+                    'arguments' => [],
                     'children' => [
                         ['type' => 'text', 'value' => 'Foo '],
-                        ['type' => 'block', 'block_type' => 'generic'],
+                        ['type' => 'block', 'block_type' => 'generic', 'arguments' => []],
                     ],
                 ]]
             ],
@@ -74,9 +78,11 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
+                    'arguments' => [],
                     'children' => [[
                         'type' => 'block',
                         'block_type' => 'inline_text',
+                        'arguments' => [],
                         'children' => [['type' => 'text', 'value' => 'Foo']],
                     ]],
                 ]]
@@ -86,22 +92,26 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
+                    'arguments' => [],
                     'children' => [
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Foo']],
                         ],
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Bar']],
                         ],
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
                     ],
@@ -112,23 +122,27 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
+                    'arguments' => [],
                     'children' => [
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Foo']],
                         ],
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Bar']],
                         ],
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
                         ['type' => 'text', 'value' => ' '],
@@ -140,21 +154,25 @@ class ParseArrayTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'paragraph',
+                    'arguments' => [],
                     'children' => [
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Foo']],
                         ],
                         ['type' => 'text', 'value' => ' '],
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [
                                 [
                                     'type' => 'block',
                                     'block_type' => 'emphasis',
+                                    'arguments' => [],
                                     'children' => [['type' => 'text', 'value' => 'Emphasis']],
                                 ],
                                 ['type' => 'text', 'value' => ' text'],
@@ -164,6 +182,7 @@ class ParseArrayTest extends TestCase
                         [
                             'type' => 'block',
                             'block_type' => 'inline_text',
+                            'arguments' => [],
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
                         ['type' => 'text', 'value' => ' '],
@@ -176,22 +195,25 @@ class ParseArrayTest extends TestCase
                     [
                         'type' => 'block',
                         'block_type' => 'title',
-                        'level' => 4,
+                        'arguments' => ['level' => 4],
                         'children' => [['type' => 'text', 'value' => 'Foo']],
                     ],
                     ['type' => 'text', 'value' => ' '],
                     [
                         'type' => 'block',
                         'block_type' => 'paragraph',
+                        'arguments' => [],
                         'children' => [
                             ['type' => 'text', 'value' => ' '],
                             [
                                 'type' => 'block',
                                 'block_type' => 'inline_text',
+                                'arguments' => [],
                                 'children' => [
                                     [
                                         'type' => 'block',
                                         'block_type' => 'emphasis',
+                                        'arguments' => [],
                                         'children' => [
                                             ['type' => 'text', 'value' => 'Emphasis'],
                                         ],
@@ -206,11 +228,12 @@ class ParseArrayTest extends TestCase
                     [
                         'type' => 'block',
                         'block_type' => 'list',
-                        'ordered' => false,
+                        'arguments' => ['ordered' => false],
                         'children' => [
                             [
                                 'type' => 'block',
                                 'block_type' => 'list_item',
+                                'arguments' => [],
                                 'children' => [
                                     ['type' => 'text', 'value' => 'Baz'],
                                 ],
@@ -220,11 +243,12 @@ class ParseArrayTest extends TestCase
                     [
                         'type' => 'block',
                         'block_type' => 'list',
-                        'ordered' => true,
+                        'arguments' => ['ordered' => true],
                         'children' => [
                             [
                                 'type' => 'block',
                                 'block_type' => 'list_item',
+                                'arguments' => [],
                                 'children' => [
                                     ['type' => 'text', 'value' => 'Qux'],
                                 ],

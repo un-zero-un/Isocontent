@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Isocontent\Tests\Bridge\Twig\Extension;
 
+use Composer\InstalledVersions;
 use Isocontent\AST\NodeList;
 use Isocontent\Bridge\Twig\Extension\IsocontentExtension;
 use Isocontent\Isocontent;
@@ -44,6 +45,10 @@ class IsocontentExtensionTest extends TestCase
 
     public function test_it_declares_filters()
     {
+        if (PHP_VERSION_ID >= 80100 && version_compare(InstalledVersions::getVersion('twig/twig'), '3.0.0') < 0) {
+            $this->markTestSkipped('Twig 2 miss some return types');
+        }
+
         $isocontent = $this->prophesize(Isocontent::class);
         $extension  = new IsocontentExtension($isocontent->reveal());
 

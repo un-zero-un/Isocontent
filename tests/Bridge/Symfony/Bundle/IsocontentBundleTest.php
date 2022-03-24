@@ -22,10 +22,10 @@ class IsocontentBundleTest extends TestCase
         $containerBuilder = $this->prophesize(ContainerBuilder::class);
 
         $parserChildConfiguration = $this->prophesize(ChildDefinition::class);
-        $parserChildConfiguration->addTag('isocontent.parser')->shouldBeCalled();
+        $parserChildConfiguration->addTag('isocontent.parser')->shouldBeCalled()->willReturn($parserChildConfiguration);
 
         $rendererChildConfiguration = $this->prophesize(ChildDefinition::class);
-        $rendererChildConfiguration->addTag('isocontent.renderer')->shouldBeCalled();
+        $rendererChildConfiguration->addTag('isocontent.renderer')->shouldBeCalled()->willReturn($rendererChildConfiguration);
 
         $containerBuilder->registerForAutoconfiguration(Parser::class)->shouldBeCalled()->willReturn($parserChildConfiguration);
         $containerBuilder->registerForAutoconfiguration(Renderer::class)->shouldBeCalled()->willReturn($rendererChildConfiguration);

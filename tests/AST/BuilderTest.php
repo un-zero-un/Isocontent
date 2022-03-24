@@ -23,7 +23,10 @@ class BuilderTest extends TestCase
         $builder = Builder::create();
         $builder->addBlockNode('paragraph');
 
-        $this->assertEquals([['type' => Node::TYPE_BLOCK, 'block_type' => 'paragraph']], $builder->getAST()->toArray());
+        $this->assertEquals(
+            [['type' => Node::TYPE_BLOCK, 'block_type' => 'paragraph', 'arguments' => []]],
+            $builder->getAST()->toArray(),
+        );
     }
 
     public function test_it_adds_non_empty_block_node(): void
@@ -37,6 +40,7 @@ class BuilderTest extends TestCase
                 [
                     'type' => Node::TYPE_BLOCK,
                     'block_type' => 'paragraph',
+                    'arguments' => [],
                     'children' => [
                         ['type' => Node::TYPE_TEXT, 'value' => 'foobar']
                     ],
