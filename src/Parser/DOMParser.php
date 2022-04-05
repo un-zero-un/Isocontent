@@ -96,7 +96,15 @@ final class DOMParser implements Parser
             case 'br':
                 return ['new_line'];
             case 'a':
-                return ['link', [ 'arguments' => ['href' => ($node->attributes !== null ? $node->attributes->getNamedItem('href')->nodeValue : '')]]];
+                return [
+                    'link', [
+                        'href' => (
+                            $node->attributes !== null && $node->attributes->getNamedItem('href') !== null ?
+                                $node->attributes->getNamedItem('href')->nodeValue :
+                                null
+                        )
+                    ]
+                ];
             case 'del':
                 return [ 'stripped' ];
             case 'hr':

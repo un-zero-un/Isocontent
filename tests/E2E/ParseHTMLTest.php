@@ -54,6 +54,24 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
+                '<a href="/toto.html">Foo</a>',
+                [[
+                    'type' => 'block',
+                    'block_type' => 'link',
+                    'arguments' => ['href' => '/toto.html'],
+                    'children' => [['type' => 'text', 'value' => 'Foo']],
+                ]]
+            ],
+            [
+                '<a>Foo</a>',
+                [[
+                    'type' => 'block',
+                    'block_type' => 'link',
+                    'arguments' => ['href' => null],
+                    'children' => [['type' => 'text', 'value' => 'Foo']],
+                ]]
+            ],
+            [
                 '<span dir="rtl">Foo</span><!-- foobar -->',
                 [[
                     'type' => 'block',
