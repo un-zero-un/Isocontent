@@ -8,6 +8,7 @@
     "suggest": {
         "ext-dom": "ext-dom is required for DOMParser usage",
         "ext-json": "ext-json is required for JSONRenderer usage",
+        "ext-libxml": "ext-libxml is required for DOMParser usage",
         "symfony/framework-bundle": "for Symfony integration",
         "symfony/serializer": "for serialization of AST"
     },
@@ -29,7 +30,7 @@
             "Isocontent\\": "src/"
         }
     },
-    "autoload-dev":  {
+    "autoload-dev": {
         "psr-4": {
             "Isocontent\\Tests\\": "tests/"
         }

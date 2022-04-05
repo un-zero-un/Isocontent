@@ -72,6 +72,15 @@ class ParseHTMLTest extends TestCase
                 ]]
             ],
             [
+                '<?xml:namespace prefix = "o" /><o:p>Test</o:p>',
+                [[
+                    'type' => 'block',
+                    'block_type' => 'paragraph',
+                    'arguments' => [],
+                    'children' => [['type' => 'text', 'value' => 'Test']],
+                ]]
+            ],
+            [
                 '<span dir="rtl">Foo</span><!-- foobar -->',
                 [[
                     'type' => 'block',

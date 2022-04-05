@@ -19,7 +19,14 @@ final class DOMParser implements Parser
             return;
         }
 
+        $oldUseInternalErrors = libxml_use_internal_errors();
+        libxml_use_internal_errors(true);
+
         $document->loadHTML('<?xml encoding="UTF-8">' . $input);
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($oldUseInternalErrors);
+
         foreach ($document->getElementsByTagName('body') as $root) {
             foreach ($root->childNodes as $childNode) {
                 $this->parseNode($builder, $childNode);
