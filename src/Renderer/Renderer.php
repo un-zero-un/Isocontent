@@ -8,9 +8,6 @@ use Isocontent\AST\NodeList;
 
 interface Renderer
 {
-    /**
-     * @return mixed
-     */
     public function render(NodeList $ast);
 
     public function supportsFormat(string $format): bool;

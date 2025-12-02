@@ -43,8 +43,6 @@ class Isocontent
     }
 
     /**
-     * @param mixed $input
-     *
      * @return Node|NodeList
      */
     public function buildAST($input, string $format)
@@ -63,9 +61,6 @@ class Isocontent
         throw new UnsupportedFormatException(sprintf('No parser found for format "%s"', $format));
     }
 
-    /**
-     * @return mixed
-     */
     public function render(NodeList $ast, string $format)
     {
         foreach ($this->renderers as $renderer) {

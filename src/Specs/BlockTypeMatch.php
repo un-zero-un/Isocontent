@@ -13,9 +13,6 @@ class BlockTypeMatch extends BaseSpecification
         $this->blockType = $blockType;
     }
 
-    /**
-     * @param mixed $candidate
-     */
     public function isSatisfiedBy($candidate): bool
     {
         return $candidate instanceof BlockNode && $candidate->getBlockType() === $this->blockType;

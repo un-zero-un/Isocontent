@@ -4,4 +4,6 @@ declare(strict_types=1);
 
 namespace Isocontent\Exception;
 
-interface Exception {}
+interface Exception
+{
+}

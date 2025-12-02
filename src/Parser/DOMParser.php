@@ -8,9 +8,6 @@ use Isocontent\AST\Builder;
 
 final class DOMParser implements Parser
 {
-    /**
-     * @param mixed $input
-     */
     public function parse(Builder $builder, $input): void
     {
         $document = new \DOMDocument('1.0', 'UTF-8');

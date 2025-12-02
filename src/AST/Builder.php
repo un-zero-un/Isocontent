@@ -14,12 +14,12 @@ class Builder
     private ?string $type;
 
     /**
-     * @var null|array<string, mixed>
+     * @var array<string, mixed>|null
      */
     private ?array $data;
 
     /**
-     * @param null|array<string, mixed> $data
+     * @param array<string, mixed>|null $data
      */
     private function __construct(?string $type = null, ?array $data = null)
     {
