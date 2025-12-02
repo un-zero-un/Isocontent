@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class IsocontentBundle extends Bundle
 {
+    #[\Override]
     public function build(ContainerBuilder $container): void
     {
         $container->registerForAutoconfiguration(Parser::class)->addTag('isocontent.parser');

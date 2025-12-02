@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Isocontent\Bridge\Symfony\Form\DataTransformer;
 
+use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\Isocontent;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ASTToStringTransformer implements DataTransformerInterface
+/**
+ * @implements DataTransformerInterface<Node|NodeList, string>
+ */
+final class ASTToStringTransformer implements DataTransformerInterface
 {
-    private Isocontent $isocontent;
-
-    private string $format;
-
-    public function __construct(Isocontent $isocontent, string $format)
-    {
-        $this->isocontent = $isocontent;
-        $this->format = $format;
+    public function __construct(
+        private readonly Isocontent $isocontent,
+        private readonly string $format,
+    ) {
     }
 
-    public function transform($value): mixed
+    #[\Override]
+    public function transform($value): ?string
     {
         if (!$value) {
             return null;
@@ -34,7 +35,8 @@ class ASTToStringTransformer implements DataTransformerInterface
         return $this->isocontent->render($value, $this->format);
     }
 
-    public function reverseTransform($value): mixed
+    #[\Override]
+    public function reverseTransform($value): Node|NodeList|null
     {
         if (!$value) {
             return null;

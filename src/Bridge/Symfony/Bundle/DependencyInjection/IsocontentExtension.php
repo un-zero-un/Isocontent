@@ -16,13 +16,9 @@ class IsocontentExtension extends Extension
      *
      * @throws \Exception
      */
+    #[\Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $configuration = $this->getConfiguration($configs, $container);
-        if (null !== $configuration) {
-            $this->processConfiguration($configuration, $configs);
-        }
-
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.php');
     }

@@ -12,6 +12,7 @@ class ArrayParser implements Parser
     /**
      * @param array<mixed> $input
      */
+    #[\Override]
     public function parse(Builder $builder, $input): void
     {
         foreach ($input as $node) {
@@ -19,6 +20,7 @@ class ArrayParser implements Parser
         }
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'array' === $format;

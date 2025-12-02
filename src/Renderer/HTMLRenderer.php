@@ -50,6 +50,7 @@ class HTMLRenderer implements Renderer
         ];
     }
 
+    #[\Override]
     public function render(NodeList $ast): string
     {
         return array_reduce(
@@ -69,6 +70,7 @@ class HTMLRenderer implements Renderer
         );
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'html' === $format;

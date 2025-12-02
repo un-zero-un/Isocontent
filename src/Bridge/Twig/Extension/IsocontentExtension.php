@@ -18,6 +18,7 @@ class IsocontentExtension extends AbstractExtension
         $this->isocontent = $isocontent;
     }
 
+    #[\Override]
     public function getFilters()
     {
         return [

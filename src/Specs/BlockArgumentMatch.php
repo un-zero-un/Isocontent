@@ -16,6 +16,7 @@ class BlockArgumentMatch extends BaseSpecification
         $this->argumentValue = $argumentValue;
     }
 
+    #[\Override]
     public function isSatisfiedBy($candidate): bool
     {
         return

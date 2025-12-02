@@ -43,11 +43,13 @@ final class BlockNode implements Node
         return $this->arguments;
     }
 
+    #[\Override]
     public function getType(): string
     {
         return Node::TYPE_BLOCK;
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $array = ['type' => $this->getType(), 'block_type' => $this->blockType, 'arguments' => $this->arguments];

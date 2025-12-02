@@ -14,6 +14,7 @@ class AllMatch extends BaseSpecification
         $this->specifications = $specifications;
     }
 
+    #[\Override]
     public function isSatisfiedBy($candidate): bool
     {
         foreach ($this->specifications as $specification) {

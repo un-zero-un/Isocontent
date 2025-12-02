@@ -9,11 +9,13 @@ use Isocontent\AST\TextNode;
 
 class TextDebugRenderer implements Renderer
 {
+    #[\Override]
     public function render(NodeList $ast): string
     {
         return $this->renderNodeList($ast);
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'text_debug' === $format;

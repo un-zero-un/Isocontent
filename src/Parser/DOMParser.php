@@ -6,8 +6,12 @@ namespace Isocontent\Parser;
 
 use Isocontent\AST\Builder;
 
+/**
+ * A simple HTML parser using DOMDocument / LibXML.
+ */
 final class DOMParser implements Parser
 {
+    #[\Override]
     public function parse(Builder $builder, $input): void
     {
         $document = new \DOMDocument('1.0', 'UTF-8');
@@ -30,6 +34,7 @@ final class DOMParser implements Parser
         }
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'html' === $format;
@@ -37,8 +42,6 @@ final class DOMParser implements Parser
 
     private function parseNode(Builder $builder, \DOMNode $node): void
     {
-        $childBuilder = null;
-
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
                 $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?: '');
@@ -46,7 +49,8 @@ final class DOMParser implements Parser
                 return;
 
             case XML_ELEMENT_NODE:
-                $childBuilder = $builder->addBlockNode(...$this->parseBlockType($node));
+                [$blockType, $arguments] = $this->parseBlockType($node);
+                $childBuilder = $builder->addBlockNode($blockType, $arguments);
 
                 break;
 
@@ -116,7 +120,8 @@ final class DOMParser implements Parser
 
             case 'a':
                 return [
-                    'link', [
+                    'link',
+                    [
                         'href' => (
                             null !== $node->attributes && null !== $node->attributes->getNamedItem('href')
                                 ? $node->attributes->getNamedItem('href')->nodeValue

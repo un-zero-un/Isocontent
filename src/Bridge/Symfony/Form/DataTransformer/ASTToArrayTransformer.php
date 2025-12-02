@@ -8,15 +8,17 @@ use Isocontent\Isocontent;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ASTToArrayTransformer implements DataTransformerInterface
+/**
+ * @implements DataTransformerInterface<NodeList, array>
+ */
+final class ASTToArrayTransformer implements DataTransformerInterface
 {
-    private Isocontent $isocontent;
-
-    public function __construct(Isocontent $isocontent)
-    {
-        $this->isocontent = $isocontent;
+    public function __construct(
+        private readonly Isocontent $isocontent,
+    ) {
     }
 
+    #[\Override]
     public function transform($value): ?array
     {
         if (!$value) {
@@ -30,6 +32,7 @@ class ASTToArrayTransformer implements DataTransformerInterface
         return $value->toArray();
     }
 
+    #[\Override]
     public function reverseTransform($value): Node|NodeList|null
     {
         if (!$value) {
