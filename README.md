@@ -8,7 +8,5 @@ This allows rendering of content from, let say, a WYSIWYG editor on
 any platform (HTML / ReactDOM / ReactNative) 
 
 
-[![Build Status](https://travis-ci.org/un-zero-un/Isocontent.svg?branch=master)](https://travis-ci.org/un-zero-un/Isocontent)
+[![CI Status](https://github.com/un-zero-un/Isocontent/actions/workflows/ci.yml/badge.svg)](https://github.com/un-zero-un/Isocontent/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/un-zero-un/Isocontent/badge.svg)](https://coveralls.io/github/un-zero-un/Isocontent)
-![Build Status](https://insight.symfony.com/projects/fe027a11-7b95-4183-8644-1c2e6b6b9acb/mini.svg)
-![Build Status](https://scrutinizer-ci.com/g/un-zero-un/Isocontent/badges/quality-score.png?b=master)
