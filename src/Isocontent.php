@@ -27,7 +27,6 @@ class Isocontent
     }
 
     public function buildAST(mixed $input, string $format): Node|NodeList
-
     {
         $builder = Builder::create();
         foreach ($this->parsers as $parser) {

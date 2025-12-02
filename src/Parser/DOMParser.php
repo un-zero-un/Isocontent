@@ -84,7 +84,7 @@ final class DOMParser implements Parser
     }
 
     /**
-     * @return array{0: string, 1?: array<string, scalar>}
+     * @return array{0: string, 1?: array<string, ?scalar>}
      */
     private function parseBlockType(\DOMElement $node): array
     {
