@@ -36,7 +36,7 @@ class Builder
     }
 
     /**
-     * @param array<string, scalar> $arguments
+     * @param array<string, ?scalar> $arguments
      */
     public function addBlockNode(string $blockType, array $arguments = []): self
     {
@@ -44,18 +44,19 @@ class Builder
             Node::TYPE_BLOCK,
             array_merge(['arguments' => $arguments], ['block_type' => $blockType])
         );
+
         $this->nodes[] = $builder;
 
         return $builder;
     }
 
-    /**
-     * @return Node|NodeList
-     */
-    public function getAST()
+    public function getAST(): NodeList|Node
     {
-        $getAst = function (Builder $builder) {
-            return $builder->getAST();
+        $getAst = function (Builder $builder): Node {
+            $ast = $builder->getAST();
+            assert($ast instanceof Node);
+
+            return $ast;
         };
 
         switch ($this->type) {

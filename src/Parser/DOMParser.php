@@ -49,8 +49,8 @@ final class DOMParser implements Parser
                 return;
 
             case XML_ELEMENT_NODE:
-                [$blockType, $arguments] = $this->parseBlockType($node);
-                $childBuilder = $builder->addBlockNode($blockType, $arguments);
+                $blockType = $this->parseBlockType($node);
+                $childBuilder = $builder->addBlockNode($blockType[0], $blockType[1] ?? []);
 
                 break;
 
@@ -68,7 +68,7 @@ final class DOMParser implements Parser
     }
 
     /**
-     * @return array{0: string, 1?: array<string, scalar>}
+     * @return array{0: string, 1?: array<string, ?scalar>}
      */
     private function parseBlockType(\DOMNode $node): array
     {

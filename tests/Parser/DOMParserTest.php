@@ -32,8 +32,8 @@ class DOMParserTest extends TestCase
         $builder = $this->prophesize(Builder::class);
         $pBuilder = $this->prophesize(Builder::class);
         $spanBuilder = $this->prophesize(Builder::class);
-        $builder->addBlockNode('paragraph')->shouldBeCalled()->willReturn($pBuilder);
-        $pBuilder->addBlockNode('inline_text')->shouldBeCalled()->willReturn($spanBuilder);
+        $builder->addBlockNode('paragraph', [])->shouldBeCalled()->willReturn($pBuilder);
+        $pBuilder->addBlockNode('inline_text', [])->shouldBeCalled()->willReturn($spanBuilder);
         $spanBuilder->addTextNode('Paragraph text')->shouldBeCalled()->willReturn($spanBuilder);
 
         $builder = $builder->reveal();

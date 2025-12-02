@@ -14,7 +14,7 @@ use Isocontent\Renderer\Renderer;
 /**
  * @api
  */
-final class Isocontent
+class Isocontent
 {
     /**
      * @param iterable<Parser>   $parsers
@@ -26,7 +26,7 @@ final class Isocontent
     ) {
     }
 
-    public function buildAST(mixed $input, string $format): NodeList|Node
+    public function buildAST(mixed $input, string $format): Node|NodeList
     {
         $builder = Builder::create();
         foreach ($this->parsers as $parser) {

@@ -9,7 +9,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * @implements DataTransformerInterface<NodeList, array>
+ * @implements DataTransformerInterface<NodeList|Node, array>
  */
 final class ASTToArrayTransformer implements DataTransformerInterface
 {
@@ -33,7 +33,7 @@ final class ASTToArrayTransformer implements DataTransformerInterface
     }
 
     #[\Override]
-    public function reverseTransform($value): Node|NodeList|null
+    public function reverseTransform($value): NodeList|Node|null
     {
         if (!$value) {
             return null;
