@@ -18,7 +18,7 @@ class IsocontentTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function test_it_constructs_with_parsers_array(): void
+    public function testItConstructsWithParsersArray(): void
     {
         $this->assertCount(
             2,
@@ -29,17 +29,18 @@ class IsocontentTest extends TestCase
         );
     }
 
-    public function test_it_constructs_with_parsers_traversable(): void
+    public function testItConstructsWithParsersTraversable(): void
     {
         $generator = function (): \Generator {
             yield $this->prophesize(Parser::class);
+
             yield $this->prophesize(Parser::class);
         };
 
         $this->assertCount(2, (new Isocontent($generator(), []))->getParsers());
     }
 
-    public function test_it_builds_ast_from_parser(): void
+    public function testItBuildsAstFromParser(): void
     {
         $parser1 = $this->prophesize(Parser::class);
         $parser2 = $this->prophesize(Parser::class);
@@ -52,7 +53,7 @@ class IsocontentTest extends TestCase
         (new Isocontent([$parser1->reveal(), $parser2->reveal()], []))->buildAST('foobar', 'html');
     }
 
-    public function test_it_screams_when_no_parser_matches_format(): void
+    public function testItScreamsWhenNoParserMatchesFormat(): void
     {
         $this->expectException(UnsupportedFormatException::class);
 
@@ -65,8 +66,7 @@ class IsocontentTest extends TestCase
         (new Isocontent([$parser1->reveal(), $parser2->reveal()], []))->buildAST('foobar', 'html');
     }
 
-
-    public function test_it_constructs_with_renderers_array(): void
+    public function testItConstructsWithRenderersArray(): void
     {
         $this->assertCount(
             2,
@@ -77,17 +77,18 @@ class IsocontentTest extends TestCase
         );
     }
 
-    public function test_it_constructs_with_renderers_traversable(): void
+    public function testItConstructsWithRenderersTraversable(): void
     {
         $generator = function (): \Generator {
             yield $this->prophesize(Renderer::class);
+
             yield $this->prophesize(Renderer::class);
         };
 
         $this->assertCount(2, (new Isocontent([], $generator()))->getRenderers());
     }
 
-    public function test_it_renders_from_ast(): void
+    public function testItRendersFromAst(): void
     {
         $renderer1 = $this->prophesize(Renderer::class);
         $renderer2 = $this->prophesize(Renderer::class);
@@ -104,7 +105,7 @@ class IsocontentTest extends TestCase
         );
     }
 
-    public function test_it_screams_when_no_renderers_matches_format(): void
+    public function testItScreamsWhenNoRenderersMatchesFormat(): void
     {
         $this->expectException(UnsupportedFormatException::class);
 

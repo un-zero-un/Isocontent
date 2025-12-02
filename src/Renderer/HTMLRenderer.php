@@ -56,11 +56,11 @@ class HTMLRenderer implements Renderer
             $ast->getNodes(),
             function (string $memo, Node $node) {
                 if ($node instanceof TextNode) {
-                    return $memo . htmlentities($node->getValue());
+                    return $memo.htmlentities($node->getValue());
                 }
 
                 if ($node instanceof BlockNode) {
-                    return $memo . $this->renderBlockNode($node);
+                    return $memo.$this->renderBlockNode($node);
                 }
 
                 return $memo;
@@ -86,11 +86,11 @@ class HTMLRenderer implements Renderer
         $arguments = '';
         if (count($blockNode->getArguments()) > 0 && array_key_exists('arguments', $blockNode->getArguments()) && count($blockNode->getArguments()['arguments']) > 0) {
             $args = [];
-            foreach($blockNode->getArguments()['arguments'] as $k => $v) {
+            foreach ($blockNode->getArguments()['arguments'] as $k => $v) {
                 $args[] = sprintf('%s="%s"', $k, $v);
             }
 
-            $arguments = ' ' . implode(' ', $args);
+            $arguments = ' '.implode(' ', $args);
         }
 
         if (null === $blockNode->getChildren()) {

@@ -27,9 +27,6 @@ class IsocontentExtension extends AbstractExtension
 
     /**
      * @param array<array<mixed>>|NodeList $ast
-     * @param string                       $format
-     *
-     * @return string
      */
     public function renderAST($ast, string $format = 'html'): string
     {

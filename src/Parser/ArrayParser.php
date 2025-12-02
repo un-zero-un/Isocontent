@@ -6,12 +6,10 @@ namespace Isocontent\Parser;
 
 use Isocontent\AST\Builder;
 use Isocontent\AST\Node;
-use Isocontent\AST\NodeList;
 
 class ArrayParser implements Parser
 {
     /**
-     * @param Builder      $builder
      * @param array<mixed> $input
      */
     public function parse(Builder $builder, $input): void
@@ -27,7 +25,6 @@ class ArrayParser implements Parser
     }
 
     /**
-     * @param Builder      $builder
      * @param array<mixed> $node
      */
     private function parseNode(Builder $builder, array $node): void
@@ -39,7 +36,7 @@ class ArrayParser implements Parser
         }
 
         $childNodes = $node['children'] ?? null;
-        $blockType  = $node['block_type'];
+        $blockType = $node['block_type'];
 
         $childBuilder = $builder->addBlockNode($blockType, $node['arguments']);
 

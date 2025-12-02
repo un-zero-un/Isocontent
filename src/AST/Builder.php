@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Isocontent\AST;
 
-use Isocontent\Exception\UnknownNodeTypeException;
-
 class Builder
 {
     /**
@@ -13,25 +11,21 @@ class Builder
      */
     private array $nodes;
 
-    /**
-     * @var string|null
-     */
     private ?string $type;
 
     /**
-     * @var array<string, mixed>|null
+     * @var null|array<string, mixed>
      */
     private ?array $data;
 
     /**
-     * @param string|null               $type
-     * @param array<string, mixed>|null $data
+     * @param null|array<string, mixed> $data
      */
-    private function __construct(string $type = null, array $data = null)
+    private function __construct(?string $type = null, ?array $data = null)
     {
         $this->nodes = [];
-        $this->type  = $type;
-        $this->data  = $data;
+        $this->type = $type;
+        $this->data = $data;
     }
 
     public function addTextNode(string $text): self
@@ -42,14 +36,11 @@ class Builder
     }
 
     /**
-     * @param string                $blockType
      * @param array<string, scalar> $arguments
-     *
-     * @return self
      */
     public function addBlockNode(string $blockType, array $arguments = []): self
     {
-        $builder       = new self(
+        $builder = new self(
             Node::TYPE_BLOCK,
             array_merge(['arguments' => $arguments], ['block_type' => $blockType])
         );
@@ -85,6 +76,6 @@ class Builder
 
     public static function create(): self
     {
-        return new self;
+        return new self();
     }
 }

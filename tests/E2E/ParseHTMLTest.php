@@ -8,31 +8,27 @@ use Isocontent\Isocontent;
 use Isocontent\Parser\ArrayParser;
 use Isocontent\Parser\DOMParser;
 use Isocontent\Renderer\HTMLRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ParseHTMLTest extends TestCase
 {
-    /**
-     * @var Isocontent
-     */
-    private $isocontent;
+    private ?Isocontent $isocontent = null;
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent([new DOMParser, new ArrayParser], [new HTMLRenderer]);
+        $this->isocontent = new Isocontent([new DOMParser(), new ArrayParser()], [new HTMLRenderer()]);
 
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function test_output_is_conform_to_html(string $htmlInput, array $expectedOutput): void
+    #[DataProvider('dataProvider')]
+    public function testOutputIsConformToHtml(string $htmlInput, array $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput, 'html')->toArray());
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [
@@ -42,7 +38,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'paragraph',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<span>Foo</span>',
@@ -51,7 +47,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'inline_text',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<a href="/toto.html">Foo</a>',
@@ -60,7 +56,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'link',
                     'arguments' => ['href' => '/toto.html'],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<a>Foo</a>',
@@ -69,7 +65,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'link',
                     'arguments' => ['href' => null],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<?xml:namespace prefix = "o" /><o:p>Test</o:p>',
@@ -78,7 +74,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'paragraph',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Test']],
-                ]]
+                ]],
             ],
             [
                 '<span dir="rtl">Foo</span><!-- foobar -->',
@@ -87,7 +83,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'inline_text',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<strong>Foo <img /></strong>',
@@ -99,7 +95,7 @@ class ParseHTMLTest extends TestCase
                         ['type' => 'text', 'value' => 'Foo '],
                         ['type' => 'block', 'block_type' => 'generic', 'arguments' => []],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<dir>Foo</dir>',
@@ -108,7 +104,7 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'generic',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<p><span>Foo</span></p>',
@@ -122,7 +118,7 @@ class ParseHTMLTest extends TestCase
                         'arguments' => [],
                         'children' => [['type' => 'text', 'value' => 'Foo']],
                     ]],
-                ]]
+                ]],
             ],
             [
                 '<p><span>Foo</span> <span>Bar</span> <span>Baz</span></p>',
@@ -152,7 +148,7 @@ class ParseHTMLTest extends TestCase
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<p>
@@ -188,7 +184,7 @@ class ParseHTMLTest extends TestCase
                         ],
                         ['type' => 'text', 'value' => ' '],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<p>
@@ -232,7 +228,7 @@ class ParseHTMLTest extends TestCase
                         ],
                         ['type' => 'text', 'value' => ' '],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<h4>Foo</h4>
@@ -268,7 +264,7 @@ class ParseHTMLTest extends TestCase
                                             ['type' => 'text', 'value' => 'Emphasis'],
                                         ],
                                     ],
-                                    ['type' => 'text', 'value' => ' text']
+                                    ['type' => 'text', 'value' => ' text'],
                                 ],
                             ],
                             ['type' => 'text', 'value' => ' '],
@@ -306,7 +302,7 @@ class ParseHTMLTest extends TestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
         ];
     }

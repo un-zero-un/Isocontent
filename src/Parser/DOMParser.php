@@ -9,8 +9,7 @@ use Isocontent\AST\Builder;
 final class DOMParser implements Parser
 {
     /**
-     * @param Builder $builder
-     * @param mixed   $input
+     * @param mixed $input
      */
     public function parse(Builder $builder, $input): void
     {
@@ -22,7 +21,7 @@ final class DOMParser implements Parser
         $oldUseInternalErrors = libxml_use_internal_errors();
         libxml_use_internal_errors(true);
 
-        $document->loadHTML('<?xml encoding="UTF-8">' . $input);
+        $document->loadHTML('<?xml encoding="UTF-8">'.$input);
 
         libxml_clear_errors();
         libxml_use_internal_errors($oldUseInternalErrors);
@@ -48,9 +47,12 @@ final class DOMParser implements Parser
                 $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?: '');
 
                 return;
+
             case XML_ELEMENT_NODE:
                 $childBuilder = $builder->addBlockNode(...$this->parseBlockType($node));
+
                 break;
+
             default:
                 return;
         }
@@ -65,8 +67,6 @@ final class DOMParser implements Parser
     }
 
     /**
-     * @param \DOMNode $node
-     *
      * @return array{0: string, 1?: array<string, scalar>}
      */
     private function parseBlockType(\DOMNode $node): array
@@ -74,54 +74,75 @@ final class DOMParser implements Parser
         switch ($node->nodeName) {
             case 'h1':
                 return ['title', ['level' => 1]];
+
             case 'h2':
                 return ['title', ['level' => 2]];
+
             case 'h3':
                 return ['title', ['level' => 3]];
+
             case 'h4':
                 return ['title', ['level' => 4]];
+
             case 'h5':
                 return ['title', ['level' => 5]];
+
             case 'h6':
                 return ['title', ['level' => 6]];
+
             case 'p':
                 return ['paragraph'];
+
             case 'em':
                 return ['emphasis'];
+
             case 'strong':
                 return ['strong'];
+
             case 'span':
                 return ['inline_text'];
+
             case 'ul':
                 return ['list', ['ordered' => false]];
+
             case 'ol':
                 return ['list', ['ordered' => true]];
+
             case 'li':
                 return ['list_item'];
+
             case 'blockquote':
                 return ['quote'];
+
             case 'br':
                 return ['new_line'];
+
             case 'a':
                 return [
                     'link', [
                         'href' => (
-                            $node->attributes !== null && $node->attributes->getNamedItem('href') !== null ?
-                                $node->attributes->getNamedItem('href')->nodeValue :
-                                null
-                        )
-                    ]
+                            null !== $node->attributes && null !== $node->attributes->getNamedItem('href')
+                                ? $node->attributes->getNamedItem('href')->nodeValue
+                                : null
+                        ),
+                    ],
                 ];
+
             case 'del':
-                return [ 'stripped' ];
+                return ['stripped'];
+
             case 'hr':
-                return [ 'separator' ];
+                return ['separator'];
+
             case 'sub':
-                return [ 'subscript' ];
+                return ['subscript'];
+
             case 'sup':
-                return [ 'superscript' ];
+                return ['superscript'];
+
             case 'code':
-                return [ 'code' ];
+                return ['code'];
+
             default:
                 return ['generic'];
         }

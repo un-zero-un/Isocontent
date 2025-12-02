@@ -32,16 +32,16 @@ class TextDebugRenderer implements Renderer
 
     private function renderNode(Node $node, ?int $level = 0): string
     {
-        $renderedNode = str_repeat('  ', $level) . '# ' . $node->getType() . $this->renderArguments($node);
+        $renderedNode = str_repeat('  ', $level).'# '.$node->getType().$this->renderArguments($node);
 
         if ($node instanceof BlockNode && null !== $node->getChildren()) {
             return
-                $renderedNode .
-                "\n" .
-                $this->renderNodeList($node->getChildren(), $level + 1);
+                $renderedNode
+                ."\n"
+                .$this->renderNodeList($node->getChildren(), $level + 1);
         }
 
-        return $renderedNode . "\n";
+        return $renderedNode."\n";
     }
 
     private function renderArguments(Node $node): string
@@ -56,7 +56,7 @@ class TextDebugRenderer implements Renderer
                 implode(
                     ', ',
                     array_map(
-                        static function (string $value, string $key) { return $key . '=' . $value; },
+                        static function (string $value, string $key) { return $key.'='.$value; },
                         array_values($node->getArguments() + [$node->getBlockType()]),
                         array_keys($node->getArguments()) + ['type']
                     )

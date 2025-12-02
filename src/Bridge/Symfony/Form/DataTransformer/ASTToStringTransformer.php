@@ -18,30 +18,30 @@ class ASTToStringTransformer implements DataTransformerInterface
     public function __construct(Isocontent $isocontent, string $format)
     {
         $this->isocontent = $isocontent;
-        $this->format     = $format;
+        $this->format = $format;
     }
 
-    public function transform($value)
+    public function transform($value): mixed
     {
         if (!$value) {
             return null;
         }
 
         if (!$value instanceof NodeList) {
-            throw new TransformationFailedException;
+            throw new TransformationFailedException();
         }
 
         return $this->isocontent->render($value, $this->format);
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (!$value) {
             return null;
         }
 
         if (!is_string($value)) {
-            throw new TransformationFailedException;
+            throw new TransformationFailedException();
         }
 
         return $this->isocontent->buildAST($value, $this->format);

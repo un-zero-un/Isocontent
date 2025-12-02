@@ -14,17 +14,18 @@ class DOMParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function test_it_supports_html(): void
+    public function testItSupportsHtml(): void
     {
-        $this->assertTrue((new DOMParser)->supportsFormat('html'));
-    }
-    public function test_it_does_not_supports_other_format_that_html(): void
-    {
-        $this->assertFalse((new DOMParser)->supportsFormat('txt'));
-        $this->assertFalse((new DOMParser)->supportsFormat('htm'));
+        $this->assertTrue((new DOMParser())->supportsFormat('html'));
     }
 
-    public function test_it_parses_simple_html(): void
+    public function testItDoesNotSupportsOtherFormatThatHtml(): void
+    {
+        $this->assertFalse((new DOMParser())->supportsFormat('txt'));
+        $this->assertFalse((new DOMParser())->supportsFormat('htm'));
+    }
+
+    public function testItParsesSimpleHtml(): void
     {
         $input = '<p><span>Paragraph text</span></p>';
 
@@ -36,15 +37,15 @@ class DOMParserTest extends TestCase
         $spanBuilder->addTextNode('Paragraph text')->shouldBeCalled()->willReturn($spanBuilder);
 
         $builder = $builder->reveal();
-        (new DOMParser)->parse($builder, $input);
+        (new DOMParser())->parse($builder, $input);
     }
 
-    public function test_it_does_not_throw_error_with_empty_html(): void
+    public function testItDoesNotThrowErrorWithEmptyHtml(): void
     {
         $builder = $this->prophesize(Builder::class);
         $builder->addTextNode(Argument::any())->shouldNotBeCalled();
         $builder->addBlockNode(Argument::any())->shouldNotBeCalled();
 
-        (new DOMParser)->parse($builder->reveal(), '');
+        (new DOMParser())->parse($builder->reveal(), '');
     }
 }

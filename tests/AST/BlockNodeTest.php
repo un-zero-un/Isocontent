@@ -6,6 +6,7 @@ namespace Isocontent\Tests\AST;
 
 use Isocontent\AST\BlockNode;
 use Isocontent\AST\NodeList;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -13,11 +14,10 @@ class BlockNodeTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function test_it_renders_as_array(): void
+    public function testItRendersAsArray(): void
     {
         $emptyBlockNode = BlockNode::fromBlockType('foo', []);
-        $this->assertEquals(['type' => 'block', 'block_type' => 'foo',  'arguments' => []], $emptyBlockNode->toArray());
-
+        $this->assertEquals(['type' => 'block', 'block_type' => 'foo', 'arguments' => []], $emptyBlockNode->toArray());
 
         $nodeList = $this->prophesize(NodeList::class);
         $nodeList->toArray()->shouldBeCalled()->willReturn(['type' => 'text', 'value' => 'foobar']);

@@ -13,7 +13,7 @@ class NodeListTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function test_it_constructs_from_array(): void
+    public function testItConstructsFromArray(): void
     {
         $node1 = $this->prophesize(Node::class);
         $node2 = $this->prophesize(Node::class);

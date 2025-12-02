@@ -34,12 +34,10 @@ class NodeList
 
     /**
      * @param Node[] $nodes
-     *
-     * @return NodeList
      */
     public static function fromArray(array $nodes): self
     {
-        $nodeList = new self;
+        $nodeList = new self();
         $nodeList->nodes = $nodes;
 
         return $nodeList;

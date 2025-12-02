@@ -3,7 +3,7 @@
     "description": "A library to transform web contents (say HTML) to an abstract AST that can be rendered everywhere",
     "type": "library",
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.2"
     },
     "suggest": {
         "ext-dom": "ext-dom is required for DOMParser usage",
@@ -15,15 +15,15 @@
     "require-dev": {
         "ext-dom": "*",
         "ext-json": "*",
-        "phpunit/phpunit": "^9.3.11",
-        "symfony/var-dumper": "^4.4 | ^5.0 | ^6.0",
-        "phpstan/phpstan": "^0.12.44",
-        "symfony/framework-bundle": "^4.4 | ^5.0 | ^6.0",
-        "symfony/serializer": "^4.4 | ^5.0 | ^6.0",
-        "php-coveralls/php-coveralls": "^2.4.2",
-        "phpspec/prophecy-phpunit": "^2.0",
-        "symfony/form": "^5.1 | ^6.0",
-        "twig/twig": "^2.0 | ^3.0"
+        "friendsofphp/php-cs-fixer": "^3.91",
+        "phpspec/prophecy-phpunit": "^2.4.0",
+        "phpunit/phpunit": "^10.5.59",
+        "rector/rector": "^2.2",
+        "symfony/form": ">=5.4,<9",
+        "symfony/framework-bundle": ">=5.4,<9",
+        "symfony/serializer": ">=5.4,<9",
+        "symfony/var-dumper": ">=5.4,<9",
+        "twig/twig": ">=2.0,<4"
     },
     "autoload": {
         "psr-4": {
@@ -39,12 +39,12 @@
     "authors": [
         {
             "name": "Yohan Giarelli",
-            "email": "yohan@un-zero-un.fr"
+            "email": "yohan@giarel.li"
         }
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-main": "2.0.x-dev"
         }
     },
     "config": {

@@ -9,8 +9,6 @@ use Isocontent\AST\NodeList;
 interface Renderer
 {
     /**
-     * @param NodeList $ast
-     *
      * @return mixed
      */
     public function render(NodeList $ast);

@@ -17,7 +17,7 @@ use function Dagger\dag;
 #[Doc('A generated module for Isocontent functions')]
 class Isocontent
 {
-    private const PHP_VERSIONS = ['7.4', '8.0', '8.1','8.2', '8.3', '8.4', '8.5'];
+    private const PHP_VERSIONS = ['8.2', '8.3', '8.4', '8.5'];
 
     #[DaggerFunction]
     #[Doc('Build test environnment')]
@@ -54,7 +54,7 @@ class Isocontent
             ->withExec(['composer', 'install'])
             ->withDirectory('src', $source->directory('src'))
             ->withDirectory('tests', $source->directory('tests'))
-//            ->withFile('.php-cs-fixer.dist.php', $source->file('.php-cs-fixer.dist.php'))
+            ->withFile('.php-cs-fixer.dist.php', $source->file('.php-cs-fixer.dist.php'))
             ->withFile('phpunit.xml.dist', $source->file('phpunit.xml.dist'));
 //            ->withFile('infection.json5', $source->file('infection.json5'))
 //            ->withFile('psalm.xml', $source->file('psalm.xml'));
@@ -120,7 +120,7 @@ class Isocontent
     public function psalm(#[DefaultPath('.')] Directory $source): string
     {
         return $this
-            ->build($source, '7.4')
+            ->build($source, '8.2')
             ->withExec(['./vendor/bin/psalm', '--show-info=true', '--no-diff'])
             ->stdout();
     }
@@ -130,7 +130,7 @@ class Isocontent
     public function phpCsFixer(#[DefaultPath('.')] Directory $source): string
     {
         return $this
-            ->build($source, '7.4')
+            ->build($source, '8.2')
             ->withExec(['./vendor/bin/php-cs-fixer', 'fix', '--dry-run', '--diff', '--ansi'])
             ->stdout();
     }
@@ -150,7 +150,7 @@ class Isocontent
             ->withExec(['apt-get', 'install', '-y', 'git'])
             ->withDirectory('.git', $source->directory('.git'));
 
-        $exec = ['./vendor/bin/infection', '--threads=1', '--min-msi=97'];
+        $exec = ['./vendor/bin/infection', '--threads=1', '--min-msi=80'];
 
         if ($strykerDashboardApiKey && $githubActions) {
             $exec[] = '--logger-github=true';

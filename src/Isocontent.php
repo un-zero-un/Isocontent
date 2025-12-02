@@ -43,10 +43,9 @@ class Isocontent
     }
 
     /**
-     * @param mixed  $input
-     * @param string $format
+     * @param mixed $input
      *
-     * @return NodeList|Node
+     * @return Node|NodeList
      */
     public function buildAST($input, string $format)
     {
@@ -65,9 +64,6 @@ class Isocontent
     }
 
     /**
-     * @param NodeList $ast
-     * @param string   $format
-     *
      * @return mixed
      */
     public function render(NodeList $ast, string $format)

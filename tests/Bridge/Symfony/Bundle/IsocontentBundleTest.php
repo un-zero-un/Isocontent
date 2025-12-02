@@ -17,7 +17,7 @@ class IsocontentBundleTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function test_it_builds(): void
+    public function testItBuilds(): void
     {
         $containerBuilder = $this->prophesize(ContainerBuilder::class);
 
@@ -30,7 +30,7 @@ class IsocontentBundleTest extends TestCase
         $containerBuilder->registerForAutoconfiguration(Parser::class)->shouldBeCalled()->willReturn($parserChildConfiguration);
         $containerBuilder->registerForAutoconfiguration(Renderer::class)->shouldBeCalled()->willReturn($rendererChildConfiguration);
 
-        $bundle = new IsocontentBundle;
+        $bundle = new IsocontentBundle();
         $bundle->build($containerBuilder->reveal());
 
         $this->assertInstanceOf(Bundle::class, $bundle);

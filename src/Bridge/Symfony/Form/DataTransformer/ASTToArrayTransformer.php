@@ -2,6 +2,7 @@
 
 namespace Isocontent\Bridge\Symfony\Form\DataTransformer;
 
+use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\Isocontent;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -16,27 +17,27 @@ class ASTToArrayTransformer implements DataTransformerInterface
         $this->isocontent = $isocontent;
     }
 
-    public function transform($value)
+    public function transform($value): ?array
     {
         if (!$value) {
             return null;
         }
 
         if (!$value instanceof NodeList) {
-            throw new TransformationFailedException;
+            throw new TransformationFailedException();
         }
 
         return $value->toArray();
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): Node|NodeList|null
     {
         if (!$value) {
             return null;
         }
 
         if (!is_array($value)) {
-            throw new TransformationFailedException;
+            throw new TransformationFailedException();
         }
 
         return $this->isocontent->buildAST($value, 'array');

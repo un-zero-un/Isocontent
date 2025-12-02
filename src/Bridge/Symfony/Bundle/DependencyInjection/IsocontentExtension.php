@@ -6,14 +6,13 @@ namespace Isocontent\Bridge\Symfony\Bundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class IsocontentExtension extends Extension
 {
     /**
      * @param array<string, mixed> $configs
-     * @param ContainerBuilder     $container
      *
      * @throws \Exception
      */
@@ -24,7 +23,7 @@ class IsocontentExtension extends Extension
             $this->processConfiguration($configuration, $configs);
         }
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yaml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.php');
     }
 }

@@ -18,14 +18,12 @@ class ASTToStringTransformerTest extends TestCase
 
     private $isocontent;
 
-    public function __construct()
+    protected function setUp(): void
     {
         $this->isocontent = $this->prophesize(Isocontent::class);
-
-        parent::__construct();
     }
 
-    public function test_it_accepts_null_value()
+    public function testItAcceptsNullValue()
     {
         $transformer = new ASTToStringTransformer($this->isocontent->reveal(), 'html');
         $this->assertNull($transformer->transform(null));
@@ -33,7 +31,7 @@ class ASTToStringTransformerTest extends TestCase
         $this->assertNull($transformer->reverseTransform(''));
     }
 
-    public function test_it_transforms()
+    public function testItTransforms()
     {
         $nodeList = $this->prophesize(NodeList::class);
         $this->isocontent->render($nodeList, 'html')->shouldBeCalled()->willReturn('value');
@@ -42,7 +40,7 @@ class ASTToStringTransformerTest extends TestCase
         $this->assertSame('value', $transformer->transform($nodeList->reveal()));
     }
 
-    public function test_transform_exception()
+    public function testTransformException()
     {
         $this->isocontent->render(Argument::any())->shouldNotBeCalled();
         $this->isocontent->buildAST(Argument::any())->shouldNotBeCalled();
@@ -53,7 +51,7 @@ class ASTToStringTransformerTest extends TestCase
         $transformer->transform('test');
     }
 
-    public function test_it_reverse_transforms()
+    public function testItReverseTransforms()
     {
         $nodeList = $this->prophesize(NodeList::class);
         $this->isocontent->buildAST('value', 'html')->shouldBeCalled()->willReturn($nodeList);
@@ -62,7 +60,7 @@ class ASTToStringTransformerTest extends TestCase
         $this->assertSame($nodeList->reveal(), $transformer->reverseTransform('value'));
     }
 
-    public function test_reverse_transform_exception()
+    public function testReverseTransformException()
     {
         $this->isocontent->render(Argument::any())->shouldNotBeCalled();
         $this->isocontent->buildAST(Argument::any())->shouldNotBeCalled();

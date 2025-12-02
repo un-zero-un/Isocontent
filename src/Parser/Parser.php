@@ -9,8 +9,7 @@ use Isocontent\AST\Builder;
 interface Parser
 {
     /**
-     * @param Builder $builder
-     * @param mixed   $input
+     * @param mixed $input
      */
     public function parse(Builder $builder, $input): void;
 

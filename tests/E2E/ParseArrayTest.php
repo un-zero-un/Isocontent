@@ -7,31 +7,25 @@ namespace Isocontent\Tests\E2E;
 use Isocontent\Isocontent;
 use Isocontent\Parser\ArrayParser;
 use Isocontent\Renderer\HTMLRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ParseArrayTest extends TestCase
 {
-    /**
-     * @var Isocontent
-     */
-    private $isocontent;
+    private ?Isocontent $isocontent = null;
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent([new ArrayParser], [new HTMLRenderer]);
-
-        parent::setUp();
+        $this->isocontent = new Isocontent([new ArrayParser()], [new HTMLRenderer()]);
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function test_output_renders_as_html(string $htmlInput, array $expectedOutput): void
+    #[DataProvider('dataProvider')]
+    public function testOutputRendersAsHtml(string $htmlInput, array $expectedOutput): void
     {
         $this->assertEquals($htmlInput, $this->isocontent->render($this->isocontent->buildAST($expectedOutput, 'array'), 'html'));
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [
@@ -41,7 +35,7 @@ class ParseArrayTest extends TestCase
                     'block_type' => 'paragraph',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<span>Foo</span>',
@@ -50,7 +44,7 @@ class ParseArrayTest extends TestCase
                     'block_type' => 'inline_text',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<span>Foo</span>',
@@ -59,7 +53,7 @@ class ParseArrayTest extends TestCase
                     'block_type' => 'inline_text',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]]
+                ]],
             ],
             [
                 '<strong>Foo <span /></strong>',
@@ -71,7 +65,7 @@ class ParseArrayTest extends TestCase
                         ['type' => 'text', 'value' => 'Foo '],
                         ['type' => 'block', 'block_type' => 'generic', 'arguments' => []],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<p><span>Foo</span></p>',
@@ -85,7 +79,7 @@ class ParseArrayTest extends TestCase
                         'arguments' => [],
                         'children' => [['type' => 'text', 'value' => 'Foo']],
                     ]],
-                ]]
+                ]],
             ],
             [
                 '<p><span>Foo</span> <span>Bar</span> <span>Baz</span></p>',
@@ -115,7 +109,7 @@ class ParseArrayTest extends TestCase
                             'children' => [['type' => 'text', 'value' => 'Baz']],
                         ],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<p> <span>Foo</span> <span>Bar</span> <span>Baz</span> </p>',
@@ -147,7 +141,7 @@ class ParseArrayTest extends TestCase
                         ],
                         ['type' => 'text', 'value' => ' '],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<p> <span>Foo</span> <span><em>Emphasis</em> text</span> <span>Baz</span> </p>',
@@ -187,7 +181,7 @@ class ParseArrayTest extends TestCase
                         ],
                         ['type' => 'text', 'value' => ' '],
                     ],
-                ]]
+                ]],
             ],
             [
                 '<h4>Foo</h4> <p> <span><em>Emphasis</em> text</span> </p> <ul><li>Baz</li></ul><ol><li>Qux</li></ol>',
@@ -218,7 +212,7 @@ class ParseArrayTest extends TestCase
                                             ['type' => 'text', 'value' => 'Emphasis'],
                                         ],
                                     ],
-                                    ['type' => 'text', 'value' => ' text']
+                                    ['type' => 'text', 'value' => ' text'],
                                 ],
                             ],
                             ['type' => 'text', 'value' => ' '],
@@ -255,7 +249,7 @@ class ParseArrayTest extends TestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
         ];
     }

@@ -15,8 +15,6 @@ class BlockTypeMatch extends BaseSpecification
 
     /**
      * @param mixed $candidate
-     *
-     * @return bool
      */
     public function isSatisfiedBy($candidate): bool
     {
