@@ -23,7 +23,8 @@
         "symfony/framework-bundle": ">=5.4,<9",
         "symfony/serializer": ">=5.4,<9",
         "symfony/var-dumper": ">=5.4,<9",
-        "twig/twig": ">=2.0,<4"
+        "twig/twig": ">=2.0,<4",
+        "vimeo/psalm": "^6.13.1"
     },
     "autoload": {
         "psr-4": {
