@@ -34,7 +34,7 @@ final class TextDebugRenderer implements Renderer
 
     private function renderNode(Node $node, int $level): string
     {
-        $renderedNode = str_repeat('  ', $level).'# '.$node->getType().$this->renderArguments($node);
+        $renderedNode = str_repeat('  ', $level ?? 0).'# '.$node->getType().$this->renderArguments($node);
 
         if ($node instanceof BlockNode && null !== $node->getChildren()) {
             return
