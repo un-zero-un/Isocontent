@@ -35,7 +35,7 @@ final class ArrayParser implements Parser
     private function parseNode(Builder $builder, array $node): void
     {
         if (Node::TYPE_TEXT === $node['type']) {
-            /* @var array{type: 'text', value: string} $node */
+            assert(is_string($node['value']));
             $builder->addTextNode($node['value']);
 
             return;
