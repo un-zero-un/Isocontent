@@ -84,7 +84,7 @@ final class DOMParser implements Parser
     }
 
     /**
-     * @return array{0: string, 1?: array<string, ?scalar>}
+     * @return array{0: string, 1?: array<string, scalar>}
      */
     private function parseBlockType(\DOMElement $node): array
     {
@@ -140,7 +140,6 @@ final class DOMParser implements Parser
                 $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
 
                 return ['link', $attributes];
-
             case 'del':
                 return ['stripped'];
 

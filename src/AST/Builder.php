@@ -33,7 +33,7 @@ final class Builder
     }
 
     /**
-     * @param array<string, ?scalar> $arguments
+     * @param array<string, scalar> $arguments
      */
     public function addBlockNode(string $blockType, array $arguments = []): self
     {
