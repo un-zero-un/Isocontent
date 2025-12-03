@@ -55,9 +55,9 @@ class Isocontent
             ->withDirectory('src', $source->directory('src'))
             ->withDirectory('tests', $source->directory('tests'))
             ->withFile('.php-cs-fixer.dist.php', $source->file('.php-cs-fixer.dist.php'))
-            ->withFile('phpunit.xml.dist', $source->file('phpunit.xml.dist'));
+            ->withFile('phpunit.xml.dist', $source->file('phpunit.xml.dist'))
 //            ->withFile('infection.json5', $source->file('infection.json5'))
-//            ->withFile('psalm.xml', $source->file('psalm.xml'));
+            ->withFile('psalm.xml', $source->file('psalm.xml'));
     }
 
     #[DaggerFunction]
