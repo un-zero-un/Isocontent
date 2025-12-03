@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Isocontent\AST;
 
-class NodeList
+final class NodeList
 {
     /**
-     * @var Node[]
+     * @param list<Node> $nodes
      */
-    private array $nodes = [];
-
-    /**
-     * @return Node[]
-     */
-    public function getNodes(): array
-    {
-        return $this->nodes;
+    private function __construct(
+        public readonly array $nodes = [],
+    ) {
     }
 
     /**
@@ -33,13 +28,10 @@ class NodeList
     }
 
     /**
-     * @param Node[] $nodes
+     * @param list<Node> $nodes
      */
     public static function fromArray(array $nodes): self
     {
-        $nodeList = new self();
-        $nodeList->nodes = $nodes;
-
-        return $nodeList;
+        return new self($nodes);
     }
 }

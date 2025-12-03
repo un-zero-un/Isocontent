@@ -4,20 +4,16 @@ namespace Isocontent\Specs;
 
 use Isocontent\AST\BlockNode;
 
-class BlockArgumentMatch extends BaseSpecification
+final class BlockArgumentMatch extends BaseSpecification
 {
-    private string $argumentName;
-
-    private $argumentValue;
-
-    public function __construct(string $argumentName, $argumentValue)
-    {
-        $this->argumentName = $argumentName;
-        $this->argumentValue = $argumentValue;
+    public function __construct(
+        private readonly string $argumentName,
+        private readonly int|float|bool|string $argumentValue,
+    ) {
     }
 
     #[\Override]
-    public function isSatisfiedBy($candidate): bool
+    public function isSatisfiedBy(mixed $candidate): bool
     {
         return
             $candidate instanceof BlockNode

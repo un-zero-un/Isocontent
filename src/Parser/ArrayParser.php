@@ -6,15 +6,17 @@ namespace Isocontent\Parser;
 
 use Isocontent\AST\Builder;
 use Isocontent\AST\Node;
+use Isocontent\Exception\UnsupportedFormatException;
 
-class ArrayParser implements Parser
+final class ArrayParser implements Parser
 {
-    /**
-     * @param array<mixed> $input
-     */
     #[\Override]
-    public function parse(Builder $builder, $input): void
+    public function parse(Builder $builder, mixed $input): void
     {
+        if (!\is_array($input)) {
+            throw new UnsupportedFormatException();
+        }
+
         foreach ($input as $node) {
             $this->parseNode($builder, $node);
         }
@@ -39,7 +41,7 @@ class ArrayParser implements Parser
 
         $childBuilder = $builder->addBlockNode($blockType, $node['arguments']);
 
-        if ($childNodes) {
+        if (null !== $childNodes) {
             foreach ($childNodes as $childNode) {
                 $this->parseNode($childBuilder, $childNode);
             }

@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Isocontent\Exception;
 
-class UnsupportedFormatException extends \InvalidArgumentException implements Exception
+final class UnsupportedFormatException extends \InvalidArgumentException implements Exception
 {
 }

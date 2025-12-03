@@ -9,7 +9,7 @@ use Isocontent\Renderer\Renderer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class IsocontentBundle extends Bundle
+final class IsocontentBundle extends Bundle
 {
     #[\Override]
     public function build(ContainerBuilder $container): void

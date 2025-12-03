@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * @psalm-suppress InternalClass Depracated class from the base Symfony package. Will be handled at 9.0 release.
  */
-class IsocontentExtension extends Extension
+final class IsocontentExtension extends Extension
 {
     #[\Override]
     public function load(array $configs, ContainerBuilder $container): void

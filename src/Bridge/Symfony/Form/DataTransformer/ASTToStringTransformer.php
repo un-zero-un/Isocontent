@@ -35,6 +35,9 @@ final class ASTToStringTransformer implements DataTransformerInterface
         return $this->isocontent->render($value, $this->format);
     }
 
+    /**
+     * @psalm-suppress DocblockTypeContradiction
+     */
     #[\Override]
     public function reverseTransform($value): Node|NodeList|null
     {

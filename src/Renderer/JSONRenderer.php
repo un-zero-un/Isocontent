@@ -6,15 +6,12 @@ namespace Isocontent\Renderer;
 
 use Isocontent\AST\NodeList;
 
-class JSONRenderer implements Renderer
+final class JSONRenderer implements Renderer
 {
-    /**
-     * @return false|string
-     */
     #[\Override]
-    public function render(NodeList $ast)
+    public function render(NodeList $ast): string
     {
-        return json_encode($ast->toArray());
+        return json_encode($ast->toArray(), JSON_THROW_ON_ERROR);
     }
 
     #[\Override]

@@ -32,6 +32,9 @@ final class ASTToArrayTransformer implements DataTransformerInterface
         return $value->toArray();
     }
 
+    /**
+     * @psalm-suppress DocblockTypeContradiction
+     */
     #[\Override]
     public function reverseTransform($value): NodeList|Node|null
     {

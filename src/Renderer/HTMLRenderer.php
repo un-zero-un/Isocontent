@@ -12,19 +12,19 @@ use Isocontent\Specs\BlockArgumentMatch;
 use Isocontent\Specs\BlockTypeMatch;
 use Isocontent\Specs\Specification;
 
-class HTMLRenderer implements Renderer
+final class HTMLRenderer implements Renderer
 {
     /**
-     * @var array<array{Specification, string}>
+     * @var list<array{Specification, string}>
      */
     private array $tags;
 
     /**
-     * @param array<array{Specification, string}> $tags
+     * @param list<array{Specification, string}> $tags
      */
     public function __construct(?array $tags = null)
     {
-        $this->tags = $tags ?: [
+        $this->tags = $tags ?? [
             [new BlockTypeMatch('paragraph'), 'p'],
             [new BlockTypeMatch('inline_text'), 'span'],
             [new BlockTypeMatch('emphasis'), 'em'],
@@ -54,7 +54,7 @@ class HTMLRenderer implements Renderer
     public function render(NodeList $ast): string
     {
         return array_reduce(
-            $ast->getNodes(),
+            $ast->nodes,
             function (string $memo, Node $node) {
                 if ($node instanceof TextNode) {
                     return $memo.htmlentities($node->getValue());

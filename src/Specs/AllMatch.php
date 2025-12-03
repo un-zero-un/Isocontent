@@ -2,7 +2,7 @@
 
 namespace Isocontent\Specs;
 
-class AllMatch extends BaseSpecification
+final class AllMatch extends BaseSpecification
 {
     /**
      * @var Specification[]
@@ -15,7 +15,7 @@ class AllMatch extends BaseSpecification
     }
 
     #[\Override]
-    public function isSatisfiedBy($candidate): bool
+    public function isSatisfiedBy(mixed $candidate): bool
     {
         foreach ($this->specifications as $specification) {
             if (!$specification->isSatisfiedBy($candidate)) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Isocontent\Parser;
 
 use Isocontent\AST\Builder;
+use Isocontent\Exception\UnsupportedFormatException;
 
 /**
  * A simple HTML parser using DOMDocument / LibXML.
@@ -12,8 +13,12 @@ use Isocontent\AST\Builder;
 final class DOMParser implements Parser
 {
     #[\Override]
-    public function parse(Builder $builder, $input): void
+    public function parse(Builder $builder, mixed $input): void
     {
+        if (!is_string($input)) {
+            throw new UnsupportedFormatException();
+        }
+
         $document = new \DOMDocument('1.0', 'UTF-8');
         if (!$input) {
             return;
@@ -23,7 +28,7 @@ final class DOMParser implements Parser
         libxml_use_internal_errors(true);
 
         /** @var non-empty-string $html */
-        $html = '<?xml encoding="UTF-8">' . $input;
+        $html = '<?xml encoding="UTF-8">'.$input;
         $document->loadHTML($html);
 
         libxml_clear_errors();
@@ -46,7 +51,7 @@ final class DOMParser implements Parser
     {
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
-                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?: '');
+                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?? '');
 
                 return;
 

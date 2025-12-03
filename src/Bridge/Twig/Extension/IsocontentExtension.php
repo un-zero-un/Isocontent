@@ -9,7 +9,7 @@ use Isocontent\Isocontent;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class IsocontentExtension extends AbstractExtension
+final class IsocontentExtension extends AbstractExtension
 {
     private Isocontent $isocontent;
 

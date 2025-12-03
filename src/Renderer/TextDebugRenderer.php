@@ -7,7 +7,7 @@ use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 
-class TextDebugRenderer implements Renderer
+final class TextDebugRenderer implements Renderer
 {
     #[\Override]
     public function render(NodeList $ast): string
@@ -26,8 +26,8 @@ class TextDebugRenderer implements Renderer
         return implode(
             '',
             array_map(
-                function (Node $node) use ($level) { return $this->renderNode($node, $level); },
-                $ast->getNodes()
+                fn (Node $node) => $this->renderNode($node, $level),
+                $ast->nodes,
             )
         );
     }
@@ -58,7 +58,7 @@ class TextDebugRenderer implements Renderer
                 implode(
                     ', ',
                     array_map(
-                        static fn (int|float|string|bool $value, string $key) => $key.'='. ((string) $value),
+                        static fn (int|float|string|bool $value, string $key) => $key.'='.((string) $value),
                         array_values($node->getArguments() + [$node->getBlockType()]),
                         array_keys($node->getArguments()) + ['type']
                     )

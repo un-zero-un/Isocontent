@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace Isocontent\AST;
 
-class Builder
+final class Builder
 {
     /**
-     * @var Builder[]
+     * @var list<Builder>
      */
     private array $nodes;
-
-    private ?string $type;
-
-    /**
-     * @var array<string, mixed>|null
-     */
-    private ?array $data;
 
     /**
      * @param array<string, mixed>|null $data
      */
-    private function __construct(?string $type = null, ?array $data = null)
-    {
+    private function __construct(
+        private readonly ?string $type = null,
+        private readonly ?array $data = null,
+    ) {
         $this->nodes = [];
-        $this->type = $type;
-        $this->data = $data;
     }
 
     public function addTextNode(string $text): self
