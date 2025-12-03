@@ -36,6 +36,9 @@ final class IsocontentExtension extends AbstractExtension
             $ast = $this->isocontent->buildAST($ast, 'array');
         }
 
-        return $this->isocontent->render($ast, $format);
+        $result = $this->isocontent->render($ast, $format);
+        assert(is_string($result));
+
+        return $result;
     }
 }

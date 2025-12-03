@@ -12,7 +12,11 @@ final class Builder
     private array $nodes;
 
     /**
-     * @param array<string, mixed>|null $data
+     * @param array{
+     *     text?: string,
+     *     block_type?: string,
+     *     arguments?: array<string, scalar>
+     * }|null $data
      */
     private function __construct(
         private readonly ?string $type = null,
@@ -29,7 +33,7 @@ final class Builder
     }
 
     /**
-     * @param array<string, ?scalar> $arguments
+     * @param array<string, scalar> $arguments
      */
     public function addBlockNode(string $blockType, array $arguments = []): self
     {
@@ -54,10 +58,13 @@ final class Builder
 
         switch ($this->type) {
             case Node::TYPE_TEXT:
-                return TextNode::fromText($this->data['text'] ?? '');
+                assert(isset($this->data['text']));
+
+                return TextNode::fromText($this->data['text']);
 
             case Node::TYPE_BLOCK:
                 assert(isset($this->data['block_type']));
+                assert(isset($this->data['arguments']));
 
                 return BlockNode::fromBlockType(
                     $this->data['block_type'],

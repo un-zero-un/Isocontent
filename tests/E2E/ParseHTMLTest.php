@@ -63,7 +63,7 @@ class ParseHTMLTest extends TestCase
                 [[
                     'type' => 'block',
                     'block_type' => 'link',
-                    'arguments' => ['href' => null],
+                    'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
                 ]],
             ],

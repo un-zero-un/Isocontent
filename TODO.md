@@ -7,3 +7,4 @@ TODO
 - [ ] New HTML parser
 - [ ] Markdown parser ?
 - [ ] Better exception / exceptions messages
+- [ ] Parser / Renderer psalm templates

@@ -18,6 +18,10 @@ final class ArrayParser implements Parser
         }
 
         foreach ($input as $node) {
+            if (!\is_array($node)) {
+                throw new UnsupportedFormatException();
+            }
+
             $this->parseNode($builder, $node);
         }
     }
@@ -31,11 +35,20 @@ final class ArrayParser implements Parser
     private function parseNode(Builder $builder, array $node): void
     {
         if (Node::TYPE_TEXT === $node['type']) {
+            /* @var array{type: 'text', value: string} $node */
             $builder->addTextNode($node['value']);
 
             return;
         }
 
+        /**
+         * @var array{
+         *     type: 'block',
+         *     block_type:  string,
+         *     arguments: array<string, scalar>,
+         *     children?: array<array>,
+         * } $node
+         * */
         $childNodes = $node['children'] ?? null;
         $blockType = $node['block_type'];
 

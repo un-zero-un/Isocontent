@@ -12,6 +12,9 @@ use Isocontent\Exception\UnsupportedFormatException;
  */
 final class DOMParser implements Parser
 {
+    /**
+     * @psalm-suppress MixedAssignment
+     */
     #[\Override]
     public function parse(Builder $builder, mixed $input): void
     {
@@ -35,7 +38,10 @@ final class DOMParser implements Parser
         libxml_use_internal_errors($oldUseInternalErrors);
 
         foreach ($document->getElementsByTagName('body') as $root) {
+            assert($root instanceof \DOMElement);
+
             foreach ($root->childNodes as $childNode) {
+                assert($childNode instanceof \DOMNode);
                 $this->parseNode($builder, $childNode);
             }
         }
@@ -70,12 +76,13 @@ final class DOMParser implements Parser
         }
 
         foreach ($node->childNodes as $subNode) {
+            assert($subNode instanceof \DOMNode);
             $this->parseNode($childBuilder, $subNode);
         }
     }
 
     /**
-     * @return array{0: string, 1?: array<string, ?scalar>}
+     * @return array{0: string, 1?: array<string, scalar>}
      */
     private function parseBlockType(\DOMNode $node): array
     {
@@ -126,13 +133,9 @@ final class DOMParser implements Parser
                 return ['new_line'];
 
             case 'a':
-                return [
-                    'link',
-                    [
-                        'href' => $node->attributes?->getNamedItem('href')?->nodeValue,
-                    ],
-                ];
+                $attributes = array_filter(['href' => $node->attributes?->getNamedItem('href')?->nodeValue]);
 
+                return ['link', $attributes];
             case 'del':
                 return ['stripped'];
 

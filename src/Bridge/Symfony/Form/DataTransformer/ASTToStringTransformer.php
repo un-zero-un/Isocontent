@@ -32,7 +32,10 @@ final class ASTToStringTransformer implements DataTransformerInterface
             throw new TransformationFailedException();
         }
 
-        return $this->isocontent->render($value, $this->format);
+        $result = $this->isocontent->render($value, $this->format);
+        assert(is_string($result));
+
+        return $result;
     }
 
     /**
