@@ -26,9 +26,6 @@ class ArrayParser implements Parser
         return 'array' === $format;
     }
 
-    /**
-     * @param array<mixed> $node
-     */
     private function parseNode(Builder $builder, array $node): void
     {
         if (Node::TYPE_TEXT === $node['type']) {

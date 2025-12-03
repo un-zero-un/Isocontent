@@ -38,7 +38,7 @@ final class ASTToStringTransformer implements DataTransformerInterface
     #[\Override]
     public function reverseTransform($value): Node|NodeList|null
     {
-        if (!$value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 

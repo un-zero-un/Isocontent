@@ -34,7 +34,7 @@ class TextDebugRenderer implements Renderer
 
     private function renderNode(Node $node, ?int $level = 0): string
     {
-        $renderedNode = str_repeat('  ', $level).'# '.$node->getType().$this->renderArguments($node);
+        $renderedNode = str_repeat('  ', $level ?? 0).'# '.$node->getType().$this->renderArguments($node);
 
         if ($node instanceof BlockNode && null !== $node->getChildren()) {
             return
@@ -58,7 +58,7 @@ class TextDebugRenderer implements Renderer
                 implode(
                     ', ',
                     array_map(
-                        static function (string $value, string $key) { return $key.'='.$value; },
+                        static fn (int|float|string|bool $value, string $key) => $key.'='. ((string) $value),
                         array_values($node->getArguments() + [$node->getBlockType()]),
                         array_keys($node->getArguments()) + ['type']
                     )

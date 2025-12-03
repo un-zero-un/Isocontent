@@ -56,7 +56,7 @@ class Isocontent
     }
 
     /**
-     * @return list<Parser>
+     * @return array<array-key, Parser>
      */
     public function getParsers(): array
     {
@@ -64,7 +64,7 @@ class Isocontent
     }
 
     /**
-     * @return list<Renderer>
+     * @return array<array-key, Renderer>
      */
     public function getRenderers(): array
     {

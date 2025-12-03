@@ -22,7 +22,9 @@ final class DOMParser implements Parser
         $oldUseInternalErrors = libxml_use_internal_errors();
         libxml_use_internal_errors(true);
 
-        $document->loadHTML('<?xml encoding="UTF-8">'.$input);
+        /** @var non-empty-string $html */
+        $html = '<?xml encoding="UTF-8">' . $input;
+        $document->loadHTML($html);
 
         libxml_clear_errors();
         libxml_use_internal_errors($oldUseInternalErrors);
@@ -58,7 +60,7 @@ final class DOMParser implements Parser
                 return;
         }
 
-        if (null === $node->childNodes || 0 === $node->childNodes->length) {
+        if (0 === $node->childNodes->length) {
             return;
         }
 
@@ -122,11 +124,7 @@ final class DOMParser implements Parser
                 return [
                     'link',
                     [
-                        'href' => (
-                            null !== $node->attributes && null !== $node->attributes->getNamedItem('href')
-                                ? $node->attributes->getNamedItem('href')->nodeValue
-                                : null
-                        ),
+                        'href' => $node->attributes?->getNamedItem('href')?->nodeValue,
                     ],
                 ];
 

@@ -61,9 +61,11 @@ class Builder
 
         switch ($this->type) {
             case Node::TYPE_TEXT:
-                return TextNode::fromText($this->data['text']);
+                return TextNode::fromText($this->data['text'] ?? '');
 
             case Node::TYPE_BLOCK:
+                assert(isset($this->data['block_type']));
+
                 return BlockNode::fromBlockType(
                     $this->data['block_type'],
                     $this->data['arguments'],
