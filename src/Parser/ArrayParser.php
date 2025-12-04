@@ -29,6 +29,11 @@ final class ArrayParser implements Parser
                 throw new UnsupportedFormatException();
             }
 
+            return;
+        }
+
+        /** @var array $node */
+        foreach ($input as $node) {
             $this->parseNode($builder, $node);
         }
     }
