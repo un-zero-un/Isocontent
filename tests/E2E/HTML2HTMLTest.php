@@ -44,7 +44,10 @@ class HTML2HTMLTest extends TestCase
                 .'<h4>Heading level 4</h4>'
                 .'<h5>Heading level 5</h5>'
                 .'<h6>Heading level 6</h6>'
-                .'<p>Some text with <strong>strong</strong> and <em>emphasis</em></p>',
+                .'<p>Some text with <strong>strong</strong> and <em>emphasis</em></p>'
+                .'<hr />'
+                .'<p>Now with <del>del</del> and even <sub>3</sub><sup>4</sup></p>'
+                .'<p>Inline&nbsp;<code>code</code> ? Yup.</p>',
             ],
             [
                 '<ul><li>foo</li><li>bar</li><li>baz <ol><li>qux</li></ol></li></ul>'

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Isocontent\Tests\Parser;
 
 use Isocontent\AST\Builder;
+use Isocontent\Exception\UnsupportedFormatException;
 use Isocontent\Parser\DOMParser;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -47,5 +48,14 @@ class DOMParserTest extends TestCase
         $builder->addBlockNode(Argument::any())->shouldNotBeCalled();
 
         (new DOMParser())->parse($builder->reveal(), '');
+    }
+
+    public function testItThrowsIfInputIsNotAString(): void
+    {
+        $this->expectException(UnsupportedFormatException::class);
+
+        $builder = $this->prophesize(Builder::class);
+
+        (new DOMParser())->parse($builder->reveal(), 123);
     }
 }

@@ -42,7 +42,7 @@ final class HTMLRenderer implements Renderer
             [new BlockTypeMatch('quote'), 'blockquote'],
             [new BlockTypeMatch('new_line'), 'br'],
             [new BlockTypeMatch('link'), 'a'],
-            [new BlockTypeMatch('striped'), 'del'],
+            [new BlockTypeMatch('stripped'), 'del'],
             [new BlockTypeMatch('separator'), 'hr'],
             [new BlockTypeMatch('subscript'), 'sub'],
             [new BlockTypeMatch('superscript'), 'sup'],
@@ -64,7 +64,7 @@ final class HTMLRenderer implements Renderer
                     return $memo.$this->renderBlockNode($node);
                 }
 
-                return $memo;
+                throw new \RuntimeException('Unsupported node type: '.get_class($node));
             },
             ''
         );

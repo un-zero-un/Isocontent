@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Isocontent\Tests\Renderer;
 
 use Isocontent\AST\BlockNode;
+use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Renderer\HTMLRenderer;
@@ -69,5 +70,27 @@ class HTMLRendererTest extends TestCase
                 '<span>foobar</span><span />',
             ],
         ];
+    }
+
+    public function testItThrowsWithUnknownImplementationOfNode(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unsupported node type: Isocontent\AST\Node');
+
+        $ast = NodeList::fromArray([
+            new class implements Node {
+                public function getType(): string
+                {
+                    return 'unknown';
+                }
+
+                public function toArray(): array
+                {
+                    return ['nope'];
+                }
+            },
+        ]);
+
+        (new HTMLRenderer())->render($ast);
     }
 }
