@@ -21,20 +21,19 @@ final class TextDebugRenderer implements Renderer
         return 'text_debug' === $format;
     }
 
-    private function renderNodeList(NodeList $ast, ?int $level = 0): string
+    private function renderNodeList(NodeList $ast, ?int $level = null): string
     {
         return implode(
             '',
             array_map(
-                fn (Node $node) => $this->renderNode($node, $level),
+                fn (Node $node) => $this->renderNode($node, $level ?? 0),
                 $ast->nodes,
             )
         );
     }
 
-    private function renderNode(Node $node, ?int $level = 0): string
+    private function renderNode(Node $node, int $level): string
     {
-        $level ??= 0;
         $renderedNode = str_repeat('  ', $level).'# '.$node->getType().$this->renderArguments($node);
 
         if ($node instanceof BlockNode && null !== $node->getChildren()) {
@@ -59,9 +58,17 @@ final class TextDebugRenderer implements Renderer
                 implode(
                     ', ',
                     array_map(
-                        static fn (int|float|string|bool $value, string $key) => $key.'='.((string) $value),
-                        array_values($node->getArguments() + [$node->getBlockType()]),
-                        array_keys($node->getArguments()) + ['type']
+                        static fn (int|float|string|bool $value, string $key) => sprintf(
+                            '%s=%s',
+                            $key,
+                            str_replace(
+                                '\'',
+                                '',
+                                var_export($value, true),
+                            ),
+                        ),
+                        $node->getArguments() + [$node->getBlockType()],
+                        array_keys($node->getArguments() + ['type' => null])
                     )
                 )
             );

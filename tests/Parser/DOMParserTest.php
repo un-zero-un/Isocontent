@@ -41,6 +41,33 @@ class DOMParserTest extends TestCase
         (new DOMParser())->parse($builder, $input);
     }
 
+    public function testItParsesSimpleHtmlWithComment(): void
+    {
+        $input = '<p><span>Paragraph text<!-- And a comment --></span></p>';
+
+        $builder = $this->prophesize(Builder::class);
+        $pBuilder = $this->prophesize(Builder::class);
+        $spanBuilder = $this->prophesize(Builder::class);
+        $builder->addBlockNode('paragraph', [])->shouldBeCalled()->willReturn($pBuilder);
+        $pBuilder->addBlockNode('inline_text', [])->shouldBeCalled()->willReturn($spanBuilder);
+        $spanBuilder->addTextNode('Paragraph text')->shouldBeCalled()->willReturn($spanBuilder);
+
+        $builder = $builder->reveal();
+        (new DOMParser())->parse($builder, $input);
+    }
+
+    public function testItParsesEmptyNode(): void
+    {
+        $input = '<p></p>';
+
+        $builder = $this->prophesize(Builder::class);
+        $pBuilder = $this->prophesize(Builder::class);
+        $builder->addBlockNode('paragraph', [])->shouldBeCalled()->willReturn($pBuilder);
+
+        $builder = $builder->reveal();
+        (new DOMParser())->parse($builder, $input);
+    }
+
     public function testItDoesNotThrowErrorWithEmptyHtml(): void
     {
         $builder = $this->prophesize(Builder::class);

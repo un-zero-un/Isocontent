@@ -56,7 +56,7 @@ class Isocontent
             ->withDirectory('tests', $source->directory('tests'))
             ->withFile('.php-cs-fixer.dist.php', $source->file('.php-cs-fixer.dist.php'))
             ->withFile('phpunit.xml.dist', $source->file('phpunit.xml.dist'))
-//            ->withFile('infection.json5', $source->file('infection.json5'))
+            ->withFile('infection.json5', $source->file('infection.json5'))
             ->withFile('psalm.xml', $source->file('psalm.xml'));
     }
 
@@ -150,7 +150,7 @@ class Isocontent
             ->withExec(['apt-get', 'install', '-y', 'git'])
             ->withDirectory('.git', $source->directory('.git'));
 
-        $exec = ['./vendor/bin/infection', '--threads=1', '--min-msi=80'];
+        $exec = ['./vendor/bin/infection', '--threads=1', '--min-msi=95'];
 
         if ($strykerDashboardApiKey && $githubActions) {
             $exec[] = '--logger-github=true';

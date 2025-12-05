@@ -17,6 +17,7 @@
         "ext-json": "*",
         "dg/bypass-finals": "^1.9",
         "friendsofphp/php-cs-fixer": "^3.91",
+        "infection/infection": "^0.31.9",
         "phpspec/prophecy-phpunit": "^2.4.0",
         "phpunit/phpunit": "^10.5.59",
         "rector/rector": "^2.2",
@@ -50,6 +51,9 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     }
 }

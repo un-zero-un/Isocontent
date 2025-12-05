@@ -76,6 +76,17 @@ class TextDebugRendererTest extends TestCase
                 ."  # text(foobar)\n"
                 ."# block(type=generic)\n",
             ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType('title', ['level' => '2'], NodeList::fromArray([
+                        TextNode::fromText('foobar'),
+                    ])),
+                    BlockNode::fromBlockType('generic'),
+                ]),
+                "# block(level=2, type=title)\n"
+                ."  # text(foobar)\n"
+                ."# block(type=generic)\n",
+            ],
         ];
     }
 

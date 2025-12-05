@@ -9,6 +9,7 @@ use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Renderer\HTMLRenderer;
+use Isocontent\Specs\BlockTypeMatch;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -92,5 +93,28 @@ class HTMLRendererTest extends TestCase
         ]);
 
         (new HTMLRenderer())->render($ast);
+    }
+
+    public function testItRendersWithCustomTags(): void
+    {
+        $input = NodeList::fromArray([
+            BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
+                TextNode::fromText('foobar'),
+            ])),
+            BlockNode::fromBlockType('strong', [], NodeList::fromArray([
+                TextNode::fromText('bazqux'),
+            ])),
+        ]);
+
+        $tags = [
+            [new BlockTypeMatch('inline_text'), 'font'],
+            [new BlockTypeMatch('strong'), 'b'],
+        ];
+
+        $renderer = new HTMLRenderer($tags);
+        $this->assertSame(
+            '<font>foobar</font><b>bazqux</b>',
+            $renderer->render($input)
+        );
     }
 }

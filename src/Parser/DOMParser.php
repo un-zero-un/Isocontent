@@ -57,11 +57,13 @@ final class DOMParser implements Parser
     {
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
+                assert($node instanceof \DOMText);
                 $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?? '');
 
                 return;
 
             case XML_ELEMENT_NODE:
+                assert($node instanceof \DOMElement);
                 $blockType = $this->parseBlockType($node);
                 $childBuilder = $builder->addBlockNode($blockType[0], $blockType[1] ?? []);
 
@@ -84,7 +86,7 @@ final class DOMParser implements Parser
     /**
      * @return array{0: string, 1?: array<string, scalar>}
      */
-    private function parseBlockType(\DOMNode $node): array
+    private function parseBlockType(\DOMElement $node): array
     {
         switch ($node->nodeName) {
             case 'h1':
@@ -133,7 +135,9 @@ final class DOMParser implements Parser
                 return ['new_line'];
 
             case 'a':
-                $attributes = array_filter(['href' => $node->attributes?->getNamedItem('href')?->nodeValue]);
+                $nodeAttributes = $node->attributes;
+                assert($nodeAttributes instanceof \DOMNamedNodeMap);
+                $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
 
                 return ['link', $attributes];
             case 'del':
