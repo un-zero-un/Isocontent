@@ -11,44 +11,22 @@ use Isocontent\Exception\UnsupportedFormatException;
 use Isocontent\Parser\Parser;
 use Isocontent\Renderer\Renderer;
 
+/**
+ * @api
+ */
 class Isocontent
 {
-    /**
-     * @var Parser[]
-     */
-    private array $parsers;
-
-    /**
-     * @var Renderer[]
-     */
-    private array $renderers;
-
     /**
      * @param iterable<Parser>   $parsers
      * @param iterable<Renderer> $renderers
      */
-    public function __construct(iterable $parsers, iterable $renderers)
-    {
-        if ($parsers instanceof \Traversable) {
-            $this->parsers = iterator_to_array($parsers);
-        } else {
-            $this->parsers = $parsers;
-        }
-
-        if ($renderers instanceof \Traversable) {
-            $this->renderers = iterator_to_array($renderers);
-        } else {
-            $this->renderers = $renderers;
-        }
+    public function __construct(
+        private readonly iterable $parsers,
+        private readonly iterable $renderers,
+    ) {
     }
 
-    /**
-     * @param mixed  $input
-     * @param string $format
-     *
-     * @return NodeList|Node
-     */
-    public function buildAST($input, string $format)
+    public function buildAST(mixed $input, string $format): Node|NodeList
     {
         $builder = Builder::create();
         foreach ($this->parsers as $parser) {
@@ -64,13 +42,7 @@ class Isocontent
         throw new UnsupportedFormatException(sprintf('No parser found for format "%s"', $format));
     }
 
-    /**
-     * @param NodeList $ast
-     * @param string   $format
-     *
-     * @return mixed
-     */
-    public function render(NodeList $ast, string $format)
+    public function render(NodeList $ast, string $format): mixed
     {
         foreach ($this->renderers as $renderer) {
             if (!$renderer->supportsFormat($format)) {
@@ -84,18 +56,18 @@ class Isocontent
     }
 
     /**
-     * @return Parser[]
+     * @return array<array-key, Parser>
      */
     public function getParsers(): array
     {
-        return $this->parsers;
+        return iterator_to_array($this->parsers);
     }
 
     /**
-     * @return Renderer[]
+     * @return array<array-key, Renderer>
      */
     public function getRenderers(): array
     {
-        return $this->renderers;
+        return iterator_to_array($this->renderers);
     }
 }

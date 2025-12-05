@@ -9,7 +9,7 @@ use Isocontent\Isocontent;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class IsocontentExtension extends AbstractExtension
+final class IsocontentExtension extends AbstractExtension
 {
     private Isocontent $isocontent;
 
@@ -18,6 +18,7 @@ class IsocontentExtension extends AbstractExtension
         $this->isocontent = $isocontent;
     }
 
+    #[\Override]
     public function getFilters()
     {
         return [
@@ -27,9 +28,6 @@ class IsocontentExtension extends AbstractExtension
 
     /**
      * @param array<array<mixed>>|NodeList $ast
-     * @param string                       $format
-     *
-     * @return string
      */
     public function renderAST($ast, string $format = 'html'): string
     {
@@ -38,6 +36,9 @@ class IsocontentExtension extends AbstractExtension
             $ast = $this->isocontent->buildAST($ast, 'array');
         }
 
-        return $this->isocontent->render($ast, $format);
+        $result = $this->isocontent->render($ast, $format);
+        assert(is_string($result));
+
+        return $result;
     }
 }

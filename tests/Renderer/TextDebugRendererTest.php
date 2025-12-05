@@ -7,6 +7,7 @@ use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Renderer\TextDebugRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -14,42 +15,27 @@ class TextDebugRendererTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function test_it_supports_text(): void
+    public function testItSupportsText(): void
     {
-        $this->assertTrue((new TextDebugRenderer)->supportsFormat('text_debug'));
+        $this->assertTrue((new TextDebugRenderer())->supportsFormat('text_debug'));
     }
 
-    public function test_it_does_not_supports_non_text(): void
+    public function testItDoesNotSupportsNonText(): void
     {
-        $this->assertFalse((new TextDebugRenderer)->supportsFormat('html'));
-        $this->assertFalse((new TextDebugRenderer)->supportsFormat('json'));
+        $this->assertFalse((new TextDebugRenderer())->supportsFormat('html'));
+        $this->assertFalse((new TextDebugRenderer())->supportsFormat('json'));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function test_it_renders_ast_to_text(NodeList $ast, string $expectedOutput): void
+    #[DataProvider('renderDataProvider')]
+    public function testItRendersAstToText(NodeList $ast, string $expectedOutput): void
     {
         $this->assertSame(
             $expectedOutput,
-            (new TextDebugRenderer)->render($ast)
+            (new TextDebugRenderer())->render($ast)
         );
     }
 
-    public function test_it_returns_only_node_type_with_dummy_node(): void
-    {
-        $node = $this->prophesize(Node::class);
-        $node->getType()->shouldBeCalled()->willReturn('dummy');
-
-        $this->assertSame(
-            "# dummy\n",
-            (new TextDebugRenderer)->render(
-                NodeList::fromArray([$node->reveal()])
-            )
-        );
-    }
-
-    public function renderDataProvider()
+    public static function renderDataProvider(): iterable
     {
         return [
             [
@@ -59,37 +45,61 @@ class TextDebugRendererTest extends TestCase
             [
                 NodeList::fromArray([
                     BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
+                        TextNode::fromText('foobar'),
                     ])),
                 ]),
-                "# block(type=inline_text)\n" .
-                "  # text(foobar)\n",
+                "# block(type=inline_text)\n"
+                ."  # text(foobar)\n",
             ],
             [
                 NodeList::fromArray([
                     BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
+                        TextNode::fromText('foobar'),
                     ])),
                     BlockNode::fromBlockType('strong', [], NodeList::fromArray([
-                        TextNode::fromText('bazqux')
+                        TextNode::fromText('bazqux'),
                     ])),
                 ]),
-                "# block(type=inline_text)\n" .
-                "  # text(foobar)\n" .
-                "# block(type=strong)\n" .
-                "  # text(bazqux)\n",
+                "# block(type=inline_text)\n"
+                ."  # text(foobar)\n"
+                ."# block(type=strong)\n"
+                ."  # text(bazqux)\n",
             ],
             [
                 NodeList::fromArray([
                     BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
+                        TextNode::fromText('foobar'),
                     ])),
-                    BlockNode::fromBlockType('generic')
+                    BlockNode::fromBlockType('generic'),
                 ]),
-                "# block(type=inline_text)\n" .
-                "  # text(foobar)\n" .
-                "# block(type=generic)\n",
-            ]
+                "# block(type=inline_text)\n"
+                ."  # text(foobar)\n"
+                ."# block(type=generic)\n",
+            ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType('title', ['level' => '2'], NodeList::fromArray([
+                        TextNode::fromText('foobar'),
+                    ])),
+                    BlockNode::fromBlockType('generic'),
+                ]),
+                "# block(level=2, type=title)\n"
+                ."  # text(foobar)\n"
+                ."# block(type=generic)\n",
+            ],
         ];
+    }
+
+    public function testItReturnsOnlyNodeTypeWithDummyNode(): void
+    {
+        $node = $this->prophesize(Node::class);
+        $node->getType()->shouldBeCalled()->willReturn('dummy');
+
+        $this->assertSame(
+            "# dummy\n",
+            (new TextDebugRenderer())->render(
+                NodeList::fromArray([$node->reveal()])
+            )
+        );
     }
 }

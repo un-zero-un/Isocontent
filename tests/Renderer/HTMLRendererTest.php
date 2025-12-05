@@ -9,30 +9,33 @@ use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 use Isocontent\Renderer\HTMLRenderer;
+use Isocontent\Specs\BlockTypeMatch;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class HTMLRendererTest extends TestCase
 {
-    public function test_it_supports_html(): void
+    use ProphecyTrait;
+
+    public function testItSupportsHtml(): void
     {
-        $this->assertTrue((new HTMLRenderer)->supportsFormat('html'));
+        $this->assertTrue((new HTMLRenderer())->supportsFormat('html'));
     }
 
-    public function test_it_does_not_supports_non_html(): void
+    public function testItDoesNotSupportsNonHtml(): void
     {
-        $this->assertFalse((new HTMLRenderer)->supportsFormat('htm'));
-        $this->assertFalse((new HTMLRenderer)->supportsFormat('json'));
+        $this->assertFalse((new HTMLRenderer())->supportsFormat('htm'));
+        $this->assertFalse((new HTMLRenderer())->supportsFormat('json'));
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function test_it_renders_ast_to_html(NodeList $ast, string $expectedOutput): void
+    #[DataProvider('dataProvider')]
+    public function testItRendersAstToHtml(NodeList $ast, string $expectedOutput): void
     {
-        $this->assertSame($expectedOutput, (new HTMLRenderer)->render($ast));
+        $this->assertSame($expectedOutput, (new HTMLRenderer())->render($ast));
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [
@@ -42,7 +45,7 @@ class HTMLRendererTest extends TestCase
             [
                 NodeList::fromArray([
                     BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
+                        TextNode::fromText('foobar'),
                     ])),
                 ]),
                 '<span>foobar</span>',
@@ -50,10 +53,10 @@ class HTMLRendererTest extends TestCase
             [
                 NodeList::fromArray([
                     BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
+                        TextNode::fromText('foobar'),
                     ])),
                     BlockNode::fromBlockType('strong', [], NodeList::fromArray([
-                        TextNode::fromText('bazqux')
+                        TextNode::fromText('bazqux'),
                     ])),
                 ]),
                 '<span>foobar</span><strong>bazqux</strong>',
@@ -61,21 +64,57 @@ class HTMLRendererTest extends TestCase
             [
                 NodeList::fromArray([
                     BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
+                        TextNode::fromText('foobar'),
                     ])),
-                    BlockNode::fromBlockType('generic')
+                    BlockNode::fromBlockType('generic'),
                 ]),
                 '<span>foobar</span><span />',
             ],
-            [
-                NodeList::fromArray([
-                    BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
-                        TextNode::fromText('foobar')
-                    ])),
-                    $this->prophesize(Node::class)->reveal()
-                ]),
-                '<span>foobar</span>',
-            ],
         ];
+    }
+
+    public function testItThrowsWithUnknownImplementationOfNode(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unsupported node type: Isocontent\AST\Node');
+
+        $ast = NodeList::fromArray([
+            new class implements Node {
+                public function getType(): string
+                {
+                    return 'unknown';
+                }
+
+                public function toArray(): array
+                {
+                    return ['nope'];
+                }
+            },
+        ]);
+
+        (new HTMLRenderer())->render($ast);
+    }
+
+    public function testItRendersWithCustomTags(): void
+    {
+        $input = NodeList::fromArray([
+            BlockNode::fromBlockType('inline_text', [], NodeList::fromArray([
+                TextNode::fromText('foobar'),
+            ])),
+            BlockNode::fromBlockType('strong', [], NodeList::fromArray([
+                TextNode::fromText('bazqux'),
+            ])),
+        ]);
+
+        $tags = [
+            [new BlockTypeMatch('inline_text'), 'font'],
+            [new BlockTypeMatch('strong'), 'b'],
+        ];
+
+        $renderer = new HTMLRenderer($tags);
+        $this->assertSame(
+            '<font>foobar</font><b>bazqux</b>',
+            $renderer->render($input)
+        );
     }
 }

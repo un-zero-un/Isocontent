@@ -6,5 +6,4 @@ namespace Isocontent\Exception;
 
 interface Exception
 {
-
 }

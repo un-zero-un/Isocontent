@@ -7,41 +7,43 @@ use Isocontent\AST\Node;
 use Isocontent\AST\NodeList;
 use Isocontent\AST\TextNode;
 
-class TextDebugRenderer implements Renderer
+final class TextDebugRenderer implements Renderer
 {
+    #[\Override]
     public function render(NodeList $ast): string
     {
         return $this->renderNodeList($ast);
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'text_debug' === $format;
     }
 
-    private function renderNodeList(NodeList $ast, ?int $level = 0): string
+    private function renderNodeList(NodeList $ast, ?int $level = null): string
     {
         return implode(
             '',
             array_map(
-                function (Node $node) use ($level) { return $this->renderNode($node, $level); },
-                $ast->getNodes()
+                fn (Node $node) => $this->renderNode($node, $level ?? 0),
+                $ast->nodes,
             )
         );
     }
 
-    private function renderNode(Node $node, ?int $level = 0): string
+    private function renderNode(Node $node, int $level): string
     {
-        $renderedNode = str_repeat('  ', $level) . '# ' . $node->getType() . $this->renderArguments($node);
+        $renderedNode = str_repeat('  ', $level).'# '.$node->getType().$this->renderArguments($node);
 
         if ($node instanceof BlockNode && null !== $node->getChildren()) {
             return
-                $renderedNode .
-                "\n" .
-                $this->renderNodeList($node->getChildren(), $level + 1);
+                $renderedNode
+                ."\n"
+                .$this->renderNodeList($node->getChildren(), $level + 1);
         }
 
-        return $renderedNode . "\n";
+        return $renderedNode."\n";
     }
 
     private function renderArguments(Node $node): string
@@ -56,9 +58,17 @@ class TextDebugRenderer implements Renderer
                 implode(
                     ', ',
                     array_map(
-                        static function (string $value, string $key) { return $key . '=' . $value; },
-                        array_values($node->getArguments() + [$node->getBlockType()]),
-                        array_keys($node->getArguments()) + ['type']
+                        static fn (int|float|string|bool $value, string $key) => sprintf(
+                            '%s=%s',
+                            $key,
+                            str_replace(
+                                '\'',
+                                '',
+                                var_export($value, true),
+                            ),
+                        ),
+                        $node->getArguments() + [$node->getBlockType()],
+                        array_keys($node->getArguments() + ['type' => null])
                     )
                 )
             );

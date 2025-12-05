@@ -5,15 +5,23 @@ declare(strict_types=1);
 namespace Isocontent\Parser;
 
 use Isocontent\AST\Builder;
+use Isocontent\Exception\UnsupportedFormatException;
 
+/**
+ * A simple HTML parser using DOMDocument / LibXML.
+ */
 final class DOMParser implements Parser
 {
     /**
-     * @param Builder $builder
-     * @param mixed   $input
+     * @psalm-suppress MixedAssignment
      */
-    public function parse(Builder $builder, $input): void
+    #[\Override]
+    public function parse(Builder $builder, mixed $input): void
     {
+        if (!is_string($input)) {
+            throw new UnsupportedFormatException();
+        }
+
         $document = new \DOMDocument('1.0', 'UTF-8');
         if (!$input) {
             return;
@@ -22,18 +30,24 @@ final class DOMParser implements Parser
         $oldUseInternalErrors = libxml_use_internal_errors();
         libxml_use_internal_errors(true);
 
-        $document->loadHTML('<?xml encoding="UTF-8">' . $input);
+        /** @var non-empty-string $html */
+        $html = '<?xml encoding="UTF-8">'.$input;
+        $document->loadHTML($html);
 
         libxml_clear_errors();
         libxml_use_internal_errors($oldUseInternalErrors);
 
         foreach ($document->getElementsByTagName('body') as $root) {
+            assert($root instanceof \DOMElement);
+
             foreach ($root->childNodes as $childNode) {
+                assert($childNode instanceof \DOMNode);
                 $this->parseNode($builder, $childNode);
             }
         }
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'html' === $format;
@@ -41,87 +55,106 @@ final class DOMParser implements Parser
 
     private function parseNode(Builder $builder, \DOMNode $node): void
     {
-        $childBuilder = null;
-
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
-                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?: '');
+                assert($node instanceof \DOMText);
+                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?? '');
 
                 return;
+
             case XML_ELEMENT_NODE:
-                $childBuilder = $builder->addBlockNode(...$this->parseBlockType($node));
+                assert($node instanceof \DOMElement);
+                $blockType = $this->parseBlockType($node);
+                $childBuilder = $builder->addBlockNode($blockType[0], $blockType[1] ?? []);
+
                 break;
+
             default:
                 return;
         }
 
-        if (null === $node->childNodes || 0 === $node->childNodes->length) {
+        if (0 === $node->childNodes->length) {
             return;
         }
 
         foreach ($node->childNodes as $subNode) {
+            assert($subNode instanceof \DOMNode);
             $this->parseNode($childBuilder, $subNode);
         }
     }
 
     /**
-     * @param \DOMNode $node
-     *
      * @return array{0: string, 1?: array<string, scalar>}
      */
-    private function parseBlockType(\DOMNode $node): array
+    private function parseBlockType(\DOMElement $node): array
     {
         switch ($node->nodeName) {
             case 'h1':
                 return ['title', ['level' => 1]];
+
             case 'h2':
                 return ['title', ['level' => 2]];
+
             case 'h3':
                 return ['title', ['level' => 3]];
+
             case 'h4':
                 return ['title', ['level' => 4]];
+
             case 'h5':
                 return ['title', ['level' => 5]];
+
             case 'h6':
                 return ['title', ['level' => 6]];
+
             case 'p':
                 return ['paragraph'];
+
             case 'em':
                 return ['emphasis'];
+
             case 'strong':
                 return ['strong'];
+
             case 'span':
                 return ['inline_text'];
+
             case 'ul':
                 return ['list', ['ordered' => false]];
+
             case 'ol':
                 return ['list', ['ordered' => true]];
+
             case 'li':
                 return ['list_item'];
+
             case 'blockquote':
                 return ['quote'];
+
             case 'br':
                 return ['new_line'];
+
             case 'a':
-                return [
-                    'link', [
-                        'href' => (
-                            $node->attributes !== null && $node->attributes->getNamedItem('href') !== null ?
-                                $node->attributes->getNamedItem('href')->nodeValue :
-                                null
-                        )
-                    ]
-                ];
+                $nodeAttributes = $node->attributes;
+                assert($nodeAttributes instanceof \DOMNamedNodeMap);
+                $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
+
+                return ['link', $attributes];
             case 'del':
-                return [ 'stripped' ];
+                return ['stripped'];
+
             case 'hr':
-                return [ 'separator' ];
+                return ['separator'];
+
             case 'sub':
-                return [ 'subscript' ];
+                return ['subscript'];
+
             case 'sup':
-                return [ 'superscript' ];
+                return ['superscript'];
+
             case 'code':
-                return [ 'code' ];
+                return ['code'];
+
             default:
                 return ['generic'];
         }

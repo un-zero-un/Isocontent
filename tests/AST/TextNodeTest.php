@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class TextNodeTest extends TestCase
 {
-    public function test_it_renders_as_array(): void
+    public function testItRendersAsArray(): void
     {
         $node = TextNode::fromText('foobar');
 

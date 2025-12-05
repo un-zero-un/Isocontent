@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {
-    public function test_it_adds_text_node(): void
+    public function testItAddsTextNode(): void
     {
         $builder = Builder::create();
         $builder->addTextNode('foobar');
@@ -18,7 +18,7 @@ class BuilderTest extends TestCase
         $this->assertEquals([['type' => Node::TYPE_TEXT, 'value' => 'foobar']], $builder->getAST()->toArray());
     }
 
-    public function test_it_adds_empty_block_node(): void
+    public function testItAddsEmptyBlockNode(): void
     {
         $builder = Builder::create();
         $builder->addBlockNode('paragraph');
@@ -29,7 +29,7 @@ class BuilderTest extends TestCase
         );
     }
 
-    public function test_it_adds_non_empty_block_node(): void
+    public function testItAddsNonEmptyBlockNode(): void
     {
         $builder = Builder::create();
         $childBuilder = $builder->addBlockNode('paragraph');
@@ -42,9 +42,9 @@ class BuilderTest extends TestCase
                     'block_type' => 'paragraph',
                     'arguments' => [],
                     'children' => [
-                        ['type' => Node::TYPE_TEXT, 'value' => 'foobar']
+                        ['type' => Node::TYPE_TEXT, 'value' => 'foobar'],
                     ],
-                ]
+                ],
             ],
             $builder->getAST()->toArray()
         );

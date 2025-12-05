@@ -4,21 +4,14 @@ namespace Isocontent\Specs;
 
 use Isocontent\AST\BlockNode;
 
-class BlockTypeMatch extends BaseSpecification
+final class BlockTypeMatch extends BaseSpecification
 {
-    private string $blockType;
-
-    public function __construct(string $blockType)
+    public function __construct(private readonly string $blockType)
     {
-        $this->blockType = $blockType;
     }
 
-    /**
-     * @param mixed $candidate
-     *
-     * @return bool
-     */
-    public function isSatisfiedBy($candidate): bool
+    #[\Override]
+    public function isSatisfiedBy(mixed $candidate): bool
     {
         return $candidate instanceof BlockNode && $candidate->getBlockType() === $this->blockType;
     }

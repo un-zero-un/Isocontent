@@ -12,19 +12,19 @@ use Isocontent\Specs\BlockArgumentMatch;
 use Isocontent\Specs\BlockTypeMatch;
 use Isocontent\Specs\Specification;
 
-class HTMLRenderer implements Renderer
+final class HTMLRenderer implements Renderer
 {
     /**
-     * @var array<array{Specification, string}>
+     * @var list<array{Specification, string}>
      */
     private array $tags;
 
     /**
-     * @param array<array{Specification, string}> $tags
+     * @param list<array{Specification, string}> $tags
      */
     public function __construct(?array $tags = null)
     {
-        $this->tags = $tags ?: [
+        $this->tags = $tags ?? [
             [new BlockTypeMatch('paragraph'), 'p'],
             [new BlockTypeMatch('inline_text'), 'span'],
             [new BlockTypeMatch('emphasis'), 'em'],
@@ -42,7 +42,7 @@ class HTMLRenderer implements Renderer
             [new BlockTypeMatch('quote'), 'blockquote'],
             [new BlockTypeMatch('new_line'), 'br'],
             [new BlockTypeMatch('link'), 'a'],
-            [new BlockTypeMatch('striped'), 'del'],
+            [new BlockTypeMatch('stripped'), 'del'],
             [new BlockTypeMatch('separator'), 'hr'],
             [new BlockTypeMatch('subscript'), 'sub'],
             [new BlockTypeMatch('superscript'), 'sup'],
@@ -50,25 +50,27 @@ class HTMLRenderer implements Renderer
         ];
     }
 
+    #[\Override]
     public function render(NodeList $ast): string
     {
         return array_reduce(
-            $ast->getNodes(),
+            $ast->nodes,
             function (string $memo, Node $node) {
                 if ($node instanceof TextNode) {
-                    return $memo . htmlentities($node->getValue());
+                    return $memo.htmlentities($node->getValue());
                 }
 
                 if ($node instanceof BlockNode) {
-                    return $memo . $this->renderBlockNode($node);
+                    return $memo.$this->renderBlockNode($node);
                 }
 
-                return $memo;
+                throw new \RuntimeException('Unsupported node type: '.get_class($node));
             },
             ''
         );
     }
 
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'html' === $format;
@@ -83,26 +85,15 @@ class HTMLRenderer implements Renderer
             }
         }
 
-        $arguments = '';
-        if (count($blockNode->getArguments()) > 0 && array_key_exists('arguments', $blockNode->getArguments()) && count($blockNode->getArguments()['arguments']) > 0) {
-            $args = [];
-            foreach($blockNode->getArguments()['arguments'] as $k => $v) {
-                $args[] = sprintf('%s="%s"', $k, $v);
-            }
-
-            $arguments = ' ' . implode(' ', $args);
-        }
-
         if (null === $blockNode->getChildren()) {
-            return strtr('<:tagName::arguments: />', [':tagName:' => $tagName, ':arguments:' => $arguments]);
+            return strtr('<:tagName: />', [':tagName:' => $tagName]);
         }
 
         return strtr(
-            '<:tagName::arguments:>:content:</:tagName:>',
+            '<:tagName:>:content:</:tagName:>',
             [
                 ':tagName:' => $tagName,
                 ':content:' => $this->render($blockNode->getChildren()),
-                ':arguments:' => $arguments,
             ]
         );
     }

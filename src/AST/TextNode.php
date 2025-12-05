@@ -18,6 +18,7 @@ final class TextNode implements Node
         return $this->value;
     }
 
+    #[\Override]
     public function getType(): string
     {
         return Node::TYPE_TEXT;
@@ -26,6 +27,7 @@ final class TextNode implements Node
     /**
      * @return array{type: string, value: string}
      */
+    #[\Override]
     public function toArray(): array
     {
         return ['type' => $this->getType(), 'value' => $this->value];

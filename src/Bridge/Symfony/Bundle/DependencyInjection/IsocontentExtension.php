@@ -6,25 +6,18 @@ namespace Isocontent\Bridge\Symfony\Bundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class IsocontentExtension extends Extension
+/**
+ * @psalm-suppress InternalClass Depracated class from the base Symfony package. Will be handled at 9.0 release.
+ */
+final class IsocontentExtension extends Extension
 {
-    /**
-     * @param array<string, mixed> $configs
-     * @param ContainerBuilder     $container
-     *
-     * @throws \Exception
-     */
+    #[\Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $configuration = $this->getConfiguration($configs, $container);
-        if (null !== $configuration) {
-            $this->processConfiguration($configuration, $configs);
-        }
-
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yaml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.php');
     }
 }
