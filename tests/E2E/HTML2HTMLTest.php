@@ -5,6 +5,7 @@ namespace Isocontent\Tests\E2E;
 use Isocontent\AST\Builder;
 use Isocontent\Parser\ArrayParser;
 use Isocontent\Parser\DOMParser;
+use Isocontent\Parser\NativeDOMParser;
 use Isocontent\Renderer\HTMLRenderer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -12,10 +13,22 @@ use PHPUnit\Framework\TestCase;
 class HTML2HTMLTest extends TestCase
 {
     #[DataProvider('htmlProvider')]
-    public function testItConvertsHtmlBackToHtml(string $html)
+    public function testItConvertsHtmlBackToHtmlWithLegacyDomParser(string $html)
     {
         $builder = Builder::create();
         (new DOMParser())->parse($builder, $html);
+        $this->assertSame($html, (new HTMLRenderer())->render($builder->getAST()));
+    }
+
+    #[DataProvider('htmlProvider')]
+    public function testItConvertsHtmlBackToHtml(string $html)
+    {
+        if (PHP_VERSION_ID < 80400) {
+            $this->markTestSkipped('The NativeDOMParser requires PHP 8.4 or higher.');
+        }
+
+        $builder = Builder::create();
+        (new NativeDOMParser())->parse($builder, $html);
         $this->assertSame($html, (new HTMLRenderer())->render($builder->getAST()));
     }
 

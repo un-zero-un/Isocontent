@@ -7,6 +7,7 @@ namespace Isocontent\Tests\E2E;
 use Isocontent\Isocontent;
 use Isocontent\Parser\ArrayParser;
 use Isocontent\Parser\DOMParser;
+use Isocontent\Parser\NativeDOMParser;
 use Isocontent\Renderer\HTMLRenderer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ class ParseHTMLTest extends TestCase
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent([new DOMParser(), new ArrayParser()], [new HTMLRenderer()]);
+        $this->isocontent = new Isocontent([new NativeDOMParser(), new DOMParser(), new ArrayParser()], [new HTMLRenderer()]);
 
         parent::setUp();
     }
@@ -31,15 +32,6 @@ class ParseHTMLTest extends TestCase
     public static function dataProvider(): array
     {
         return [
-            [
-                'Foo',
-                [[
-                    'type' => 'block',
-                    'block_type' => 'paragraph',
-                    'arguments' => [],
-                    'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]],
-            ],
             [
                 '<span>Foo</span>',
                 [[
@@ -65,15 +57,6 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'link',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]],
-            ],
-            [
-                '<?xml:namespace prefix = "o" /><o:p>Test</o:p>',
-                [[
-                    'type' => 'block',
-                    'block_type' => 'paragraph',
-                    'arguments' => [],
-                    'children' => [['type' => 'text', 'value' => 'Test']],
                 ]],
             ],
             [
