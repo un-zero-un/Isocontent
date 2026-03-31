@@ -7,31 +7,53 @@ namespace Isocontent\Tests\E2E;
 use Isocontent\Isocontent;
 use Isocontent\Parser\ArrayParser;
 use Isocontent\Parser\DOMParser;
+use Isocontent\Parser\NativeDOMParser;
 use Isocontent\Renderer\HTMLRenderer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ParseHTMLTest extends TestCase
 {
-    private ?Isocontent $isocontent = null;
+    private ?Isocontent $legacyIsocontent = null;
+    private ?Isocontent $nativeIsocontent = null;
 
     public function setUp(): void
     {
-        $this->isocontent = new Isocontent([new DOMParser(), new ArrayParser()], [new HTMLRenderer()]);
+        $this->legacyIsocontent = new Isocontent([new DOMParser(), new ArrayParser()], [new HTMLRenderer()]);
+
+        if (PHP_VERSION_ID >= 80400) {
+            $this->nativeIsocontent = new Isocontent([new NativeDOMParser(), new ArrayParser()], [new HTMLRenderer()]);
+        }
 
         parent::setUp();
     }
 
     #[DataProvider('dataProvider')]
-    public function testOutputIsConformToHtml(string $htmlInput, array $expectedOutput): void
+    public function testLegacyDOMParserOutputIsConformToHtml(string $htmlInput, array $expectedOutput): void
     {
-        $this->assertEquals($expectedOutput, $this->isocontent->buildAST($htmlInput, 'html')->toArray());
+        $this->assertEquals($expectedOutput, $this->legacyIsocontent->buildAST($htmlInput, 'html')->toArray());
     }
 
-    public static function dataProvider(): array
+    #[DataProvider('dataProvider')]
+    public function testNativeDOMParserOutputIsConformToHtml(string $htmlInput, array $expectedOutput): void
+    {
+        if (PHP_VERSION_ID < 80400) {
+            $this->markTestSkipped('The NativeDOMParser requires PHP 8.4 or higher.');
+        }
+
+        $this->assertEquals($expectedOutput, $this->nativeIsocontent->buildAST($htmlInput, 'html')->toArray());
+    }
+
+    #[DataProvider('legacyDOMParserDataProvider')]
+    public function testLegacyDOMParserSpecificBehavior(string $htmlInput, array $expectedOutput): void
+    {
+        $this->assertEquals($expectedOutput, $this->legacyIsocontent->buildAST($htmlInput, 'html')->toArray());
+    }
+
+    public static function legacyDOMParserDataProvider(): array
     {
         return [
-            [
+            'bare text is auto-wrapped in paragraph' => [
                 'Foo',
                 [[
                     'type' => 'block',
@@ -40,6 +62,21 @@ class ParseHTMLTest extends TestCase
                     'children' => [['type' => 'text', 'value' => 'Foo']],
                 ]],
             ],
+            'XML namespace processing instruction' => [
+                '<?xml:namespace prefix = "o" /><o:p>Test</o:p>',
+                [[
+                    'type' => 'block',
+                    'block_type' => 'paragraph',
+                    'arguments' => [],
+                    'children' => [['type' => 'text', 'value' => 'Test']],
+                ]],
+            ],
+        ];
+    }
+
+    public static function dataProvider(): array
+    {
+        return [
             [
                 '<span>Foo</span>',
                 [[
@@ -65,15 +102,6 @@ class ParseHTMLTest extends TestCase
                     'block_type' => 'link',
                     'arguments' => [],
                     'children' => [['type' => 'text', 'value' => 'Foo']],
-                ]],
-            ],
-            [
-                '<?xml:namespace prefix = "o" /><o:p>Test</o:p>',
-                [[
-                    'type' => 'block',
-                    'block_type' => 'paragraph',
-                    'arguments' => [],
-                    'children' => [['type' => 'text', 'value' => 'Test']],
                 ]],
             ],
             [

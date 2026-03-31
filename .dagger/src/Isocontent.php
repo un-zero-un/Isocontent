@@ -120,7 +120,7 @@ class Isocontent
     public function psalm(#[DefaultPath('.')] Directory $source): string
     {
         return $this
-            ->build($source, '8.2')
+            ->build($source, '8.4')
             ->withExec(['./vendor/bin/psalm', '--show-info=true', '--no-diff'])
             ->stdout();
     }

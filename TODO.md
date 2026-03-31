@@ -3,7 +3,7 @@ TODO
 
 - [ ] Mermaid renderer
 - [ ] Markdown renderer
-- [ ] Optionnal attributes 
+- [ ] Optionnal attributes
 - [ ] New HTML parser
 - [ ] Markdown parser ?
 - [ ] Better exception / exceptions messages

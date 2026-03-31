@@ -4,71 +4,58 @@ declare(strict_types=1);
 
 namespace Isocontent\Parser;
 
+use Dom\HTMLDocument;
+use Dom\HTMLElement;
+use Dom\NamedNodeMap;
+use Dom\Node;
+use Dom\NodeList as DomNodeList;
+use Dom\Text;
 use Isocontent\AST\Builder;
 use Isocontent\Exception\FeatureNotAvailableException;
 use Isocontent\Exception\UnsupportedFormatException;
 
-/**
- * A simple HTML parser using DOMDocument / LibXML.
- */
-final class DOMParser implements Parser
+final class NativeDOMParser implements Parser
 {
-    /**
-     * @psalm-suppress MixedAssignment
-     */
+    #[\Override]
+    public function supportsFormat(string $format): bool
+    {
+        return 'html' === $format && class_exists(HTMLDocument::class);
+    }
+
     #[\Override]
     public function parse(Builder $builder, mixed $input): void
     {
-        if (!class_exists(\DOMDocument::class)) {
-            throw new FeatureNotAvailableException(\DOMDocument::class, __CLASS__); // @codeCoverageIgnore
+        if (!class_exists(HTMLDocument::class)) {
+            throw new FeatureNotAvailableException(HTMLDocument::class, __CLASS__); // @codeCoverageIgnore
         }
 
         if (!is_string($input)) {
             throw new UnsupportedFormatException();
         }
 
-        $document = new \DOMDocument('1.0', 'UTF-8');
-        if (!$input) {
-            return;
-        }
-
-        $oldUseInternalErrors = libxml_use_internal_errors();
-        libxml_use_internal_errors(true);
-
-        /** @var non-empty-string $html */
-        $html = '<?xml encoding="UTF-8">'.$input;
-        $document->loadHTML($html);
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($oldUseInternalErrors);
-
-        foreach ($document->getElementsByTagName('body') as $root) {
-            assert($root instanceof \DOMElement);
-
-            foreach ($root->childNodes as $childNode) {
-                assert($childNode instanceof \DOMNode);
-                $this->parseNode($builder, $childNode);
-            }
+        $document = HTMLDocument::createEmpty();
+        assert($document instanceof HTMLDocument);
+        $body = $document->createElement('body');
+        assert($body instanceof HTMLElement);
+        $document->appendChild($body);
+        $body->innerHTML = $input;
+        foreach ($body->childNodes as $childNode) {
+            assert($childNode instanceof Node);
+            $this->parseNode($builder, $childNode);
         }
     }
 
-    #[\Override]
-    public function supportsFormat(string $format): bool
-    {
-        return 'html' === $format && class_exists(\DOMDocument::class);
-    }
-
-    private function parseNode(Builder $builder, \DOMNode $node): void
+    private function parseNode(Builder $builder, Node $node): void
     {
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
-                assert($node instanceof \DOMText);
-                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?? '');
+                assert($node instanceof Text);
+                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', (string) $node->textContent) ?? '');
 
                 return;
 
             case XML_ELEMENT_NODE:
-                assert($node instanceof \DOMElement);
+                assert($node instanceof HTMLElement);
                 $blockType = $this->parseBlockType($node);
                 $childBuilder = $builder->addBlockNode($blockType[0], $blockType[1] ?? []);
 
@@ -78,22 +65,25 @@ final class DOMParser implements Parser
                 return;
         }
 
+        assert($node->childNodes instanceof DomNodeList);
         if (0 === $node->childNodes->length) {
             return;
         }
 
         foreach ($node->childNodes as $subNode) {
-            assert($subNode instanceof \DOMNode);
+            assert($subNode instanceof Node);
             $this->parseNode($childBuilder, $subNode);
         }
     }
 
     /**
+     * @psalm-suppress MixedPropertyFetch
+     *
      * @return array{0: string, 1?: array<string, scalar>}
      */
-    private function parseBlockType(\DOMElement $node): array
+    private function parseBlockType(HTMLElement $node): array
     {
-        switch ($node->nodeName) {
+        switch (strtolower((string) $node->nodeName)) {
             case 'h1':
                 return ['title', ['level' => 1]];
 
@@ -141,10 +131,14 @@ final class DOMParser implements Parser
 
             case 'a':
                 $nodeAttributes = $node->attributes;
-                assert($nodeAttributes instanceof \DOMNamedNodeMap);
-                $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
+                assert($nodeAttributes instanceof NamedNodeMap);
+
+                /** @var ?scalar $value */
+                $value = $nodeAttributes->getNamedItem('href')?->value;
+                $attributes = array_filter(['href' => $value]);
 
                 return ['link', $attributes];
+
             case 'del':
                 return ['stripped'];
 
