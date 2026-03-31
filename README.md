@@ -9,155 +9,126 @@
 
 Typical use‑case: accept content from a WYSIWYG editor, store it as a portable AST, and render it on any platform.
 
----
-
-## Table of Contents
-
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Core Concepts](#core-concepts)
-  - [AST Structure](#ast-structure)
-  - [Block Types](#block-types)
-- [Parsers](#parsers)
-  - [DOMParser](#domparser)
-  - [ArrayParser](#arrayparser)
-  - [Custom Parser](#custom-parser)
-- [Renderers](#renderers)
-  - [HTMLRenderer](#htmlrenderer)
-  - [JSONRenderer](#jsonrenderer)
-  - [TextDebugRenderer](#textdebugrenderer)
-  - [Custom Renderer](#custom-renderer)
-- [Customizing the HTML Renderer](#customizing-the-html-renderer)
-- [Symfony Integration](#symfony-integration)
-  - [Bundle Setup](#bundle-setup)
-  - [Using the Service](#using-the-service)
-  - [Form Data Transformers](#form-data-transformers)
-- [Twig Integration](#twig-integration)
-- [AST Array Format](#ast-array-format)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
-
----
-
-## Requirements
-
-- PHP **>= 8.2**
-- `ext-dom` and `ext-libxml` — required for the `DOMParser`
-- `ext-json` — required for the `JSONRenderer`
-
 ## Installation
+
+Requires PHP **>= 8.2**. The `DOMParser` needs `ext-dom` and `ext-libxml`; the `JSONRenderer` needs `ext-json`.
 
 ```bash
 composer require unzeroun/isocontent
 ```
 
-## Quick Start
+## End‑to‑End Demo
+
+The `Isocontent` service is the main entry point. Register parsers and renderers, then parse and render content in any supported format:
 
 ```php
 use Isocontent\Isocontent;
 use Isocontent\Parser\DOMParser;
+use Isocontent\Renderer\HTMLRenderer;
 use Isocontent\Renderer\JSONRenderer;
 
 $isocontent = new Isocontent(
     parsers:   [new DOMParser()],
-    renderers: [new JSONRenderer()],
+    renderers: [new HTMLRenderer(), new JSONRenderer()],
 );
 
-// Parse HTML into an AST
-$ast = $isocontent->buildAST('<p>Hello <strong>world</strong></p>', 'html');
+// 1. Parse HTML into an AST
+$ast = $isocontent->buildAST(
+    '<h1>Hello</h1><p>This is <strong>rich</strong> content with a <a href="https://example.com">link</a>.</p>',
+    'html',
+);
 
-// Render the AST to JSON
-echo $isocontent->render($ast, 'json');
+// 2. Inspect the AST as a portable array (suitable for JSON storage / API responses)
+$ast->toArray();
+// [
+//     [
+//         'type'       => 'block',
+//         'block_type' => 'title',
+//         'arguments'  => ['level' => 1],
+//         'children'   => [
+//             ['type' => 'text', 'value' => 'Hello'],
+//         ],
+//     ],
+//     [
+//         'type'       => 'block',
+//         'block_type' => 'paragraph',
+//         'arguments'  => [],
+//         'children'   => [
+//             ['type' => 'text', 'value' => 'This is '],
+//             [
+//                 'type'       => 'block',
+//                 'block_type' => 'strong',
+//                 'arguments'  => [],
+//                 'children'   => [
+//                     ['type' => 'text', 'value' => 'rich'],
+//                 ],
+//             ],
+//             ['type' => 'text', 'value' => ' content with a '],
+//             [
+//                 'type'       => 'block',
+//                 'block_type' => 'link',
+//                 'arguments'  => ['href' => 'https://example.com'],
+//                 'children'   => [
+//                     ['type' => 'text', 'value' => 'link'],
+//                 ],
+//             ],
+//             ['type' => 'text', 'value' => '.'],
+//         ],
+//     ],
+// ]
+
+// 3. Render back to HTML
+$isocontent->render($ast, 'html');
+// '<h1>Hello</h1><p>This is <strong>rich</strong> content with a <a>link</a>.</p>'
+
+// 4. Render to JSON
+$isocontent->render($ast, 'json');
+// The same array structure above, encoded as a JSON string
 ```
 
----
-
 ## Core Concepts
-
-### AST Structure
 
 Isocontent models content as a tree of **nodes**:
 
 | Class | Description |
 |-------|-------------|
-| `Node` | Interface implemented by every node. Defines `getType()` and `toArray()`. |
-| `TextNode` | A leaf node holding a plain text value. |
-| `BlockNode` | A node representing a structural element (paragraph, heading, link…). May contain children and typed arguments. |
-| `NodeList` | An ordered collection of `Node` objects. This is what parsers produce and renderers consume. |
-
-Nodes are created through static factory methods (`TextNode::fromText()`, `BlockNode::fromBlockType()`) or via the fluent `Builder`:
-
-```php
-use Isocontent\AST\Builder;
-
-$builder = Builder::create();
-$builder
-    ->addBlockNode('paragraph')
-        ->addTextNode('Hello ')
-        ->addBlockNode('strong')
-            ->addTextNode('world');
-
-$ast = $builder->getAST(); // NodeList
-```
+| `TextNode` | Leaf node holding a plain text value. |
+| `BlockNode` | Structural element (paragraph, heading, link…) with optional children and typed arguments. |
+| `NodeList` | Ordered collection of nodes — this is what parsers produce and renderers consume. |
 
 ### Block Types
 
 The `DOMParser` maps HTML elements to the following block types:
 
-| Block Type     | HTML Tag(s)         | Arguments         |
-|----------------|---------------------|-------------------|
-| `paragraph`    | `<p>`               | —                 |
-| `title`        | `<h1>` – `<h6>`     | `level` (int 1–6) |
-| `strong`       | `<strong>`          | —                 |
-| `emphasis`     | `<em>`              | —                 |
-| `inline_text`  | `<span>`            | —                 |
-| `link`         | `<a>`               | `href` (string)   |
-| `list`         | `<ul>`, `<ol>`      | `ordered` (bool)  |
-| `list_item`    | `<li>`              | —                 |
-| `quote`        | `<blockquote>`      | —                 |
-| `new_line`     | `<br>`              | —                 |
-| `stripped`     | `<del>`             | —                 |
-| `separator`    | `<hr>`              | —                 |
-| `subscript`    | `<sub>`             | —                 |
-| `superscript`  | `<sup>`             | —                 |
-| `code`         | `<code>`            | —                 |
-| `generic`      | *any other element* | —                 |
-
----
+| Block Type | HTML Tag(s) | Arguments |
+|---|---|---|
+| `paragraph` | `<p>` | — |
+| `title` | `<h1>`–`<h6>` | `level` (int 1–6) |
+| `strong` | `<strong>` | — |
+| `emphasis` | `<em>` | — |
+| `inline_text` | `<span>` | — |
+| `link` | `<a>` | `href` (string) |
+| `list` | `<ul>`, `<ol>` | `ordered` (bool) |
+| `list_item` | `<li>` | — |
+| `quote` | `<blockquote>` | — |
+| `new_line` | `<br>` | — |
+| `stripped` | `<del>` | — |
+| `separator` | `<hr>` | — |
+| `subscript` | `<sub>` | — |
+| `superscript` | `<sup>` | — |
+| `code` | `<code>` | — |
+| `generic` | *any other element* | — |
 
 ## Parsers
 
-A parser reads an input in a given format and builds an AST through the `Builder`.
+A parser reads input in a given format and builds an AST through the `Builder`.
 
-### DOMParser
-
-Parses an HTML string using PHP's `DOMDocument`. Supports format `html`.
-
-```php
-use Isocontent\Parser\DOMParser;
-
-$parser = new DOMParser();
-$parser->supportsFormat('html'); // true
-```
-
-### ArrayParser
-
-Parses a PHP array that already follows the [AST array format](#ast-array-format). Supports format `array`.
-
-```php
-use Isocontent\Parser\ArrayParser;
-
-$parser = new ArrayParser();
-$parser->supportsFormat('array'); // true
-```
-
-This is useful for re‑hydrating an AST that was previously serialized to JSON or stored as an array.
+- **`DOMParser`** — parses HTML strings via PHP's `DOMDocument` (format: `html`)
+- **`ArrayParser`** — re‑hydrates an AST from a PHP array or decoded JSON (format: `array`)
 
 ### Custom Parser
 
-Implement the `Isocontent\Parser\Parser` interface:
+Implement the `Parser` interface:
 
 ```php
 use Isocontent\AST\Builder;
@@ -177,41 +148,17 @@ final class MarkdownParser implements Parser
 }
 ```
 
----
-
 ## Renderers
 
-A renderer converts a `NodeList` AST into an output format.
+A renderer converts a `NodeList` into an output format.
 
-### HTMLRenderer
-
-Renders the AST back to an HTML string. Supports format `html`.
-
-```php
-use Isocontent\Renderer\HTMLRenderer;
-
-$renderer = new HTMLRenderer();
-echo $renderer->render($ast); // <p>Hello <strong>world</strong></p>
-```
-
-### JSONRenderer
-
-Renders the AST to a JSON string. Supports format `json`.
-
-```php
-use Isocontent\Renderer\JSONRenderer;
-
-$renderer = new JSONRenderer();
-echo $renderer->render($ast);
-```
-
-### TextDebugRenderer
-
-Renders the AST as an indented, human‑readable tree. Useful for debugging. Supports format `text_debug`.
+- **`HTMLRenderer`** — renders to HTML (format: `html`). Tag mapping is [customizable](#custom-html-tag-mapping).
+- **`JSONRenderer`** — renders to a JSON string (format: `json`).
+- **`TextDebugRenderer`** — renders an indented tree for debugging (format: `text_debug`).
 
 ### Custom Renderer
 
-Implement the `Isocontent\Renderer\Renderer` interface:
+Implement the `Renderer` interface:
 
 ```php
 use Isocontent\AST\NodeList;
@@ -221,7 +168,7 @@ final class ReactNativeRenderer implements Renderer
 {
     public function supportsFormat(string $format): bool
     {
-        return $format === 'react_native';
+        return 'react_native' === $format;
     }
 
     public function render(NodeList $ast): mixed
@@ -231,11 +178,9 @@ final class ReactNativeRenderer implements Renderer
 }
 ```
 
----
+### Custom HTML Tag Mapping
 
-## Customizing the HTML Renderer
-
-The `HTMLRenderer` uses the [Specification pattern](https://en.wikipedia.org/wiki/Specification_pattern) to map AST block types to HTML tags. You can override the defaults by passing your own mapping:
+The `HTMLRenderer` uses the [Specification pattern](https://en.wikipedia.org/wiki/Specification_pattern) to map block types to HTML tags. You can pass your own mapping to override the defaults:
 
 ```php
 use Isocontent\Renderer\HTMLRenderer;
@@ -252,23 +197,11 @@ $renderer = new HTMLRenderer([
 ]);
 ```
 
-Each entry is a pair of `[Specification, string]` where the specification is checked against every `BlockNode` and the string is the HTML tag name to use.
-
-Available specifications:
-
-| Class                | Description                                                                           |
-|----------------------|---------------------------------------------------------------------------------------|
-| `BlockTypeMatch`     | Matches a block by its type name.                                                     |
-| `BlockArgumentMatch` | Matches a block by a specific argument key/value.                                     |
-| `AllMatch`           | Composes multiple specifications (all must match). Built automatically via `->and()`. |
-
----
+Available specifications: `BlockTypeMatch` (match by type), `BlockArgumentMatch` (match by argument key/value), and `AllMatch` (compose with `->and()`).
 
 ## Symfony Integration
 
-### Bundle Setup
-
-Register the bundle in your Symfony application:
+Register the bundle:
 
 ```php
 // config/bundles.php
@@ -278,98 +211,52 @@ return [
 ];
 ```
 
-The bundle automatically:
-
-- **Discovers** all classes implementing `Parser` and tags them with `isocontent.parser`.
-- **Discovers** all classes implementing `Renderer` and tags them with `isocontent.renderer`.
-- **Registers** the `Isocontent` service (public, also aliased as `isocontent`).
-
-All built‑in parsers and renderers are autowired and autoconfigured out of the box.
-
-### Using the Service
-
-Inject the `Isocontent` service in your controllers or services:
+The bundle auto‑discovers all `Parser` and `Renderer` implementations (tagged `isocontent.parser` / `isocontent.renderer`) and registers a public `Isocontent` service. All built‑in parsers and renderers are autowired out of the box.
 
 ```php
 use Isocontent\Isocontent;
 
 final class ContentController
 {
-    public function __construct(private readonly Isocontent $isocontent)
-    {
-    }
+    public function __construct(private readonly Isocontent $isocontent) {}
 
     public function show(): Response
     {
         $ast  = $this->isocontent->buildAST($html, 'html');
         $json = $this->isocontent->render($ast, 'json');
-
         // ...
     }
 }
 ```
 
-### Form Data Transformers
-
-Two Symfony Form data transformers are provided:
-
-| Transformer              | Direction                                      |
-|--------------------------|------------------------------------------------|
-| `ASTToStringTransformer` | `Node\|NodeList` ↔ rendered string (e.g. HTML) |
-| `ASTToArrayTransformer`  | `Node\|NodeList` ↔ PHP array                   |
-
-Use them when your form field stores AST data but needs to display or accept a different representation.
-
----
+Two Symfony Form **data transformers** are also provided: `ASTToStringTransformer` (`Node|NodeList` ↔ rendered string) and `ASTToArrayTransformer` (`Node|NodeList` ↔ PHP array).
 
 ## Twig Integration
 
-The library ships with a Twig extension that exposes the `render_isocontent_ast` filter:
+A Twig filter is available to render AST directly in templates:
 
 ```twig
-{# Render a NodeList or an array to HTML (default format) #}
 {{ content|render_isocontent_ast }}
-
-{# Render to a specific format #}
 {{ content|render_isocontent_ast('json') }}
 ```
 
-The filter accepts both `NodeList` objects and raw arrays (which are parsed via the `ArrayParser` first).
+The filter accepts both `NodeList` objects and raw arrays.
 
----
+## Testing
 
-## AST Array Format
-
-Every node can be serialized to a plain array with `toArray()`. This is the canonical interchange format, suitable for JSON storage or API responses.
-
-**TextNode:**
-
-```json
-{
-    "type": "text",
-    "value": "Hello world"
-}
+```bash
+vendor/bin/phpunit          # Unit & E2E tests
+vendor/bin/psalm            # Static analysis
+vendor/bin/infection        # Mutation testing
+vendor/bin/php-cs-fixer fix # Code style
 ```
 
-**BlockNode:**
+CI runs on PHP 8.2, 8.3, 8.4, and 8.5 with both lowest and highest dependency versions.
 
-```json
-{
-    "type": "block",
-    "block_type": "paragraph",
-    "arguments": {},
-    "children": [
-        { "type": "text", "value": "Hello " },
-        {
-            "type": "block",
-            "block_type": "strong",
-            "arguments": {},
-            "children": [
-                { "type": "text", "value": "world" }
-            ]
-        }
-    ]
-}
-```
+## Contributing
 
-A `NodeList` serializes as an array of node objects. You can re-hydrate an AST from this format using the `ArrayParser`.
+Contributions are welcome! Fork the repository, create a feature branch, ensure all checks pass, and open a pull request.
+
+## License
+
+Isocontent is released under the [MIT License](https://opensource.org/licenses/MIT).
