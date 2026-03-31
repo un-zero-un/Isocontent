@@ -3,7 +3,7 @@
 [![CI Status](https://github.com/un-zero-un/Isocontent/actions/workflows/ci.yml/badge.svg)](https://github.com/un-zero-un/Isocontent/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/un-zero-un/Isocontent/badge.svg)](https://coveralls.io/github/un-zero-un/Isocontent)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fun-zero-un%2FIsocontent%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/un-zero-un/Isocontent/main)
-[![License](https://img.shields.io/github/license/un-zero-un/Isocontent)](https://github.com/un-zero-un/Isocontent/blob/main/LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 **Isocontent** is a PHP library that transforms rich‑text content (such as HTML) into a platform‑agnostic Abstract Syntax Tree (AST). The AST can then be rendered back to any target format — HTML, JSON, React Native, mobile views, or anything else you need.
 
