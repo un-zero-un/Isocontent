@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Isocontent\Exception;
 
 final class FeatureNotAvailableException extends \RuntimeException implements Exception

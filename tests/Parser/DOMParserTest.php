@@ -56,6 +56,32 @@ class DOMParserTest extends TestCase
         (new DOMParser())->parse($builder, $input);
     }
 
+    public function testItParsesLinkWithAttribute(): void
+    {
+        $input = '<p><a href="https://example.com">Example</a></p>';
+
+        $builder = $this->createMock(Builder::class);
+        $pBuilder = $this->createMock(Builder::class);
+        $aBuilder = $this->createMock(Builder::class);
+        $builder->expects($this->once())->method('addBlockNode')->with('paragraph', [])->willReturn($pBuilder);
+        $pBuilder->expects($this->once())->method('addBlockNode')->with('link', ['href' => 'https://example.com'])->willReturn($aBuilder);
+        $aBuilder->expects($this->once())->method('addTextNode')->with('Example')->willReturn($aBuilder);
+
+        (new DOMParser())->parse($builder, $input);
+    }
+
+    public function testItParsesUnknownNodeType(): void
+    {
+        $input = '<custom>Some custom content</custom>';
+
+        $builder = $this->createMock(Builder::class);
+        $genericBuilder = $this->createMock(Builder::class);
+        $builder->expects($this->once())->method('addBlockNode')->with('generic', [])->willReturn($genericBuilder);
+        $genericBuilder->expects($this->once())->method('addTextNode')->with('Some custom content')->willReturn($genericBuilder);
+
+        (new DOMParser())->parse($builder, $input);
+    }
+
     public function testItParsesEmptyNode(): void
     {
         $input = '<p></p>';

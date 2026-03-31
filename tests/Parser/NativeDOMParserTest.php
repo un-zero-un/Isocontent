@@ -4,7 +4,6 @@ namespace Isocontent\Tests\Parser;
 
 use Isocontent\AST\Builder;
 use Isocontent\Exception\UnsupportedFormatException;
-use Isocontent\Parser\DOMParser;
 use Isocontent\Parser\NativeDOMParser;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +24,13 @@ final class NativeDOMParserTest extends TestCase
     {
         $this->assertTrue($this->parser->supportsFormat('html'));
         $this->assertFalse($this->parser->supportsFormat('xml'));
+    }
+
+    public function testItDoesNotSupportOtherFormatThanHtml(): void
+    {
+        $this->assertFalse($this->parser->supportsFormat('txt'));
+        $this->assertFalse($this->parser->supportsFormat('htm'));
+        $this->assertFalse($this->parser->supportsFormat('json'));
     }
 
     public function testItParsesSimpleHtml(): void
@@ -65,13 +71,39 @@ final class NativeDOMParserTest extends TestCase
         (new NativeDOMParser())->parse($builder, $input);
     }
 
+    public function testItParsesLinkWithAttribute(): void
+    {
+        $input = '<p><a href="https://example.com">Example</a></p>';
+
+        $builder = $this->createMock(Builder::class);
+        $pBuilder = $this->createMock(Builder::class);
+        $aBuilder = $this->createMock(Builder::class);
+        $builder->expects($this->once())->method('addBlockNode')->with('paragraph', [])->willReturn($pBuilder);
+        $pBuilder->expects($this->once())->method('addBlockNode')->with('link', ['href' => 'https://example.com'])->willReturn($aBuilder);
+        $aBuilder->expects($this->once())->method('addTextNode')->with('Example')->willReturn($aBuilder);
+
+        (new NativeDOMParser())->parse($builder, $input);
+    }
+
+    public function testItParsesUnknownNodeType(): void
+    {
+        $input = '<custom>Some custom content</custom>';
+
+        $builder = $this->createMock(Builder::class);
+        $genericBuilder = $this->createMock(Builder::class);
+        $builder->expects($this->once())->method('addBlockNode')->with('generic', [])->willReturn($genericBuilder);
+        $genericBuilder->expects($this->once())->method('addTextNode')->with('Some custom content')->willReturn($genericBuilder);
+
+        (new NativeDOMParser())->parse($builder, $input);
+    }
+
     public function testItDoesNotThrowErrorWithEmptyHtml(): void
     {
         $builder = $this->createMock(Builder::class);
         $builder->expects($this->never())->method('addTextNode');
         $builder->expects($this->never())->method('addBlockNode');
 
-        (new DOMParser())->parse($builder, '');
+        (new NativeDOMParser())->parse($builder, '');
     }
 
     public function testItThrowsIfInputIsNotAString(): void
@@ -80,6 +112,6 @@ final class NativeDOMParserTest extends TestCase
 
         $builder = $this->createMock(Builder::class);
 
-        (new DOMParser())->parse($builder, 123);
+        (new NativeDOMParser())->parse($builder, 123);
     }
 }

@@ -1,33 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Isocontent\Parser;
 
 use Dom\HTMLDocument;
 use Dom\HTMLElement;
 use Dom\NamedNodeMap;
 use Dom\Node;
+use Dom\NodeList as DomNodeList;
 use Dom\Text;
 use Isocontent\AST\Builder;
 use Isocontent\Exception\FeatureNotAvailableException;
+use Isocontent\Exception\UnsupportedFormatException;
 
 final class NativeDOMParser implements Parser
 {
+    #[\Override]
     public function supportsFormat(string $format): bool
     {
         return 'html' === $format && class_exists(HTMLDocument::class);
     }
 
+    #[\Override]
     public function parse(Builder $builder, mixed $input): void
     {
         if (!class_exists(HTMLDocument::class)) {
             throw new FeatureNotAvailableException(HTMLDocument::class, __CLASS__); // @codeCoverageIgnore
         }
 
+        if (!is_string($input)) {
+            throw new UnsupportedFormatException();
+        }
+
         $document = HTMLDocument::createEmpty();
+        assert($document instanceof HTMLDocument);
         $body = $document->createElement('body');
+        assert($body instanceof HTMLElement);
         $document->appendChild($body);
         $body->innerHTML = $input;
         foreach ($body->childNodes as $childNode) {
+            assert($childNode instanceof Node);
             $this->parseNode($builder, $childNode);
         }
     }
@@ -37,7 +50,7 @@ final class NativeDOMParser implements Parser
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
                 assert($node instanceof Text);
-                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', $node->textContent) ?? '');
+                $builder->addTextNode(preg_replace('#\s{2,}#', ' ', (string) $node->textContent) ?? '');
 
                 return;
 
@@ -52,6 +65,7 @@ final class NativeDOMParser implements Parser
                 return;
         }
 
+        assert($node->childNodes instanceof DomNodeList);
         if (0 === $node->childNodes->length) {
             return;
         }
@@ -63,11 +77,13 @@ final class NativeDOMParser implements Parser
     }
 
     /**
+     * @psalm-suppress MixedPropertyFetch
+     *
      * @return array{0: string, 1?: array<string, scalar>}
      */
     private function parseBlockType(HTMLElement $node): array
     {
-        switch (strtolower($node->nodeName)) {
+        switch (strtolower((string) $node->nodeName)) {
             case 'h1':
                 return ['title', ['level' => 1]];
 
@@ -116,9 +132,13 @@ final class NativeDOMParser implements Parser
             case 'a':
                 $nodeAttributes = $node->attributes;
                 assert($nodeAttributes instanceof NamedNodeMap);
-                $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
+
+                /** @var ?scalar $value */
+                $value = $nodeAttributes->getNamedItem('href')?->value;
+                $attributes = array_filter(['href' => $value]);
 
                 return ['link', $attributes];
+
             case 'del':
                 return ['stripped'];
 

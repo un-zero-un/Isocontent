@@ -48,8 +48,12 @@ class HTML2HTMLTest extends TestCase
     {
         return [
             ['<strong>foobar</strong>'],
+            ['<em>foobar</em>'],
             ['<span><strong>foobar</strong></span>'],
             ['<span><strong>foobar</strong><strong>bazqux</strong></span>'],
+            ['<p><a>link without href</a></p>'],
+            ['<p>Click <a>here</a> please</p>'],
+            ['<br />'],
             [
                 '<h1>Heading level 1</h1>'
                 .'<h2>Heading level 2</h2>'

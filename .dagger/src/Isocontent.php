@@ -120,7 +120,7 @@ class Isocontent
     public function psalm(#[DefaultPath('.')] Directory $source): string
     {
         return $this
-            ->build($source, '8.2')
+            ->build($source, '8.4')
             ->withExec(['./vendor/bin/psalm', '--show-info=true', '--no-diff'])
             ->stdout();
     }
@@ -151,6 +151,7 @@ class Isocontent
             ->withDirectory('.git', $source->directory('.git'));
 
         $exec = ['./vendor/bin/infection', '--threads=1', '--min-msi=95'];
+
         if ($strykerDashboardApiKey && $githubActions) {
             $exec[] = '--logger-github=true';
 
