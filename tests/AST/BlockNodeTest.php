@@ -6,6 +6,7 @@ namespace Isocontent\Tests\AST;
 
 use Isocontent\AST\BlockNode;
 use Isocontent\AST\NodeList;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

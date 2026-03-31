@@ -151,7 +151,6 @@ class Isocontent
             ->withDirectory('.git', $source->directory('.git'));
 
         $exec = ['./vendor/bin/infection', '--threads=1', '--min-msi=95'];
-
         if ($strykerDashboardApiKey && $githubActions) {
             $exec[] = '--logger-github=true';
 

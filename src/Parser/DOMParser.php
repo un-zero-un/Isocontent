@@ -140,6 +140,7 @@ final class DOMParser implements Parser
                 $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
 
                 return ['link', $attributes];
+
             case 'del':
                 return ['stripped'];
 
