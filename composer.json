@@ -10,7 +10,8 @@
         "ext-json": "ext-json is required for JSONRenderer usage",
         "ext-libxml": "ext-libxml is required for DOMParser usage",
         "symfony/framework-bundle": "for Symfony integration",
-        "symfony/serializer": "for serialization of AST"
+        "symfony/serializer": "for serialization of AST",
+        "talleu/md-to-ooxml": "for OOXML / .docx rendering via TalleuOoxmlRenderer"
     },
     "require-dev": {
         "ext-dom": "*",
@@ -25,6 +26,7 @@
         "symfony/framework-bundle": ">=5.4,<9",
         "symfony/serializer": ">=5.4,<9",
         "symfony/var-dumper": ">=5.4,<9",
+        "talleu/md-to-ooxml": "dev-chore/inject_ast@dev",
         "twig/twig": ">=2.0,<4",
         "vimeo/psalm": "^6.13.1@dev"
     },
