@@ -142,7 +142,12 @@ final class DOMParser implements Parser
             case 'a':
                 $nodeAttributes = $node->attributes;
                 assert($nodeAttributes instanceof \DOMNamedNodeMap);
-                $attributes = array_filter(['href' => $nodeAttributes->getNamedItem('href')?->nodeValue]);
+                $attributes = array_filter([
+                    'href' => $nodeAttributes->getNamedItem('href')?->nodeValue,
+                    'download' => (bool) $nodeAttributes->getNamedItem('download'),
+                    'rel' => $nodeAttributes->getNamedItem('target')?->nodeValue,
+                    'target' => $nodeAttributes->getNamedItem('target')?->nodeValue,
+                ]);
 
                 return ['link', $attributes];
             case 'del':

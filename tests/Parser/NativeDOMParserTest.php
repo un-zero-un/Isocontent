@@ -85,6 +85,20 @@ final class NativeDOMParserTest extends TestCase
         (new NativeDOMParser())->parse($builder, $input);
     }
 
+    public function testItParsesLinkBooleanAttribute(): void
+    {
+        $input = '<p><a download>Example</a></p>';
+
+        $builder = $this->createMock(Builder::class);
+        $pBuilder = $this->createMock(Builder::class);
+        $aBuilder = $this->createMock(Builder::class);
+        $builder->expects($this->once())->method('addBlockNode')->with('paragraph', [])->willReturn($pBuilder);
+        $pBuilder->expects($this->once())->method('addBlockNode')->with('link', ['download' => true])->willReturn($aBuilder);
+        $aBuilder->expects($this->once())->method('addTextNode')->with('Example')->willReturn($aBuilder);
+
+        (new NativeDOMParser())->parse($builder, $input);
+    }
+
     public function testItParsesUnknownNodeType(): void
     {
         $input = '<custom>Some custom content</custom>';
