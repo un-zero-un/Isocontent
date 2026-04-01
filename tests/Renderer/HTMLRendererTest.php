@@ -70,6 +70,50 @@ class HTMLRendererTest extends TestCase
                 ]),
                 '<span>foobar</span><span />',
             ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType('link', ['href' => 'https://example.com/bazqux'], NodeList::fromArray([
+                        TextNode::fromText('foobar'),
+                    ])),
+                ]),
+                '<a href="https://example.com/bazqux">foobar</a>',
+            ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType(
+                        'link',
+                        ['href' => 'https://example.com/bazqux', 'disallowed' => 'nope'],
+                        NodeList::fromArray([
+                            TextNode::fromText('foobar'),
+                        ]),
+                    ),
+                ]),
+                '<a href="https://example.com/bazqux">foobar</a>',
+            ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType(
+                        'link',
+                        ['href' => 'https://example.com/bazqux', 'download' => true],
+                        NodeList::fromArray([
+                            TextNode::fromText('foobar'),
+                        ]),
+                    ),
+                ]),
+                '<a href="https://example.com/bazqux" download>foobar</a>',
+            ],
+            [
+                NodeList::fromArray([
+                    BlockNode::fromBlockType(
+                        'link',
+                        ['href' => 'https://example.com/bazqux', 'download' => false],
+                        NodeList::fromArray([
+                            TextNode::fromText('foobar'),
+                        ]),
+                    ),
+                ]),
+                '<a href="https://example.com/bazqux">foobar</a>',
+            ],
         ];
     }
 

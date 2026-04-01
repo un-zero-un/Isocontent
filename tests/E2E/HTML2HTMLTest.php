@@ -52,6 +52,8 @@ class HTML2HTMLTest extends TestCase
             ['<span><strong>foobar</strong></span>'],
             ['<span><strong>foobar</strong><strong>bazqux</strong></span>'],
             ['<p><a>link without href</a></p>'],
+            ['<p><a href="/bazqux.zip">link with href</a></p>'],
+            ['<p><a href="/bazqux.zip" download>link with href and download</a></p>'],
             ['<p>Click <a>here</a> please</p>'],
             ['<br />'],
             [

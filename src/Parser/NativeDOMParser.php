@@ -133,9 +133,12 @@ final class NativeDOMParser implements Parser
                 $nodeAttributes = $node->attributes;
                 assert($nodeAttributes instanceof NamedNodeMap);
 
-                /** @var ?scalar $value */
-                $value = $nodeAttributes->getNamedItem('href')?->value;
-                $attributes = array_filter(['href' => $value]);
+                $attributes = array_filter([
+                    'href' => (string) $nodeAttributes->getNamedItem('href')?->value,
+                    'download' => (bool) $nodeAttributes->getNamedItem('download'),
+                    'rel' => (string) $nodeAttributes->getNamedItem('target')?->value,
+                    'target' => (string) $nodeAttributes->getNamedItem('target')?->value,
+                ]);
 
                 return ['link', $attributes];
 

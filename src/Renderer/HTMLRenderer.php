@@ -15,12 +15,14 @@ use Isocontent\Specs\Specification;
 final class HTMLRenderer implements Renderer
 {
     /**
-     * @var list<array{Specification, string}>
+     * @var list<array{0: Specification, 1: string, 2?: string[]}>
      */
     private array $tags;
 
+    private array $allowedAttributes = [];
+
     /**
-     * @param list<array{Specification, string}> $tags
+     * @param list<array{0: Specification, 1: string, 2?: string[]}> $tags
      */
     public function __construct(?array $tags = null)
     {
@@ -41,7 +43,7 @@ final class HTMLRenderer implements Renderer
             [(new BlockTypeMatch('title'))->and(new BlockArgumentMatch('level', 6)), 'h6'],
             [new BlockTypeMatch('quote'), 'blockquote'],
             [new BlockTypeMatch('new_line'), 'br'],
-            [new BlockTypeMatch('link'), 'a'],
+            [new BlockTypeMatch('link'), 'a', ['download', 'href', 'rel', 'target']],
             [new BlockTypeMatch('stripped'), 'del'],
             [new BlockTypeMatch('separator'), 'hr'],
             [new BlockTypeMatch('subscript'), 'sub'],
@@ -79,21 +81,41 @@ final class HTMLRenderer implements Renderer
     private function renderBlockNode(BlockNode $blockNode): string
     {
         $tagName = 'span';
+        $allowedAttributes = $this->allowedAttributes;
         foreach ($this->tags as $tag) {
             if ($tag[0]->isSatisfiedBy($blockNode)) {
                 $tagName = $tag[1];
+                $allowedAttributes = [...$allowedAttributes, ...($tag[2] ?? [])];
+
+                break;
             }
         }
 
+        $tagAttrs = '';
+        foreach ($blockNode->getArguments() as $name => $value) {
+            if (!in_array($name, $allowedAttributes, true)) {
+                continue;
+            }
+
+            if (is_bool($value)) {
+                $tagAttrs .= $value ? (' '.$name) : '';
+
+                continue;
+            }
+
+            $tagAttrs .= ' '.$name.'="'.htmlentities((string) $value).'"';
+        }
+
         if (null === $blockNode->getChildren()) {
-            return strtr('<:tagName: />', [':tagName:' => $tagName]);
+            return strtr('<:tagName::tagAttrs: />', [':tagName:' => $tagName, ':tagAttrs:' => $tagAttrs]);
         }
 
         return strtr(
-            '<:tagName:>:content:</:tagName:>',
+            '<:tagName::tagAttrs:>:content:</:tagName:>',
             [
                 ':tagName:' => $tagName,
                 ':content:' => $this->render($blockNode->getChildren()),
+                ':tagAttrs:' => $tagAttrs,
             ]
         );
     }
